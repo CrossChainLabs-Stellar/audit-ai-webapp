@@ -7,8 +7,6 @@ import {
   Button,
   CircularProgress,
   List,
-  ListItem,
-  ListItemText,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
@@ -22,7 +20,63 @@ export default function Dashboard({ onLogin }) {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [reportGenerating, setReportGenerating] = useState(false);
   const [vulnerabilities, setVulnerabilities] = useState([]);
-  const [pieChartData, setPieChartData] = useState([]);
+  
+  // Standard colors for pie chart slices (order: High, Medium, Low)
+  const COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
+
+  // Custom severity label styles
+  const severityStyles = {
+    High: {
+      backgroundColor: "#FF6666",
+      color: "white",
+      padding: "2px 4px",
+      borderRadius: "4px",
+      fontWeight: "bold",
+    },
+    Medium: {
+      backgroundColor: "#FFA500",
+      color: "white",
+      padding: "2px 4px",
+      borderRadius: "4px",
+      fontWeight: "bold",
+    },
+    Low: {
+      backgroundColor: "#4CAF50",
+      color: "white",
+      padding: "2px 4px",
+      borderRadius: "4px",
+      fontWeight: "bold",
+    },
+  };
+
+  // Report Sections (non-findings content)
+  const reportSections = [
+    {
+      title: "Summary",
+      content:
+        "This report provides a comprehensive audit of the Stellar Contracts Library, version 0.1.0-RC. The analysis covers the scope, system overview, and a detailed breakdown of security issues.",
+    },
+    {
+      title: "Scope",
+      content:
+        "The audit examined the OpenZeppelin/stellar-contracts repository at a specific commit. In-scope files include those within the token/fungible and pausable directories.",
+    },
+    {
+      title: "System Overview",
+      content:
+        "The Soroban mainnet launched in February 2024, making smart contract deployment on Stellar possible. This audit evaluates key modules in the Stellar Contracts Library.",
+    },
+    {
+      title: "Security Model and Trust Assumptions",
+      content:
+        "The audit assumes the inherent security of the Soroban SDK and related dependencies. It is the responsibility of developers to integrate and customize the library functions carefully.",
+    },
+    {
+      title: "Conclusion",
+      content:
+        "The audit concludes that while the Stellar Contracts Library is robust and well-documented, certain areas—particularly in security checks and macro handling—require further attention to ensure long-term reliability.",
+    },
+  ];
 
   useEffect(() => {
     // Check if Freighter is installed
@@ -71,16 +125,72 @@ export default function Dashboard({ onLogin }) {
 
     // Begin report generation
     setReportGenerating(true);
-    // Simulate AI report generation with a timeout (e.g., 3 seconds)
+    // Simulate AI report generation with a timeout (3 seconds)
     setTimeout(() => {
-      // Dummy vulnerabilities data for demonstration (also used in the pie chart)
+      // Dummy findings data with six findings for demonstration
       const dummyVulnerabilities = [
-        { name: "SQL Injection", value: 5 },
-        { name: "Cross-Site Scripting", value: 3 },
-        { name: "Open Redirect", value: 2 },
+        {
+          id: "5.1",
+          severity: "Medium",
+          title: "Missing event emissions",
+          file: uploadedFile ? uploadedFile.name : "<name_of_uploaded_file>",
+          description:
+            "Contracts are missing event emissions for important state changes, such as owner/admin address updates, token address changes, and initialization.",
+          recommendation:
+            "Consider emitting events in the functions where state changes occur.",
+        },
+        {
+          id: "5.2",
+          severity: "Low",
+          title: "Getter functions with @external visibility",
+          file: uploadedFile ? uploadedFile.name : "<name_of_uploaded_file>",
+          description:
+            "Several functions declared as getters use the @external decorator despite not modifying state.",
+          recommendation:
+            "Review function decorators and consider using @view for pure getters.",
+        },
+        {
+          id: "5.3",
+          severity: "High",
+          title: "Improper access control in token minting",
+          file: uploadedFile ? uploadedFile.name : "<name_of_uploaded_file>",
+          description:
+            "The token minting function lacks strict access control measures, potentially allowing unauthorized minting of tokens.",
+          recommendation:
+            "Implement robust access control checks to restrict minting operations.",
+        },
+        {
+          id: "5.4",
+          severity: "Medium",
+          title: "Inconsistent state validation",
+          file: uploadedFile ? uploadedFile.name : "<name_of_uploaded_file>",
+          description:
+            "Some functions perform state validation inconsistently, which may lead to unexpected behaviors.",
+          recommendation:
+            "Standardize state validation logic across all functions.",
+        },
+        {
+          id: "5.5",
+          severity: "Low",
+          title: "Inadequate error messages",
+          file: uploadedFile ? uploadedFile.name : "<name_of_uploaded_file>",
+          description:
+            "Error messages in several parts of the contract are vague and do not provide sufficient context for debugging.",
+          recommendation:
+            "Enhance error messages to be more descriptive and helpful for troubleshooting.",
+        },
+        {
+          id: "5.6",
+          severity: "High",
+          title: "Potential reentrancy vulnerability",
+          file: uploadedFile ? uploadedFile.name : "<name_of_uploaded_file>",
+          description:
+            "Certain external calls are unprotected, which could lead to reentrancy attacks if exploited.",
+          recommendation:
+            "Introduce reentrancy guards and validate external calls appropriately.",
+        },
       ];
       setVulnerabilities(dummyVulnerabilities);
-      setPieChartData(dummyVulnerabilities);
       setReportGenerating(false);
     }, 3000);
   };
@@ -91,56 +201,16 @@ export default function Dashboard({ onLogin }) {
     }
   };
 
-  // Colors for pie chart slices
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  // Report Sections: inspired by the attached report reference
-  const reportSections = [
-    {
-      title: "Summary",
-      content:
-        "This report provides a comprehensive audit of the Stellar Contracts Library, version 0.1.0-RC. The analysis covers the scope, system overview, and a detailed breakdown of security issues.",
-    },
-    {
-      title: "Scope",
-      content:
-        "The audit examined the OpenZeppelin/stellar-contracts repository at a specific commit. In-scope files include those within the token/fungible and pausable directories.",
-    },
-    {
-      title: "System Overview",
-      content:
-        "The Soroban mainnet launched in February 2024, making smart contract deployment on Stellar possible. This audit evaluates key modules in the Stellar Contracts Library.",
-    },
-    {
-      title: "Security Model and Trust Assumptions",
-      content:
-        "The audit assumes the inherent security of the Soroban SDK and related dependencies. It is the responsibility of developers to integrate and customize the library functions carefully.",
-    },
-    {
-      title: "High Severity",
-      content:
-        "A high severity issue was identified regarding the omission of subsequent attributes when using attribute macros. This could potentially allow unauthorized access if not addressed.",
-    },
-    {
-      title: "Medium Severity",
-      content:
-        "The approval period restrictions in the fungible token module were noted. While designed to prevent excessive token approval durations, this limitation may require further flexibility in future updates.",
-    },
-    {
-      title: "Low Severity",
-      content:
-        "Low severity issues include bypassable environment type checks and minor documentation discrepancies. These issues, though not critical, are recommended for resolution to enhance clarity.",
-    },
-    {
-      title: "Notes & Additional Information",
-      content:
-        "Additional observations include duplicated code in macros, potential unused variables, and recommendations for improved error handling. These suggestions aim to increase the maintainability of the codebase.",
-    },
-    {
-      title: "Conclusion",
-      content:
-        "The audit concludes that while the Stellar Contracts Library is robust and well-documented, certain areas—particularly in security checks and macro handling—require further attention to ensure long-term reliability.",
-    },
+  // Compute severity counts for the Overview section
+  const severityCounts = vulnerabilities.reduce((acc, vuln) => {
+    acc[vuln.severity] = (acc[vuln.severity] || 0) + 1;
+    return acc;
+  }, {});
+  const totalFindings = vulnerabilities.length;
+  const pieData = [
+    { name: "High", value: severityCounts.High || 0 },
+    { name: "Medium", value: severityCounts.Medium || 0 },
+    { name: "Low", value: severityCounts.Low || 0 },
   ];
 
   return (
@@ -185,7 +255,6 @@ export default function Dashboard({ onLogin }) {
             onChange={(e) => setProjectName(e.target.value)}
             InputLabelProps={{ shrink: true }}
           />
-
           <Button variant="contained" component="label">
             Upload File
             <input type="file" hidden onChange={handleFileUpload} />
@@ -221,7 +290,7 @@ export default function Dashboard({ onLogin }) {
       </Box>
 
       {/* Report Layout */}
-      {vulnerabilities.length > 0 && (
+      {totalFindings > 0 && (
         <Box
           sx={{
             mt: 6,
@@ -249,13 +318,45 @@ export default function Dashboard({ onLogin }) {
             <Typography variant="h6" gutterBottom>
               Table of Contents
             </Typography>
-            <List>
-              {reportSections.map((section, index) => (
-                <ListItem key={index} disableGutters>
-                  <ListItemText primary={`${index + 1}. ${section.title}`} />
-                </ListItem>
-              ))}
-            </List>
+            <Typography variant="body1">1. Overview</Typography>
+            {reportSections.map((section, index) => (
+              <Typography key={index} variant="body1">
+                {index + 2}. {section.title}
+              </Typography>
+            ))}
+            <Typography variant="body1">
+              {reportSections.length + 2}. Findings
+            </Typography>
+          </Box>
+
+          {/* Overview Section */}
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h5" gutterBottom>
+              Overview
+            </Typography>
+            <Typography variant="body1">
+              Total Findings: {totalFindings} (High: {severityCounts.High || 0}, Medium: {severityCounts.Medium || 0}, Low: {severityCounts.Low || 0})
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <PieChart width={300} height={300}>
+                <Pie
+                  data={pieData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </Box>
           </Box>
 
           {/* Report Sections */}
@@ -268,38 +369,31 @@ export default function Dashboard({ onLogin }) {
             </Box>
           ))}
 
-          {/* Vulnerabilities Overview */}
+          {/* Findings Section */}
           <Box sx={{ mt: 6 }}>
-            <Typography variant="h6" gutterBottom>
-              Vulnerabilities Overview
+            <Typography variant="h5" gutterBottom>
+              Findings
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-              <PieChart width={300} height={300}>
-                <Pie
-                  data={pieChartData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  label
-                >
-                  {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </Box>
-            <List>
-              {vulnerabilities.map((vuln, index) => (
-                <ListItem key={index}>
-                  <ListItemText primary={`${vuln.name}: ${vuln.value} issues`} />
-                </ListItem>
-              ))}
-            </List>
+            {vulnerabilities.map((vuln, index) => (
+              <Box
+                key={index}
+                sx={{ mt: 2, borderBottom: "1px solid #ddd", pb: 2 }}
+              >
+                <Typography variant="subtitle1">
+                  {vuln.id} [<span style={severityStyles[vuln.severity]}>{vuln.severity} Severity</span>]{" "}
+                  {vuln.title}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>File:</strong> {vuln.file}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Description:</strong> {vuln.description}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Recommendation:</strong> {vuln.recommendation}
+                </Typography>
+              </Box>
+            ))}
           </Box>
         </Box>
       )}
