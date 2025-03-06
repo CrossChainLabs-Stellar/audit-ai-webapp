@@ -112,16 +112,6 @@ export default function Dashboard({ onLogin }) {
         "The Soroban mainnet launched in February 2024, making smart contract deployment on Stellar possible. This audit evaluates key modules in the Stellar Contracts Library.",
     },
     {
-      title: "Fungible Token",
-      content:
-        "Developed according to the SEP-0041 standard, the fungible token module includes essential extensions such as burnable, metadata, and mintable. It provides storage and operational functions for token management.",
-    },
-    {
-      title: "Pausable Utility",
-      content:
-        "This module includes functionality for pausing contract operations during emergencies. It provides attribute macros and utility functions that ensure secure pausing and resuming of contract activities.",
-    },
-    {
       title: "Security Model and Trust Assumptions",
       content:
         "The audit assumes the inherent security of the Soroban SDK and related dependencies. It is the responsibility of developers to integrate and customize the library functions carefully.",
@@ -147,11 +137,6 @@ export default function Dashboard({ onLogin }) {
         "Additional observations include duplicated code in macros, potential unused variables, and recommendations for improved error handling. These suggestions aim to increase the maintainability of the codebase.",
     },
     {
-      title: "Client Reported",
-      content:
-        "One client-reported issue involved the lack of necessary derives for contract errors. Addressing this would align the error definitions with best practices and documentation requirements.",
-    },
-    {
       title: "Conclusion",
       content:
         "The audit concludes that while the Stellar Contracts Library is robust and well-documented, certain areas—particularly in security checks and macro handling—require further attention to ensure long-term reliability.",
@@ -162,12 +147,24 @@ export default function Dashboard({ onLogin }) {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #283E51 0%, #4B79A1 100%)",
+        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
         p: 3,
       }}
     >
-      <Box sx={{ maxWidth: 600, mx: "auto", mt: 4, textAlign: "center" }}>
-        <Typography variant="h4" gutterBottom color="white">
+      {/* Audit Form Container */}
+      <Box
+        sx={{
+          maxWidth: 600,
+          mx: "auto",
+          mt: 4,
+          p: 3,
+          backgroundColor: "white",
+          borderRadius: 2,
+          boxShadow: 3,
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom color="text.primary">
           Run Audit
         </Typography>
 
@@ -200,7 +197,7 @@ export default function Dashboard({ onLogin }) {
           fullWidth
           size="large"
           variant="contained"
-          color="secondary"
+          color="primary"
           onClick={handleGenerateReport}
           sx={{ mt: 3, py: 1.5 }}
           loading={reportGenerating}
@@ -215,13 +212,15 @@ export default function Dashboard({ onLogin }) {
           </Box>
         )}
 
-         { !isFreighterInstalled && <Typography variant="body2" color="error" sx={{ mt: 3 }}>
+        {/* Freighter Wallet Warning */}
+        {!isFreighterInstalled && (
+          <Typography variant="body2" color="error" sx={{ mt: 3 }}>
             Freighter wallet is not installed! Please install it to continue.
           </Typography>
-        }
+        )}
       </Box>
 
-      {/* Display Report Layout once vulnerabilities exist */}
+      {/* Report Layout */}
       {vulnerabilities.length > 0 && (
         <Box
           sx={{
@@ -236,7 +235,10 @@ export default function Dashboard({ onLogin }) {
         >
           {/* Title Section */}
           <Typography variant="h4" align="center" gutterBottom>
-            {projectName} Audit Report
+            Security Audit Report
+          </Typography>
+          <Typography variant="h4" align="center" gutterBottom>
+            {projectName}
           </Typography>
           <Typography variant="subtitle1" align="center" gutterBottom>
             February 20, 2025
@@ -266,7 +268,7 @@ export default function Dashboard({ onLogin }) {
             </Box>
           ))}
 
-          {/* Example: Vulnerabilities Summary (Pie Chart + Details) */}
+          {/* Vulnerabilities Overview */}
           <Box sx={{ mt: 6 }}>
             <Typography variant="h6" gutterBottom>
               Vulnerabilities Overview
