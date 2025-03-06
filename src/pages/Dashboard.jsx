@@ -137,16 +137,15 @@ export default function Dashboard({ onLogin }) {
         p: 3
       }}
     >
-      {/* Audit Form Container */}
+      {/* Audit Form Container with no borders */}
       <Box
         sx={{
           maxWidth: 600,
           mx: "auto",
           mt: 4,
           p: 3,
-          backgroundColor: "white",
+          backgroundColor: "none",
           borderRadius: 2,
-          boxShadow: 3,
           textAlign: "center"
         }}
       >
@@ -170,6 +169,9 @@ export default function Dashboard({ onLogin }) {
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             InputLabelProps={{ shrink: true }}
+            sx={{
+              backgroundColor: "none",
+            }}
           />
           <Button variant="contained" component="label">
             Upload File
