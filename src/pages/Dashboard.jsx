@@ -32,22 +32,22 @@ export default function Dashboard({ onLogin }) {
       color: "white",
       padding: "2px 4px",
       borderRadius: "4px",
-      fontWeight: "bold",
+      fontWeight: "bold"
     },
     Medium: {
       backgroundColor: "#FFA500",
       color: "white",
       padding: "2px 4px",
       borderRadius: "4px",
-      fontWeight: "bold",
+      fontWeight: "bold"
     },
     Low: {
       backgroundColor: "#4CAF50",
       color: "white",
       padding: "2px 4px",
       borderRadius: "4px",
-      fontWeight: "bold",
-    },
+      fontWeight: "bold"
+    }
   };
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export default function Dashboard({ onLogin }) {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+        backgroundColor: "#f4f4f4",
         p: 3
       }}
     >
@@ -144,8 +144,7 @@ export default function Dashboard({ onLogin }) {
           mx: "auto",
           mt: 4,
           p: 3,
-          backgroundColor: "none",
-          borderRadius: 2,
+          backgroundColor: "transparent",
           textAlign: "center"
         }}
       >
@@ -170,10 +169,20 @@ export default function Dashboard({ onLogin }) {
             onChange={(e) => setProjectName(e.target.value)}
             InputLabelProps={{ shrink: true }}
             sx={{
-              backgroundColor: "none",
+              backgroundColor: "transparent"
             }}
           />
-          <Button variant="contained" component="label">
+          <Button
+            variant="contained"
+            component="label"
+            sx={{
+              backgroundColor: "#4ca1af",
+              color: "white",
+              fontWeight: "bold",
+              textTransform: "none",
+              "&:hover": { backgroundColor: "#2c3e50" }
+            }}
+          >
             Upload File
             <input type="file" hidden onChange={handleFileUpload} />
           </Button>
@@ -184,9 +193,16 @@ export default function Dashboard({ onLogin }) {
           fullWidth
           size="large"
           variant="contained"
-          color="primary"
           onClick={handleGenerateReport}
-          sx={{ mt: 3, py: 1.5 }}
+          sx={{
+            mt: 3,
+            py: 1.5,
+            backgroundColor: "#2c3e50",
+            color: "white",
+            fontWeight: "bold",
+            textTransform: "none",
+            "&:hover": { backgroundColor: "#4ca1af" }
+          }}
           loading={reportGenerating}
         >
           Generate Report using AI
