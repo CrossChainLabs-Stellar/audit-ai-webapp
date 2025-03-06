@@ -1,4 +1,4 @@
-// src/components/Register.js
+// src/components/Dashboard.js
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,7 +11,7 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 
-export default function Register({ onLogin }) {
+export default function Dashboard({ onLogin }) {
   const navigate = useNavigate();
   const [publicKey, setPublicKey] = useState(null);
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);

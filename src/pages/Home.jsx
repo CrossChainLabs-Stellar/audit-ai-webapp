@@ -44,7 +44,7 @@ export default function Home() {
             variant="contained"
             color="secondary"
             component={Link}
-            to="/register"
+            to="/dashboard"
             sx={{
               px: 4,
               py: 1.5,

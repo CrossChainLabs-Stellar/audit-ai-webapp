@@ -44,7 +44,7 @@ export default function AuditAINavbar({ publicKey }) {
             <>
               <Button
                 component={Link}
-                to="/upload"
+                to="/dashboard"
                 variant="outlined"
                 color="inherit"
                 sx={{
@@ -55,37 +55,7 @@ export default function AuditAINavbar({ publicKey }) {
                   "&:hover": { borderColor: "white" },
                 }}
               >
-                Upload Contract
-              </Button>
-              <Button
-                component={Link}
-                to="/audit"
-                variant="outlined"
-                color="inherit"
-                sx={{
-                  marginLeft: 2,
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  borderColor: "rgba(255, 255, 255, 0.5)",
-                  "&:hover": { borderColor: "white" },
-                }}
-              >
-                Audit Progress
-              </Button>
-              <Button
-                component={Link}
-                to="/results"
-                variant="outlined"
-                color="inherit"
-                sx={{
-                  marginLeft: 2,
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  borderColor: "rgba(255, 255, 255, 0.5)",
-                  "&:hover": { borderColor: "white" },
-                }}
-              >
-                Results
+                My reports
               </Button>
             </>
           )}
