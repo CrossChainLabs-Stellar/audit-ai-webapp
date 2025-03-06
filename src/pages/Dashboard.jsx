@@ -168,7 +168,7 @@ export default function Dashboard({ onLogin }) {
     >
       <Box sx={{ maxWidth: 600, mx: "auto", mt: 4, textAlign: "center" }}>
         <Typography variant="h4" gutterBottom color="white">
-          Dashboard
+          Run Audit
         </Typography>
 
         {/* Project Name and File Upload */}
@@ -182,8 +182,8 @@ export default function Dashboard({ onLogin }) {
           <TextField
             fullWidth
             name="project"
-            label="Project/Team Name"
-            placeholder="Enter your project or team name"
+            label="Project"
+            placeholder="Enter your project"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             InputLabelProps={{ shrink: true }}
@@ -215,23 +215,10 @@ export default function Dashboard({ onLogin }) {
           </Box>
         )}
 
-        {/* Freighter Wallet Info */}
-        {isFreighterInstalled ? (
-          publicKey && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="body1" color="white">
-                Connected Account:{" "}
-                <strong>
-                  {publicKey.slice(0, 6)}...{publicKey.slice(-6)}
-                </strong>
-              </Typography>
-            </Box>
-          )
-        ) : (
-          <Typography variant="body2" color="error" sx={{ mt: 3 }}>
+         { !isFreighterInstalled && <Typography variant="body2" color="error" sx={{ mt: 3 }}>
             Freighter wallet is not installed! Please install it to continue.
           </Typography>
-        )}
+        }
       </Box>
 
       {/* Display Report Layout once vulnerabilities exist */}
@@ -249,7 +236,7 @@ export default function Dashboard({ onLogin }) {
         >
           {/* Title Section */}
           <Typography variant="h4" align="center" gutterBottom>
-            Stellar Contracts Library 0.1.0-RC Audit Report
+            {projectName} Audit Report
           </Typography>
           <Typography variant="subtitle1" align="center" gutterBottom>
             February 20, 2025
