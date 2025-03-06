@@ -216,7 +216,7 @@ export default function Dashboard({ onLogin }) {
                 sx={{ mt: 2, borderBottom: "1px solid #ddd", pb: 2 }}
               >
                 <Typography variant="subtitle1">
-                  {vuln.id} <span style={severityStyles[vuln.severity]}>{vuln.severity} Severity</span>{" "}
+                  5.{index + 1} <span style={severityStyles[vuln.severity]}>{vuln.severity} Severity</span>{" "}
                   {vuln.title}
                 </Typography>
                 <Typography variant="body2">
@@ -225,6 +225,21 @@ export default function Dashboard({ onLogin }) {
                 <Typography variant="body2">
                   <strong>Description:</strong> {vuln.description}
                 </Typography>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  <strong>Code Snippet:</strong>
+                </Typography>
+                <Box
+                  component="pre"
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                    padding: 2,
+                    borderRadius: 1,
+                    overflowX: "auto",
+                    fontFamily: "monospace"
+                  }}
+                >
+                  {vuln.snippet}
+                </Box>
                 <Typography variant="body2">
                   <strong>Recommendation:</strong> {vuln.recommendation}
                 </Typography>
