@@ -1,7 +1,7 @@
-// src/components/AuditAINavbar.js
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import logo from "../assets/AuditAILogo.svg"; // Update the path to match your project structure
 
 export default function AuditAINavbar({ publicKey }) {
   return (
@@ -12,18 +12,25 @@ export default function AuditAINavbar({ publicKey }) {
       }}
     >
       <Toolbar>
-        {/* Left: Title */}
-        <Typography
-          variant="h6"
-          component={Link}
-          to="/"
-          sx={{
-            textDecoration: "none",
-            color: "inherit",
-          }}
-        >
-          AuditAI
-        </Typography>
+        {/* Left: Logo and Title */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={logo}
+            alt="AuditAI Logo"
+            style={{ height: "40px", marginRight: "8px" }}
+          />
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            sx={{
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            AuditAI
+          </Typography>
+        </Box>
 
         {/* Center: Navigation Buttons (only if publicKey exists) */}
         <Box
@@ -84,7 +91,7 @@ export default function AuditAINavbar({ publicKey }) {
           )}
         </Box>
 
-        {/* Right: If publicKey exists, display it; else show the Login button */}
+        {/* Right: Display publicKey or Login button */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {publicKey ? (
             <Typography
