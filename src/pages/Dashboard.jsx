@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, TextField, Typography, Button, CircularProgress, Paper, Divider } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  CircularProgress,
+  Paper,
+  Divider
+} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
@@ -52,6 +60,7 @@ export default function Dashboard({ onLogin }) {
   }, []);
 
   const handleConnectStellar = async () => {
+    let succesful = false;
     try {
       if (!isFreighterInstalled) {
         alert("Freighter wallet not found. Please install the Freighter extension.");
@@ -63,17 +72,27 @@ export default function Dashboard({ onLogin }) {
         return;
       }
       const pk = accessObj.address;
+      if (pk) {
+        succesful = true;
+      }
       setPublicKey(pk);
       onLogin(pk);
     } catch (error) {
       console.error("Stellar wallet connection error: ", error);
     }
+    return succesful;
+  };
+
+  const handleFileUpload = (event) => {
+    if (event.target.files.length > 0) {
+      setUploadedFile(event.target.files[0]);
+    }
   };
 
   const handleGenerateReport = async () => {
     if (!publicKey) {
-      await handleConnectStellar();
-      if (!publicKey) return;
+      let res = await handleConnectStellar();
+      if (!res) return;
     }
 
     if (!projectName || !uploadedFile) {
@@ -83,7 +102,9 @@ export default function Dashboard({ onLogin }) {
 
     setReportGenerating(true);
 
+    // Simulate an async process (e.g., sending file to server) with a timeout:
     setTimeout(() => {
+      // Attach the file name to each vulnerability for demonstration
       const updatedVulnerabilities = reportData.vulnerabilities.map((vuln) => ({
         ...vuln,
         file: uploadedFile ? uploadedFile.name : vuln.file,
@@ -94,12 +115,6 @@ export default function Dashboard({ onLogin }) {
     }, 3000);
   };
 
-  const handleFileUpload = (event) => {
-    if (event.target.files.length > 0) {
-      setUploadedFile(event.target.files[0]);
-    }
-  };
-
   const severityCounts = vulnerabilities.reduce((acc, vuln) => {
     acc[vuln.severity] = (acc[vuln.severity] || 0) + 1;
     return acc;
@@ -108,7 +123,7 @@ export default function Dashboard({ onLogin }) {
   const pieData = [
     { name: "High", value: severityCounts.High || 0 },
     { name: "Medium", value: severityCounts.Medium || 0 },
-    { name: "Low", value: severityCounts.Low || 0 },
+    { name: "Low", value: severityCounts.Low || 0 }
   ];
 
   return (
@@ -126,17 +141,29 @@ export default function Dashboard({ onLogin }) {
           sx={{ mb: 2 }}
         />
 
+        {/* Upload/Change File Button */}
         <Button variant="contained" component="label" fullWidth sx={{ mb: 2 }}>
-          Upload File
-          <input type="file" hidden onChange={handleFileUpload} />
+          {uploadedFile ? "Change File" : "Upload File"}
+          <input
+            type="file"
+            hidden
+            onChange={handleFileUpload}
+          />
         </Button>
+
+        {/* Display uploaded file name if present */}
+        {uploadedFile && (
+          <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
+            Selected File: {uploadedFile.name}
+          </Typography>
+        )}
 
         <LoadingButton
           fullWidth
           variant="contained"
           loading={reportGenerating}
           onClick={handleGenerateReport}
-          sx={{ py: 1.5 }}
+          sx={{ py: 1.5, mt: 2 }}
         >
           Generate Report
         </LoadingButton>
@@ -186,9 +213,19 @@ export default function Dashboard({ onLogin }) {
           <Divider sx={{ my: 2 }} />
 
           <PieChart width={350} height={350} style={{ margin: "auto" }}>
-            <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100}>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+            >
               {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip />
@@ -216,7 +253,10 @@ export default function Dashboard({ onLogin }) {
                 sx={{ mt: 2, borderBottom: "1px solid #ddd", pb: 2 }}
               >
                 <Typography variant="subtitle1">
-                  5.{index + 1} <span style={severityStyles[vuln.severity]}>{vuln.severity} Severity</span>{" "}
+                  5.{index + 1}{" "}
+                  <span style={severityStyles[vuln.severity]}>
+                    {vuln.severity} Severity
+                  </span>{" "}
                   {vuln.title}
                 </Typography>
                 <Typography variant="body2">
