@@ -1,8 +1,18 @@
-// src/pages/Home.js
 import React, { useState } from 'react';
-import { Container, Typography, Button, Grid, Card, CardContent, Box, Stack, TextField } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  Box,
+  Stack,
+  TextField
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { X, LinkedIn, Telegram, GitHub } from '@mui/icons-material';
+import SCFLogoBlack from '../assets/SCF Logo SVG-black.svg';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -67,6 +77,61 @@ export default function Home() {
           >
             Get Started
           </Button>
+        </Container>
+      </Box>
+
+      {/* SCF Kickstart Award Section */}
+      <Box sx={{ py: 4, backgroundColor: "#ffffff", textAlign: "center" }}>
+        <Container maxWidth="md">
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={{ fontWeight: "bold", mb: 2 }}
+          >
+            Proud Winner of the SCF Kickstart Award
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 3 }}>
+            We’re honored to be recognized for our dedication to top-tier security and innovation in the Soroban ecosystem.
+          </Typography>
+
+          <a href="https://communityfund.stellar.org/kickstart" target="_blank" rel="noopener noreferrer">
+            <Box
+              component="img"
+              src={SCFLogoBlack}
+              alt="SCF Kickstart Award"
+              sx={{
+                maxWidth: "6rem",
+                width: "100%",
+                height: "auto",
+                mb: 4,
+              }}
+            />
+          </a>
+
+          <Box
+            sx={{
+              position: "relative",
+              paddingTop: "56.25%", // 16:9 aspect ratio
+              mb: 4,
+            }}
+          >
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/VIDEO_ID"
+              title="Audit AI Demo"
+              frameBorder="0"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+              }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </Box>
         </Container>
       </Box>
 
@@ -167,32 +232,13 @@ export default function Home() {
             justifyContent="center"
             sx={{ mt: 4 }}
           >
-            <Link
-              to="#"
-              // You can use a real URL here:
-              // component='a'
-              // href="https://twitter.com/YourProfile"
-              // target="_blank"
-              // rel="noopener noreferrer"
-            >
+            <Link to="https://x.com">
               <X sx={{ fontSize: 32, color: '#000000' }} />
             </Link>
-            <Link
-              to="#"
-              // component='a'
-              // href="https://linkedin.com/in/YourProfile"
-              // target="_blank"
-              // rel="noopener noreferrer"
-            >
+            <Link to="https://www.linkedin.com">
               <LinkedIn sx={{ fontSize: 32, color: '#0A66C2' }} />
             </Link>
-            <Link
-              to="#"
-              // component='a'
-              // href="https://github.com/YourProfile"
-              // target="_blank"
-              // rel="noopener noreferrer"
-            >
+            <Link to="https://telegram.org">
               <Telegram sx={{ fontSize: 32, color: '#000000' }} />
             </Link>
           </Stack>
