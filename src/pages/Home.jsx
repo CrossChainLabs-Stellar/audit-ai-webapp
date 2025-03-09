@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Container, Typography, Button, Grid, Card, CardContent, Box, Stack, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
-// 1) Import MUI Icons:
 import { X, LinkedIn, Telegram, GitHub } from '@mui/icons-material';
 
 export default function Home() {
