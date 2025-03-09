@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { Container, Typography, Button, Grid, Card, CardContent, Box, Stack, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
+// 1) Import MUI Icons:
+import { X, LinkedIn, Telegram, GitHub } from '@mui/icons-material';
 
 export default function Home() {
-  // Common card styling to ensure equal height
   const [email, setEmail] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
 
@@ -13,9 +14,8 @@ export default function Home() {
       setStatusMessage('Please enter an email.');
       return;
     }
-
     setStatusMessage('Done.');
-  }
+  };
 
   const cardStyles = {
     display: "flex",
@@ -39,7 +39,7 @@ export default function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", // professional dark blue-teal gradient
+          background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)",
           color: "#fff",
           textAlign: "center",
           p: 3,
@@ -75,7 +75,7 @@ export default function Home() {
       <Box
         sx={{
           py: 8,
-          backgroundColor: "#f4f4f4", // clean, light gray background for a professional look
+          backgroundColor: "#f4f4f4",
           width: "100vw",
         }}
       >
@@ -118,6 +118,8 @@ export default function Home() {
               </Card>
             </Grid>
           </Grid>
+
+          {/* Waiting List Section */}
           <Stack
             direction="column"
             alignItems="center"
@@ -157,6 +159,43 @@ export default function Home() {
               </Button>
             </Stack>
             {statusMessage && <Typography variant="body2" color="text.secondary">{statusMessage}</Typography>}
+          </Stack>
+
+          {/* Socials Section */}
+          <Stack
+            direction="row"
+            spacing={3}
+            justifyContent="center"
+            sx={{ mt: 4 }}
+          >
+            <Link
+              to="#"
+              // You can use a real URL here:
+              // component='a'
+              // href="https://twitter.com/YourProfile"
+              // target="_blank"
+              // rel="noopener noreferrer"
+            >
+              <X sx={{ fontSize: 32, color: '#000000' }} />
+            </Link>
+            <Link
+              to="#"
+              // component='a'
+              // href="https://linkedin.com/in/YourProfile"
+              // target="_blank"
+              // rel="noopener noreferrer"
+            >
+              <LinkedIn sx={{ fontSize: 32, color: '#0A66C2' }} />
+            </Link>
+            <Link
+              to="#"
+              // component='a'
+              // href="https://github.com/YourProfile"
+              // target="_blank"
+              // rel="noopener noreferrer"
+            >
+              <Telegram sx={{ fontSize: 32, color: '#000000' }} />
+            </Link>
           </Stack>
         </Container>
       </Box>
