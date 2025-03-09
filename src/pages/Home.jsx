@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { X, LinkedIn, Telegram, GitHub } from '@mui/icons-material';
-import SCFLogoBlack from '../assets/SCF Logo SVG-black.svg';
+import SCFLogoBlack from '../assets/SCFLogoSVG-black.svg';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -108,6 +108,10 @@ export default function Home() {
             />
           </a>
 
+          {/* Demo Video Section */}
+          <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+            Demo Video: See AuditAI in Action
+          </Typography>
           <Box
             sx={{
               position: "relative",
@@ -118,8 +122,8 @@ export default function Home() {
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/VIDEO_ID"
-              title="Audit AI Demo"
+              src="https://www.youtube.com/embed/VIDEO_ID" 
+              title="Audit AI Demo Video"
               frameBorder="0"
               style={{
                 position: "absolute",
