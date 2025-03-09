@@ -1,19 +1,55 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+// AuditAINavbar.jsx
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/AuditAILogo.svg"; // Update the path to match your project structure
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { isConnected, requestAccess } from "@stellar/freighter-api"; // <-- for Freighter
+import logo from "../assets/AuditAILogo.svg";
 
-export default function AuditAINavbar({ publicKey }) {
+export default function AuditAINavbar({ publicKey, onLogin }) {
+  const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
+
+  useEffect(() => {
+    // Check if Freighter is installed
+    const checkFreighter = async () => {
+      const connectionStatus = await isConnected();
+      setIsFreighterInstalled(connectionStatus.isConnected);
+    };
+    checkFreighter();
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      if (!isFreighterInstalled) {
+        alert("Freighter wallet not found. Please install the Freighter extension.");
+        return;
+      }
+
+      // Request access from Freighter
+      const accessObj = await requestAccess();
+      if (accessObj.error) {
+        alert(`Error: ${accessObj.error}`);
+        return;
+      }
+
+      // Pass the public key back up to the parent or do any necessary post-login actions
+      onLogin(accessObj.address);
+    } catch (error) {
+      console.error("Stellar wallet connection error: ", error);
+    }
+  };
+
   return (
-    <AppBar
-      position="static"
-      sx={{
-        backgroundColor: "#2c3e50", // A dark, professional background
-      }}
-    >
+    <AppBar position="static" sx={{ backgroundColor: "#2c3e50" }}>
       <Toolbar>
         {/* Left: Logo and Title */}
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box
+          component={Link}
+          to="/"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",   // disables underline
+          }}>
           <img
             src={logo}
             alt="AuditAI Logo"
@@ -21,11 +57,9 @@ export default function AuditAINavbar({ publicKey }) {
           />
           <Typography
             variant="h6"
-            component={Link}
-            to="/"
             sx={{
               textDecoration: "none",
-              color: "inherit",
+              color: "white",
             }}
           >
             AuditAI
@@ -33,31 +67,23 @@ export default function AuditAINavbar({ publicKey }) {
         </Box>
 
         {/* Center: Navigation Buttons (only if publicKey exists) */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
           {publicKey && (
-            <>
-              <Button
-                component={Link}
-                to="/dashboard"
-                variant="outlined"
-                color="inherit"
-                sx={{
-                  marginLeft: 2,
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  borderColor: "rgba(255, 255, 255, 0.5)",
-                  "&:hover": { borderColor: "white" },
-                }}
-              >
-                My reports
-              </Button>
-            </>
+            <Button
+              component={Link}
+              variant="outlined"
+              color="inherit"
+              to="/dashboard"
+              sx={{
+                marginLeft: 2,
+                textTransform: "none",
+                fontWeight: "bold",
+                borderColor: "rgba(255, 255, 255, 0.5)",
+                "&:hover": { borderColor: "white" },
+              }}
+            >
+              My reports
+            </Button>
           )}
         </Box>
 
@@ -77,8 +103,7 @@ export default function AuditAINavbar({ publicKey }) {
             </Typography>
           ) : (
             <Button
-              component={Link}
-              to="/login"
+              onClick={handleLogin}
               variant="outlined"
               color="inherit"
               sx={{

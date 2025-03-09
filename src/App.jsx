@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./theme/theme-provider";
 
 // Pages
-import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 
@@ -22,10 +21,9 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
-        <AuditAINavbar publicKey={publicKey} />
+        <AuditAINavbar publicKey={publicKey} onLogin={handleLogin}/>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/dashboard" element={<Dashboard onLogin={handleLogin} />} />
           {/*<Route path="*" element={<NotFound />} />*/}
         </Routes>
