@@ -12,7 +12,9 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+
 import reportData from "../test/reportData.json";
+import FreighterBanner from "../components/FreighterBanner";
 
 export default function Dashboard({ onLogin }) {
   const navigate = useNavigate();
@@ -60,27 +62,25 @@ export default function Dashboard({ onLogin }) {
   }, []);
 
   const handleConnectStellar = async () => {
-    let succesful = false;
     try {
       if (!isFreighterInstalled) {
-        alert("Freighter wallet not found. Please install the Freighter extension.");
-        return;
+        return false; 
       }
       const accessObj = await requestAccess();
       if (accessObj.error) {
         alert(`Error: ${accessObj.error}`);
-        return;
+        return false;
       }
       const pk = accessObj.address;
       if (pk) {
-        succesful = true;
+        setPublicKey(pk);
+        onLogin(pk);
+        return true;
       }
-      setPublicKey(pk);
-      onLogin(pk);
     } catch (error) {
       console.error("Stellar wallet connection error: ", error);
     }
-    return succesful;
+    return false;
   };
 
   const handleFileUpload = (event) => {
@@ -90,97 +90,150 @@ export default function Dashboard({ onLogin }) {
   };
 
   const handleGenerateReport = async () => {
+    // If not connected, try to connect
     if (!publicKey) {
-      let res = await handleConnectStellar();
-      if (!res) return;
+      const connected = await handleConnectStellar();
+      if (!connected) return;
     }
 
+    // Ensure project name and file are provided
     if (!projectName || !uploadedFile) {
-      alert("Please provide project name and upload a file.");
+      alert("Please provide a project name and upload a file.");
       return;
     }
 
     setReportGenerating(true);
 
-    // Simulate an async process (e.g., sending file to server) with a timeout:
+    // Simulate async process
     setTimeout(() => {
-      // Attach the file name to each vulnerability for demonstration
+      // Attach file name for demonstration
       const updatedVulnerabilities = reportData.vulnerabilities.map((vuln) => ({
         ...vuln,
         file: uploadedFile ? uploadedFile.name : vuln.file,
       }));
+
       setVulnerabilities(updatedVulnerabilities);
       setReportSections(reportData.reportSections);
       setReportGenerating(false);
     }, 3000);
   };
 
+  // Prepare data for Pie chart
   const severityCounts = vulnerabilities.reduce((acc, vuln) => {
     acc[vuln.severity] = (acc[vuln.severity] || 0) + 1;
     return acc;
   }, {});
-
   const pieData = [
     { name: "High", value: severityCounts.High || 0 },
     { name: "Medium", value: severityCounts.Medium || 0 },
     { name: "Low", value: severityCounts.Low || 0 }
   ];
 
+  // Check if user can generate a report
+  const canGenerateReport = publicKey && projectName && uploadedFile;
+
   return (
     <Box sx={{ minHeight: "100vh", p: 3, bgcolor: "#f9fafb" }}>
       <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
-        <Typography variant="h4" gutterBottom align="center">
+        <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3 }}>
           Run Audit
         </Typography>
 
-        <TextField
-          fullWidth
-          label="Project Name"
-          value={projectName}
-          onChange={(e) => setProjectName(e.target.value)}
-          sx={{ mb: 2 }}
-        />
+        {/* STEP 1: Connect Freighter Wallet */}
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Step 1: Connect Freighter Wallet
+          </Typography>
+          {publicKey ? (
+            <Typography variant="body2" color="success.main">
+              Wallet connected: <strong>{publicKey}</strong>
+            </Typography>
+          ) : (
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleConnectStellar}
+              sx={{ mt: 1 }}
+            >
+              Connect Freighter
+            </Button>
+          )}
+          {/* Render the banner if Freighter is not installed */}
+          {!isFreighterInstalled && <FreighterBanner />}
+        </Box>
 
-        {/* Upload/Change File Button */}
-        <Button variant="contained" component="label" fullWidth sx={{ mb: 2 }}>
-          {uploadedFile ? "Change File" : "Upload File"}
-          <input
-            type="file"
-            hidden
-            onChange={handleFileUpload}
+        {/* STEP 2: Enter Project Name */}
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Step 2: Provide a Project Name
+          </Typography>
+          <TextField
+            fullWidth
+            placeholder="e.g. My Soroban Contract"
+            label="Project Name"
+            value={projectName}
+            onChange={(e) => setProjectName(e.target.value)}
+            sx={{ mt: 1 }}
           />
-        </Button>
+        </Box>
 
-        {/* Display uploaded file name if present */}
-        {uploadedFile && (
-          <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
-            Selected File: {uploadedFile.name}
+        {/* STEP 3: Upload Contract File */}
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Step 3: Upload Your Contract
           </Typography>
-        )}
+          <Button variant="contained" component="label" sx={{ mt: 1 }}>
+            {uploadedFile ? "Change File" : "Upload File"}
+            <input
+              type="file"
+              hidden
+              onChange={handleFileUpload}
+            />
+          </Button>
+          {uploadedFile && (
+            <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
+              Selected File: {uploadedFile.name}
+            </Typography>
+          )}
+        </Box>
 
-        <LoadingButton
-          fullWidth
-          variant="contained"
-          loading={reportGenerating}
-          onClick={handleGenerateReport}
-          sx={{ py: 1.5, mt: 2 }}
-        >
-          Generate Report
-        </LoadingButton>
-
-        {!isFreighterInstalled && (
-          <Typography color="error" align="center" sx={{ mt: 2 }}>
-            Please install Freighter wallet.
+        {/* STEP 4: Generate Report */}
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="h6" gutterBottom>
+            Step 4: Generate Your Report
           </Typography>
-        )}
-
-        {reportGenerating && (
-          <Box sx={{ textAlign: "center", mt: 2 }}>
-            <CircularProgress />
-          </Box>
-        )}
+          <LoadingButton
+            fullWidth
+            variant="contained"
+            color="primary"
+            loading={reportGenerating}
+            onClick={handleGenerateReport}
+            disabled={!canGenerateReport}
+            sx={{ py: 1.5, mt: 1 }}
+          >
+            Generate Report
+          </LoadingButton>
+          {reportGenerating && (
+            <Box sx={{ mt: 2 }}>
+              <CircularProgress />
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                Generating report...
+              </Typography>
+            </Box>
+          )}
+          {!canGenerateReport && !reportGenerating && (
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ mt: 1, fontStyle: "italic" }}
+            >
+              Please connect your wallet, provide a project name, and upload a file first.
+            </Typography>
+          )}
+        </Box>
       </Paper>
 
+      {/* REPORT SECTION */}
       {vulnerabilities.length > 0 && (
         <Paper sx={{ mt: 6, mx: "auto", maxWidth: 800, p: 4, boxShadow: 3 }}>
           <Typography variant="h4" align="center">
@@ -212,6 +265,7 @@ export default function Dashboard({ onLogin }) {
 
           <Divider sx={{ my: 2 }} />
 
+          {/* Pie Chart */}
           <PieChart width={350} height={350} style={{ margin: "auto" }}>
             <Pie
               data={pieData}
