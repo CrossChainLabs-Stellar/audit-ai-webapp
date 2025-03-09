@@ -1,10 +1,22 @@
 // src/pages/Home.js
-import React from "react";
-import { Container, Typography, Button, Grid, Card, CardContent, Box } from "@mui/material";
+import React, { useState } from 'react';
+import { Container, Typography, Button, Grid, Card, CardContent, Box, Stack, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function Home() {
   // Common card styling to ensure equal height
+  const [email, setEmail] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+
+  const handleSignup = async () => {
+    if (!email) {
+      setStatusMessage('Please enter an email.');
+      return;
+    }
+
+    setStatusMessage('Done.');
+  }
+
   const cardStyles = {
     display: "flex",
     flexDirection: "column",
@@ -106,6 +118,46 @@ export default function Home() {
               </Card>
             </Grid>
           </Grid>
+          <Stack
+            direction="column"
+            alignItems="center"
+            sx={{
+              marginBottom: '3rem',
+              marginTop: '3rem',
+            }}
+            spacing={2}
+          >
+            <Typography variant="h5" sx={{ color: '#6ca4a4' }}>
+              Join the Waiting List
+            </Typography>
+            <Typography variant="body1" align="center" sx={{ maxWidth: '30rem', marginBottom: '1rem' }}>
+              Be the first to know when AuditAI launches. Sign up below and we’ll keep you updated.
+            </Typography>
+            <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
+              <TextField
+                label="Email Address"
+                variant="outlined"
+                size="small"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{ width: '20rem' }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSignup}
+                sx={{
+                  backgroundColor: '#6ca4a4',
+                  ':hover': {
+                    backgroundColor: '#5c9292',
+                  }
+                }}
+              >
+                Sign Up
+              </Button>
+            </Stack>
+            {statusMessage && <Typography variant="body2" color="text.secondary">{statusMessage}</Typography>}
+          </Stack>
         </Container>
       </Box>
     </Box>
