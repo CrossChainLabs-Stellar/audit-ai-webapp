@@ -12,7 +12,7 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-
+import { Client } from "../utils/client";
 import reportData from "../test/reportData.json";
 import FreighterBanner from "../components/FreighterBanner";
 
@@ -90,13 +90,13 @@ export default function Dashboard({ onLogin }) {
   };
 
   const handleGenerateReport = async () => {
-    // If not connected, try to connect
+    // Ensure wallet is connected
     if (!publicKey) {
       const connected = await handleConnectStellar();
       if (!connected) return;
     }
 
-    // Ensure project name and file are provided
+    // Validate required fields
     if (!projectName || !uploadedFile) {
       alert("Please provide a project name and upload a file.");
       return;
@@ -104,18 +104,27 @@ export default function Dashboard({ onLogin }) {
 
     setReportGenerating(true);
 
-    // Simulate async process
-    setTimeout(() => {
-      // Attach file name for demonstration
-      const updatedVulnerabilities = reportData.vulnerabilities.map((vuln) => ({
-        ...vuln,
-        file: uploadedFile ? uploadedFile.name : vuln.file,
-      }));
-
-      setVulnerabilities(updatedVulnerabilities);
-      setReportSections(reportData.reportSections);
-      setReportGenerating(false);
-    }, 3000);
+    const client = new Client();
+    try {
+      const result = await client.runAudit(publicKey, projectName, uploadedFile);
+      if (result && result.auditRow) {
+        const { report } = result.auditRow;
+        console.log(result.auditRow);
+        // Decode the Base64 encoded report using window.atob
+        try {
+          const decodedReport = JSON.parse(window.atob(report));
+          setVulnerabilities(decodedReport.vulnerabilities || []);
+          setReportSections(decodedReport.reportSections || []);
+        } catch (decodeErr) {
+          console.error("Failed to decode audit report:", decodeErr);
+          setVulnerabilities([]);
+          setReportSections([]);
+        }
+      }
+    } catch (error) {
+      console.error("runAudit API error:", error);
+    }
+    setReportGenerating(false);
   };
 
   // Prepare data for Pie chart
