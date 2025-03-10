@@ -89,10 +89,30 @@ export default function Dashboard({ onLogin }) {
         // After connecting, use client.getAudit to check if an audit already exists
         const client = new Client();
         try {
-          const auditResponse = await client.getAudit(pk);
-          console.log(auditResponse);
-          // Assuming your API returns { success: true, report: ... } when an audit is found
-          if (auditResponse?.success && auditResponse.report) {
+          const result = await client.getAudit(pk);
+          if (result?.success && result.report) {
+            const { report } = result.report;
+            // Decode the Base64 encoded report using window.atob
+            try {
+              let trimmedReport = report;
+              if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
+                trimmedReport = trimmedReport.slice(1, -1);
+              }
+              // Decode the Base64 string
+              const decodedString = base64Decode(trimmedReport);
+              // Parse JSON
+              const decodedReport = JSON.parse(decodedString);
+
+              setProjectName(decodedReport.name);
+              setVulnerabilities(decodedReport.vulnerabilities || []);
+              setReportSections(decodedReport.reportSections || []);
+              setReportDate(formatDate(decodedReport.date) || "");
+            } catch (decodeErr) {
+              console.error("Failed to decode audit report:", decodeErr);
+              setVulnerabilities([]);
+              setReportSections([]);
+            }
+
             setAuditExists(true);
           } else {
             setAuditExists(false);
@@ -220,6 +240,7 @@ export default function Dashboard({ onLogin }) {
             placeholder="e.g. My Soroban Contract"
             label="Project Name"
             value={projectName}
+            disabled={auditExists}
             onChange={(e) => setProjectName(e.target.value)}
             sx={{ mt: 1 }}
           />
@@ -230,7 +251,7 @@ export default function Dashboard({ onLogin }) {
           <Typography variant="h6" gutterBottom>
             Step 3: Upload Your Contract
           </Typography>
-          <Button variant="contained" component="label" sx={{ mt: 1 }}>
+          <Button disabled={auditExists} variant="contained" component="label" sx={{ mt: 1 }}>
             {uploadedFile ? "Change File" : "Upload File"}
             <input
               type="file"
