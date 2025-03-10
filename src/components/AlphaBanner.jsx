@@ -3,7 +3,7 @@ import { Box, Typography, Button, Alert } from '@mui/material';
 
 export default function AlphaBanner() {
   return (
-    <Box sx={{ mt: 2, p: 2, backgroundColor: '#fff3cd', borderRadius: 1 }}>
+    <Box sx={{ mb: 2, p: 2, backgroundColor: '#fff3cd', borderRadius: 1 }}>
       <Alert severity="info" sx={{ mb: 2 }}>
         Alpha Release - Preview Version
       </Alert>

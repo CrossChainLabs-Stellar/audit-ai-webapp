@@ -16,6 +16,7 @@ import { decode as base64Decode } from 'base-64';
 
 import { Client } from "../utils/client";
 import FreighterBanner from "../components/FreighterBanner";
+import AlphaBanner from "../components/AlphaBanner";
 
 function formatDate(isoDate) {
   const date = new Date(isoDate);
@@ -33,6 +34,7 @@ export default function Dashboard({ onLogin }) {
   const [reportGenerating, setReportGenerating] = useState(false);
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [reportSections, setReportSections] = useState([]);
+  const [auditExists, setAuditExists] = useState(false);
 
   const COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
 
@@ -72,7 +74,7 @@ export default function Dashboard({ onLogin }) {
   const handleConnectStellar = async () => {
     try {
       if (!isFreighterInstalled) {
-        return false; 
+        return false;
       }
       const accessObj = await requestAccess();
       if (accessObj.error) {
@@ -83,6 +85,22 @@ export default function Dashboard({ onLogin }) {
       if (pk) {
         setPublicKey(pk);
         onLogin(pk);
+
+        // After connecting, use client.getAudit to check if an audit already exists
+        const client = new Client();
+        try {
+          const auditResponse = await client.getAudit(pk);
+          console.log(auditResponse);
+          // Assuming your API returns { success: true, report: ... } when an audit is found
+          if (auditResponse?.success && auditResponse.report) {
+            setAuditExists(true);
+          } else {
+            setAuditExists(false);
+          }
+        } catch (auditErr) {
+          console.error("Error fetching audit:", auditErr);
+          setAuditExists(false);
+        }
         return true;
       }
     } catch (error) {
@@ -162,6 +180,8 @@ export default function Dashboard({ onLogin }) {
 
   return (
     <Box sx={{ minHeight: "100vh", p: 3, bgcolor: "#f9fafb" }}>
+      {/* Render the alpha banner if an audit already exists */}
+      {auditExists && <AlphaBanner />}
       <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
         <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3 }}>
           Run Audit
