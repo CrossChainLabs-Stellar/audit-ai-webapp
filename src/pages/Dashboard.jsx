@@ -12,15 +12,23 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { decode as base64Decode } from 'base-64';
+
 import { Client } from "../utils/client";
-import reportData from "../test/reportData.json";
 import FreighterBanner from "../components/FreighterBanner";
+
+function formatDate(isoDate) {
+  const date = new Date(isoDate);
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+}
 
 export default function Dashboard({ onLogin }) {
   const navigate = useNavigate();
   const [publicKey, setPublicKey] = useState(null);
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const [reportDate, setReportDate] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
   const [reportGenerating, setReportGenerating] = useState(false);
   const [vulnerabilities, setVulnerabilities] = useState([]);
@@ -106,15 +114,26 @@ export default function Dashboard({ onLogin }) {
 
     const client = new Client();
     try {
+      console.log({publicKey, projectName, uploadedFile});
       const result = await client.runAudit(publicKey, projectName, uploadedFile);
-      if (result && result.auditRow) {
-        const { report } = result.auditRow;
-        console.log(result.auditRow);
+      console.log(result);
+      if (result && result.report) {
+        const { report } = result.report;
         // Decode the Base64 encoded report using window.atob
         try {
-          const decodedReport = JSON.parse(window.atob(report));
+          let trimmedReport = report;
+          if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
+            trimmedReport = trimmedReport.slice(1, -1);
+          }
+          // Decode the Base64 string
+          const decodedString = base64Decode(trimmedReport);
+          // Parse JSON
+          const decodedReport = JSON.parse(decodedString);
+
+          console.log(decodedReport);
           setVulnerabilities(decodedReport.vulnerabilities || []);
           setReportSections(decodedReport.reportSections || []);
+          setReportDate(formatDate(decodedReport.date) || "");
         } catch (decodeErr) {
           console.error("Failed to decode audit report:", decodeErr);
           setVulnerabilities([]);
@@ -253,7 +272,7 @@ export default function Dashboard({ onLogin }) {
           </Typography>
 
           <Typography variant="subtitle1" align="center" gutterBottom>
-            February 20, 2025
+            {reportDate}
           </Typography>
 
           {/* Table of Contents */}
