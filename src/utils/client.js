@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.timeout = 30000;
+axios.defaults.timeout = 300000;
 
 //const API = import.meta.env.REACT_APP_API || 'https://auditron.io/api';
 const API = import.meta.env.REACT_APP_API || 'http://localhost:4000';
@@ -44,12 +44,13 @@ export class Client {
   }
 
   // Audit endpoint: POST /audit
-  // Expects: accountWallet (string), projectName (string), codeFile (File)
-  async runAudit(accountWallet, projectName, codeFile) {
+  // Expects: accountWallet (string), projectName (string), fileName (string), codeFile (File)
+  async runAudit(accountWallet, projectName, fileName, codeFile) {
     try {
       const formData = new FormData();
       formData.append('accountWallet', accountWallet);
       formData.append('projectName', projectName);
+      formData.append('fileName', fileName);
       formData.append('codeFile', codeFile);
 
       // axios will set the multipart boundary automatically

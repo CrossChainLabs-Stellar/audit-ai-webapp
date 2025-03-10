@@ -29,6 +29,7 @@ export default function Dashboard({ onLogin }) {
   const [publicKey, setPublicKey] = useState(null);
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const [fileName, setFileName] = useState("");
   const [reportDate, setReportDate] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
   const [reportGenerating, setReportGenerating] = useState(false);
@@ -104,6 +105,7 @@ export default function Dashboard({ onLogin }) {
               const decodedReport = JSON.parse(decodedString);
 
               setProjectName(decodedReport.name);
+              setFileName(decodedReport.fileName);
               setVulnerabilities(decodedReport.vulnerabilities || []);
               setReportSections(decodedReport.reportSections || []);
               setReportDate(formatDate(decodedReport.date) || "");
@@ -132,6 +134,7 @@ export default function Dashboard({ onLogin }) {
   const handleFileUpload = (event) => {
     if (event.target.files.length > 0) {
       setUploadedFile(event.target.files[0]);
+      setFileName(event.target.files[0].name);
     }
   };
 
@@ -153,7 +156,7 @@ export default function Dashboard({ onLogin }) {
     const client = new Client();
     try {
       console.log({publicKey, projectName, uploadedFile});
-      const result = await client.runAudit(publicKey, projectName, uploadedFile);
+      const result = await client.runAudit(publicKey, projectName, fileName, uploadedFile);
       console.log(result);
       if (result && result.report) {
         const { report } = result.report;
@@ -168,7 +171,6 @@ export default function Dashboard({ onLogin }) {
           // Parse JSON
           const decodedReport = JSON.parse(decodedString);
 
-          console.log(decodedReport);
           setVulnerabilities(decodedReport.vulnerabilities || []);
           setReportSections(decodedReport.reportSections || []);
           setReportDate(formatDate(decodedReport.date) || "");
@@ -261,7 +263,7 @@ export default function Dashboard({ onLogin }) {
           </Button>
           {uploadedFile && (
             <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
-              Selected File: {uploadedFile.name}
+              Selected File: {fileName}
             </Typography>
           )}
         </Box>
@@ -333,6 +335,11 @@ export default function Dashboard({ onLogin }) {
           </Box>
 
           <Divider sx={{ my: 2 }} />
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h5" gutterBottom>
+              1. Overview
+            </Typography>
+          </Box>
 
           {/* Pie Chart */}
           <PieChart width={350} height={350} style={{ margin: "auto" }}>
@@ -359,7 +366,7 @@ export default function Dashboard({ onLogin }) {
           {reportSections.map((section, index) => (
             <Box key={index} sx={{ mt: 4 }}>
               <Typography variant="h5" gutterBottom>
-                {section.title}
+                {index + 2}. {section.title}
               </Typography>
               <Typography variant="body1">{section.content}</Typography>
             </Box>
@@ -368,7 +375,7 @@ export default function Dashboard({ onLogin }) {
           {/* Findings Section */}
           <Box sx={{ mt: 6 }}>
             <Typography variant="h5" gutterBottom>
-              Findings
+              5. Findings
             </Typography>
             {vulnerabilities.map((vuln, index) => (
               <Box
@@ -383,7 +390,7 @@ export default function Dashboard({ onLogin }) {
                   {vuln.title}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>File:</strong> {vuln.file}
+                  <strong>File:</strong> {fileName}
                 </Typography>
                 <Typography variant="body2">
                   <strong>Description:</strong> {vuln.description}
