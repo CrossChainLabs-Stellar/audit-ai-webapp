@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Alert, TextField, Stack } from '@mui/material';
+import { Box, Typography, Button, Alert, TextField, Stack, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { Client } from '../utils/client';
 
 export default function AlphaBanner() {
   const [email, setEmail] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
+  const [visible, setVisible] = useState(true);
   const client = new Client();
 
   const handleSignup = async () => {
@@ -21,9 +23,20 @@ export default function AlphaBanner() {
     }
   };
 
+  if (!visible) return null;
+
   return (
-    <Box sx={{ mb: 2, p: 2, backgroundColor: '#fff3cd', borderRadius: 1 }}>
-      <Alert severity="info" sx={{ mb: 2 }}>
+    <Box sx={{ mb: 2, p: 2, backgroundColor: '#fff3cd', borderRadius: 1, position: 'relative' }}>
+      {/* Close button */}
+      <IconButton 
+        size="small" 
+        onClick={() => setVisible(false)} 
+        sx={{ position: 'absolute', top: 4, right: 4 }}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+
+      <Alert severity="info" sx={{ mt: 2, mb: 2 }}>
         Alpha Release - Preview Version
       </Alert>
       <Typography variant="body2" sx={{ mb: 2 }}>
