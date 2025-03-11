@@ -12,19 +12,30 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { decode as base64Decode } from 'base-64';
 
-import reportData from "../test/reportData.json";
+import { Client } from "../utils/client";
 import FreighterBanner from "../components/FreighterBanner";
+import AlphaBanner from "../components/AlphaBanner";
+
+function formatDate(isoDate) {
+  const date = new Date(isoDate);
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+}
 
 export default function Dashboard({ onLogin }) {
   const navigate = useNavigate();
   const [publicKey, setPublicKey] = useState(null);
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [reportDate, setReportDate] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
   const [reportGenerating, setReportGenerating] = useState(false);
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [reportSections, setReportSections] = useState([]);
+  const [auditExists, setAuditExists] = useState(false);
 
   const COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
 
@@ -64,7 +75,7 @@ export default function Dashboard({ onLogin }) {
   const handleConnectStellar = async () => {
     try {
       if (!isFreighterInstalled) {
-        return false; 
+        return false;
       }
       const accessObj = await requestAccess();
       if (accessObj.error) {
@@ -75,6 +86,43 @@ export default function Dashboard({ onLogin }) {
       if (pk) {
         setPublicKey(pk);
         onLogin(pk);
+
+        // After connecting, use client.getAudit to check if an audit already exists
+        const client = new Client();
+        try {
+          const result = await client.getAudit(pk);
+          if (result?.success && result.report) {
+            const { report } = result.report;
+            // Decode the Base64 encoded report using window.atob
+            try {
+              let trimmedReport = report;
+              if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
+                trimmedReport = trimmedReport.slice(1, -1);
+              }
+              // Decode the Base64 string
+              const decodedString = base64Decode(trimmedReport);
+              // Parse JSON
+              const decodedReport = JSON.parse(decodedString);
+
+              setProjectName(decodedReport.name);
+              setFileName(decodedReport.fileName);
+              setVulnerabilities(decodedReport.vulnerabilities || []);
+              setReportSections(decodedReport.reportSections || []);
+              setReportDate(formatDate(decodedReport.date) || "");
+            } catch (decodeErr) {
+              console.error("Failed to decode audit report:", decodeErr);
+              setVulnerabilities([]);
+              setReportSections([]);
+            }
+
+            setAuditExists(true);
+          } else {
+            setAuditExists(false);
+          }
+        } catch (auditErr) {
+          console.error("Error fetching audit:", auditErr);
+          setAuditExists(false);
+        }
         return true;
       }
     } catch (error) {
@@ -86,17 +134,18 @@ export default function Dashboard({ onLogin }) {
   const handleFileUpload = (event) => {
     if (event.target.files.length > 0) {
       setUploadedFile(event.target.files[0]);
+      setFileName(event.target.files[0].name);
     }
   };
 
   const handleGenerateReport = async () => {
-    // If not connected, try to connect
+    // Ensure wallet is connected
     if (!publicKey) {
       const connected = await handleConnectStellar();
       if (!connected) return;
     }
 
-    // Ensure project name and file are provided
+    // Validate required fields
     if (!projectName || !uploadedFile) {
       alert("Please provide a project name and upload a file.");
       return;
@@ -104,18 +153,37 @@ export default function Dashboard({ onLogin }) {
 
     setReportGenerating(true);
 
-    // Simulate async process
-    setTimeout(() => {
-      // Attach file name for demonstration
-      const updatedVulnerabilities = reportData.vulnerabilities.map((vuln) => ({
-        ...vuln,
-        file: uploadedFile ? uploadedFile.name : vuln.file,
-      }));
+    const client = new Client();
+    try {
+      console.log({publicKey, projectName, uploadedFile});
+      const result = await client.runAudit(publicKey, projectName, fileName, uploadedFile);
+      console.log(result);
+      if (result && result.report) {
+        const { report } = result.report;
+        // Decode the Base64 encoded report using window.atob
+        try {
+          let trimmedReport = report;
+          if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
+            trimmedReport = trimmedReport.slice(1, -1);
+          }
+          // Decode the Base64 string
+          const decodedString = base64Decode(trimmedReport);
+          // Parse JSON
+          const decodedReport = JSON.parse(decodedString);
 
-      setVulnerabilities(updatedVulnerabilities);
-      setReportSections(reportData.reportSections);
-      setReportGenerating(false);
-    }, 3000);
+          setVulnerabilities(decodedReport.vulnerabilities || []);
+          setReportSections(decodedReport.reportSections || []);
+          setReportDate(formatDate(decodedReport.date) || "");
+        } catch (decodeErr) {
+          console.error("Failed to decode audit report:", decodeErr);
+          setVulnerabilities([]);
+          setReportSections([]);
+        }
+      }
+    } catch (error) {
+      console.error("runAudit API error:", error);
+    }
+    setReportGenerating(false);
   };
 
   // Prepare data for Pie chart
@@ -134,6 +202,8 @@ export default function Dashboard({ onLogin }) {
 
   return (
     <Box sx={{ minHeight: "100vh", p: 3, bgcolor: "#f9fafb" }}>
+      {/* Render the alpha banner if an audit already exists */}
+      {auditExists && <AlphaBanner />}
       <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
         <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3 }}>
           Run Audit
@@ -172,6 +242,7 @@ export default function Dashboard({ onLogin }) {
             placeholder="e.g. My Soroban Contract"
             label="Project Name"
             value={projectName}
+            disabled={auditExists}
             onChange={(e) => setProjectName(e.target.value)}
             sx={{ mt: 1 }}
           />
@@ -182,7 +253,7 @@ export default function Dashboard({ onLogin }) {
           <Typography variant="h6" gutterBottom>
             Step 3: Upload Your Contract
           </Typography>
-          <Button variant="contained" component="label" sx={{ mt: 1 }}>
+          <Button disabled={auditExists} variant="contained" component="label" sx={{ mt: 1 }}>
             {uploadedFile ? "Change File" : "Upload File"}
             <input
               type="file"
@@ -192,7 +263,7 @@ export default function Dashboard({ onLogin }) {
           </Button>
           {uploadedFile && (
             <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
-              Selected File: {uploadedFile.name}
+              Selected File: {fileName}
             </Typography>
           )}
         </Box>
@@ -244,7 +315,7 @@ export default function Dashboard({ onLogin }) {
           </Typography>
 
           <Typography variant="subtitle1" align="center" gutterBottom>
-            February 20, 2025
+            {reportDate}
           </Typography>
 
           {/* Table of Contents */}
@@ -264,6 +335,11 @@ export default function Dashboard({ onLogin }) {
           </Box>
 
           <Divider sx={{ my: 2 }} />
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h5" gutterBottom>
+              1. Overview
+            </Typography>
+          </Box>
 
           {/* Pie Chart */}
           <PieChart width={350} height={350} style={{ margin: "auto" }}>
@@ -290,7 +366,7 @@ export default function Dashboard({ onLogin }) {
           {reportSections.map((section, index) => (
             <Box key={index} sx={{ mt: 4 }}>
               <Typography variant="h5" gutterBottom>
-                {section.title}
+                {index + 2}. {section.title}
               </Typography>
               <Typography variant="body1">{section.content}</Typography>
             </Box>
@@ -299,7 +375,7 @@ export default function Dashboard({ onLogin }) {
           {/* Findings Section */}
           <Box sx={{ mt: 6 }}>
             <Typography variant="h5" gutterBottom>
-              Findings
+              5. Findings
             </Typography>
             {vulnerabilities.map((vuln, index) => (
               <Box
@@ -314,7 +390,7 @@ export default function Dashboard({ onLogin }) {
                   {vuln.title}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>File:</strong> {vuln.file}
+                  <strong>File:</strong> {fileName}
                 </Typography>
                 <Typography variant="body2">
                   <strong>Description:</strong> {vuln.description}

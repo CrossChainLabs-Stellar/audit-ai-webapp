@@ -13,17 +13,26 @@ import {
 import { Link } from "react-router-dom";
 import { X, LinkedIn, Telegram, GitHub } from '@mui/icons-material';
 import SCFLogoBlack from '../assets/SCFLogoSVG-black.svg';
+import Client from '../utils/client.js';
 
 export default function Home() {
   const [email, setEmail] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
+
+  const client = new Client();
 
   const handleSignup = async () => {
     if (!email) {
       setStatusMessage('Please enter an email.');
       return;
     }
-    setStatusMessage('Done.');
+    try {
+      const response = await client.waitlist(email);
+      setStatusMessage(response.message || "Successfully signed up!");
+    } catch (error) {
+      console.error("Waitlist signup error:", error);
+      setStatusMessage("Signup failed. Please try again later.");
+    }
   };
 
   const cardStyles = {
