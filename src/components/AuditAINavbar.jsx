@@ -56,7 +56,7 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
             style={{ height: "40px", marginRight: "8px" }}
           />
           <Typography
-            variant="h6"
+            variant="h5"
             sx={{
               textDecoration: "none",
               color: "white",
@@ -68,7 +68,7 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
 
         {/* Center: Navigation Buttons (only if publicKey exists) */}
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
-          {publicKey && (
+          {/*publicKey && (
             <Button
               component={Link}
               variant="outlined"
@@ -84,7 +84,7 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
             >
               My reports
             </Button>
-          )}
+          )*/}
         </Box>
 
         {/* Right: Display publicKey or Login button */}
@@ -103,9 +103,10 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
             </Typography>
           ) : (
             <Button
-              onClick={handleLogin}
+              component={Link}
               variant="outlined"
               color="inherit"
+              to="/dashboard"
               sx={{
                 textTransform: "none",
                 fontWeight: "bold",
@@ -113,7 +114,7 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
                 "&:hover": { borderColor: "white" },
               }}
             >
-              Login
+              Get Started
             </Button>
           )}
         </Box>
