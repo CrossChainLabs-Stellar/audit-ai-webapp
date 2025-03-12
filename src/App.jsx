@@ -7,9 +7,12 @@ import { ThemeProvider } from "./theme/theme-provider";
 // Pages
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
 
 // Components
 import AuditAINavbar from "./components/AuditAINavbar";
+import Footer from "./components/Footer";
 
 function App() {
   const [publicKey, setPublicKey] = useState(null);
@@ -29,8 +32,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard publicKey={publicKey} onLogin={handleLogin} />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
           {/*<Route path="*" element={<NotFound />} />*/}
         </Routes>
+        <Footer/>
       </Router>
     </ThemeProvider>
   );
