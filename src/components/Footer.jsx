@@ -53,7 +53,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           color="inherit"
         >
-          <X />
+          <X fontSize="small" />
         </Link>
         <Link
           href="https://www.linkedin.com"
@@ -61,7 +61,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           color="inherit"
         >
-          <LinkedIn />
+          <LinkedIn fontSize="small" />
         </Link>
       </Box>
     </Box>
