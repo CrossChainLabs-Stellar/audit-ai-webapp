@@ -104,7 +104,7 @@ export default function Dashboard({ publicKey, onLogin }) {
               // Parse JSON
               const decodedReport = JSON.parse(decodedString);
 
-              setProjectName(decodedReport.name);
+              setProjectName(decodedReport.fileName);
               setFileName(decodedReport.fileName);
               setVulnerabilities(decodedReport.vulnerabilities || []);
               setReportSections(decodedReport.reportSections || []);
@@ -212,7 +212,7 @@ export default function Dashboard({ publicKey, onLogin }) {
         {/* STEP 1: Connect Freighter Wallet */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h6" gutterBottom>
-            Step 1: Connect Freighter Wallet
+            Connect Freighter Wallet
           </Typography>
           {publicKey ? (
             <Typography variant="body2" color="success.main">
@@ -232,7 +232,7 @@ export default function Dashboard({ publicKey, onLogin }) {
           {!isFreighterInstalled && <FreighterBanner />}
         </Box>
 
-        {/* STEP 2: Enter Project Name */}
+        {/* STEP 2: Enter Project Name 
         <Box sx={{ mb: 4 }}>
           <Typography variant="h6" gutterBottom>
             Step 2: Provide a Project Name
@@ -247,11 +247,12 @@ export default function Dashboard({ publicKey, onLogin }) {
             sx={{ mt: 1 }}
           />
         </Box>
+        */}
 
         {/* STEP 3: Upload Contract File */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h6" gutterBottom>
-            Step 3: Upload Your Contract
+            Upload Your Contract
           </Typography>
           <Button disabled={auditExists} variant="contained" component="label" sx={{ mt: 1 }}>
             {uploadedFile ? "Change File" : "Upload File"}
@@ -271,7 +272,7 @@ export default function Dashboard({ publicKey, onLogin }) {
         {/* STEP 4: Generate Report */}
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="h6" gutterBottom>
-            Step 4: Generate Your Report
+            Generate Your Report
           </Typography>
           <LoadingButton
             fullWidth
@@ -298,7 +299,7 @@ export default function Dashboard({ publicKey, onLogin }) {
               color="textSecondary"
               sx={{ mt: 1, fontStyle: "italic" }}
             >
-              Please connect your wallet, provide a project name, and upload a file first.
+              Please connect your wallet and upload a file first.
             </Typography>
           )}
         </Box>
@@ -311,7 +312,7 @@ export default function Dashboard({ publicKey, onLogin }) {
             Security Audit Report
           </Typography>
           <Typography variant="h5" align="center" gutterBottom>
-            {projectName}
+            {fileName}
           </Typography>
 
           <Typography variant="subtitle1" align="center" gutterBottom>
