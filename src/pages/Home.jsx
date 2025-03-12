@@ -65,7 +65,7 @@ export default function Home() {
       >
         <Container maxWidth="md">
           <Typography variant="h2" component="h1" sx={{ fontWeight: "bold", mb: 2 }}>
-            Welcome to AuditAI
+            Welcome to Auditron
           </Typography>
           <Typography variant="h5" sx={{ mb: 4 }}>
             Your Automated Smart Contract Audit Platform
@@ -119,7 +119,7 @@ export default function Home() {
 
           {/* Demo Video Section */}
           <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-            Demo Video: See AuditAI in Action
+            Demo Video: See Auditron in Action
           </Typography>
           <Box
             sx={{
@@ -210,7 +210,7 @@ export default function Home() {
               Join the Waiting List
             </Typography>
             <Typography variant="body1" align="center" sx={{ maxWidth: '30rem', marginBottom: '1rem' }}>
-              Be the first to know when AuditAI launches. Sign up below and we’ll keep you updated.
+              Be the first to know when Auditron launches. Sign up below and we’ll keep you updated.
             </Typography>
             <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
               <TextField

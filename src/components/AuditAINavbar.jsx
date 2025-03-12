@@ -52,7 +52,7 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
           }}>
           <img
             src={logo}
-            alt="AuditAI Logo"
+            alt="Auditron Logo"
             style={{ height: "40px", marginRight: "8px" }}
           />
           <Typography
@@ -62,7 +62,7 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
               color: "white",
             }}
           >
-            AuditAI
+            Auditron
           </Typography>
         </Box>
 
