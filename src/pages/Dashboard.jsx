@@ -231,105 +231,99 @@ return (
   <Box sx={{ minHeight: "100vh", p: 3, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", }}>
     {/* Render the alpha banner if an audit already exists */}
     {auditExists && <AlphaBanner />}
-    {!auditExists && !loadingAudit && <Paper sx={{ maxWidth: 700, mx: "auto", mt: 4, p: 4, boxShadow: 3 }}>
-      <Typography variant="h4" gutterBottom align="center" sx={{ mt: 2, mb: 5 }}>
-        Run Audit
+    {!auditExists && !loadingAudit && (
+  <Paper
+    sx={{
+      maxWidth: 700,
+      mx: "auto",
+      mt: 4,
+      p: 4,
+      boxShadow: 3,
+      borderRadius: 2, // rounded corners for a modern look
+      backgroundColor: "background.paper",
+    }}
+  >
+    <Typography variant="h4" gutterBottom align="center" sx={{ mt: 2, mb: 5 }}>
+      Run Audit
+    </Typography>
+
+    {/* STEP 1: Connect Freighter Wallet */}
+    <Box sx={{ mb: 4, textAlign: "left" }}>
+      <Typography variant="subtitle1" gutterBottom>
+        STEP 1: Connect Freighter Wallet
       </Typography>
-
-      {/* STEP 1: Connect Freighter Wallet */}
-      <Box sx={{ mb: 4, textAlign: "center" }}>
-        <Typography variant="h6" gutterBottom>
-          STEP 1: Connect Freighter Wallet
+      {publicKey ? (
+        <Typography variant="body2" color="secondary">
+          {publicKey}
         </Typography>
-        {publicKey ? (
-          <Typography variant="body2" color="secondary">
-            {publicKey}
-          </Typography>
-        ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleConnectStellar}
-            sx={{ display: "block", mx: "auto", mt: 1 }}
-          >
-            Connect Freighter
-          </Button>
-        )}
-        {!isFreighterInstalled && <FreighterBanner />}
-      </Box>
+      ) : (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleConnectStellar}
+          sx={{ display: "inline-block", mt: 1 }}
+        >
+          Connect Freighter
+        </Button>
+      )}
+      {!isFreighterInstalled && <FreighterBanner />}
+    </Box>
 
-      {/* STEP 2: Enter Project Name 
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Step 2: Provide a Project Name
-          </Typography>
-          <TextField
-            fullWidth
-            placeholder="e.g. My Soroban Contract"
-            label="Project Name"
-            value={projectName}
-            disabled={auditExists}
-            onChange={(e) => setProjectName(e.target.value)}
-            sx={{ mt: 1 }}
-          />
-        </Box>
-        */}
-
-      {/* STEP 3: Upload Contract File */}
-      <Box sx={{ mb: 4, textAlign: "center" }}>
-        <Typography variant="h6" gutterBottom>
-          STEP 2: Upload Your Smart Contract
-        </Typography>
+    {/* STEP 2: Upload Smart Contract */}
+    <Box sx={{ mb: 4, textAlign: "left" }}>
+      <Typography variant="subtitle1" gutterBottom>
+        STEP 2: Upload Smart Contract
+      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
         <Button
           disabled={auditExists}
           variant="contained"
           component="label"
-          sx={{ display: "inline-block", mt: 0.5 }}
         >
           {uploadedFile ? "Change File" : "Upload File"}
           <input type="file" hidden onChange={handleFileUpload} />
         </Button>
         {uploadedFile && (
-          <Typography variant="body2" color="secondary" sx={{ mt: 1 }}>
+          <Typography variant="body2" color="secondary" sx={{ ml: 2 }}>
             {fileName}
           </Typography>
         )}
       </Box>
+    </Box>
 
-      {/* STEP 4: Generate Report */}
-      <Box sx={{ textAlign: "center" }}>
-        <Typography variant="h6" gutterBottom>
-          STEP3: Generate Your Audit Report
-        </Typography>
-        <LoadingButton
-          variant="contained"
-          color="primary"
-          loading={reportGenerating}
-          onClick={handleGenerateReport}
-          disabled={!canGenerateReport}
-          sx={{ display: "inline-block", mt: 0.5, mb: 1 }}
+    {/* STEP 3: Generate Report */}
+    <Box sx={{ textAlign: "center" }}>
+      {!canGenerateReport && !reportGenerating && (
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ mt: 1, fontStyle: "italic" }}
         >
-          Generate Report
-        </LoadingButton>
-        {reportGenerating && (
-          <Box sx={{ mt: 1 }}>
-            <CircularProgress />
-            <Typography variant="body2" sx={{ mt: 1 }}>
-              Generating report...
-            </Typography>
-          </Box>
-        )}
-       {/*} {!canGenerateReport && !reportGenerating && (
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ mt: 1, fontStyle: "italic" }}
-          >
-            Please connect your wallet and upload a file first.
+          Please connect your wallet and upload a file first.
+        </Typography>
+      )}
+      <LoadingButton
+        fullWidth
+        variant="contained"
+        color="primary"
+        loading={reportGenerating}
+        onClick={handleGenerateReport}
+        disabled={!canGenerateReport}
+        sx={{ display: "block", mt: 1, mb: 1, py: 2 }}
+      >
+        Generate Audit Report
+      </LoadingButton>
+      {reportGenerating && (
+        <Box sx={{ mt: 2 }}>
+          <CircularProgress />
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            Generating report...
           </Typography>
-        )}*/}
-      </Box>
-    </Paper>}
+        </Box>
+      )}
+    </Box>
+  </Paper>
+)}
 
     {/* REPORT SECTION */}
     {vulnerabilities.length > 0 && (
