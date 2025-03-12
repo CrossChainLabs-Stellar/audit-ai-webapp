@@ -64,57 +64,45 @@ export default function Dashboard({ publicKey, onLogin }) {
     }
   };
 
+  const viewReport = async (report) => {
+    if (report) {
+      try {
+        let trimmedReport = report;
+        if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
+          trimmedReport = trimmedReport.slice(1, -1);
+        }
+        // Decode the Base64 string
+        const decodedString = base64Decode(trimmedReport);
+        // Parse JSON
+        const decodedReport = JSON.parse(decodedString);
+
+        setProjectName(decodedReport.fileName);
+        setFileName(decodedReport.fileName);
+        setVulnerabilities(decodedReport.vulnerabilities || []);
+        setReportSections(decodedReport.reportSections || []);
+        setReportDate(formatDate(decodedReport.date) || "");
+      } catch (decodeErr) {
+        console.error("Failed to decode audit report:", decodeErr);
+        setVulnerabilities([]);
+        setReportSections([]);
+      }
+    }
+  }
+
   useEffect(() => {
     const checkFreighter = async () => {
       const connectionStatus = await isConnected();
       setIsFreighterInstalled(connectionStatus.isConnected);
     };
     checkFreighter();
-  }, []);
-
-  const handleConnectStellar = async () => {
-    try {
-      if (!isFreighterInstalled) {
-        return false;
-      }
-      const accessObj = await requestAccess();
-      if (accessObj.error) {
-        alert(`Error: ${accessObj.error}`);
-        return false;
-      }
-      const pk = accessObj.address;
-      if (pk) {
-        //setPublicKey(pk);
-        onLogin(pk);
-
-        // After connecting, use client.getAudit to check if an audit already exists
+    const checkAuditExists = async () => {
+      if (publicKey) {
         const client = new Client();
         try {
-          const result = await client.getAudit(pk);
+          const result = await client.getAudit(publicKey);
           if (result?.success && result.report) {
             const { report } = result.report;
-            // Decode the Base64 encoded report using window.atob
-            try {
-              let trimmedReport = report;
-              if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
-                trimmedReport = trimmedReport.slice(1, -1);
-              }
-              // Decode the Base64 string
-              const decodedString = base64Decode(trimmedReport);
-              // Parse JSON
-              const decodedReport = JSON.parse(decodedString);
-
-              setProjectName(decodedReport.fileName);
-              setFileName(decodedReport.fileName);
-              setVulnerabilities(decodedReport.vulnerabilities || []);
-              setReportSections(decodedReport.reportSections || []);
-              setReportDate(formatDate(decodedReport.date) || "");
-            } catch (decodeErr) {
-              console.error("Failed to decode audit report:", decodeErr);
-              setVulnerabilities([]);
-              setReportSections([]);
-            }
-
+            await viewReport(report);
             setAuditExists(true);
           } else {
             setAuditExists(false);
@@ -123,116 +111,153 @@ export default function Dashboard({ publicKey, onLogin }) {
           console.error("Error fetching audit:", auditErr);
           setAuditExists(false);
         }
-        return true;
       }
-    } catch (error) {
-      console.error("Stellar wallet connection error: ", error);
+    };
+    checkAuditExists();
+  }, []);
+
+const handleConnectStellar = async () => {
+  try {
+    if (!isFreighterInstalled) {
+      return false;
     }
-    return false;
-  };
-
-  const handleFileUpload = (event) => {
-    if (event.target.files.length > 0) {
-      setUploadedFile(event.target.files[0]);
-      setFileName(event.target.files[0].name);
+    const accessObj = await requestAccess();
+    if (accessObj.error) {
+      alert(`Error: ${accessObj.error}`);
+      return false;
     }
-  };
+    const pk = accessObj.address;
+    if (pk) {
+      //setPublicKey(pk);
+      onLogin(pk);
 
-  const handleGenerateReport = async () => {
-    // Ensure wallet is connected
-    if (!publicKey) {
-      const connected = await handleConnectStellar();
-      if (!connected) return;
-    }
+      // After connecting, use client.getAudit to check if an audit already exists
+      const client = new Client();
+      try {
+        const result = await client.getAudit(pk);
+        if (result?.success && result.report) {
+          const { report } = result.report;
+          await viewReport(report);
 
-    // Validate required fields
-    if (!projectName || !uploadedFile) {
-      alert("Please provide a project name and upload a file.");
-      return;
-    }
-
-    setReportGenerating(true);
-
-    const client = new Client();
-    try {
-      console.log({publicKey, projectName, uploadedFile});
-      const result = await client.runAudit(publicKey, projectName, fileName, uploadedFile);
-      console.log(result);
-      if (result && result.report) {
-        const { report } = result.report;
-        // Decode the Base64 encoded report using window.atob
-        try {
-          let trimmedReport = report;
-          if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
-            trimmedReport = trimmedReport.slice(1, -1);
-          }
-          // Decode the Base64 string
-          const decodedString = base64Decode(trimmedReport);
-          // Parse JSON
-          const decodedReport = JSON.parse(decodedString);
-
-          setVulnerabilities(decodedReport.vulnerabilities || []);
-          setReportSections(decodedReport.reportSections || []);
-          setReportDate(formatDate(decodedReport.date) || "");
-        } catch (decodeErr) {
-          console.error("Failed to decode audit report:", decodeErr);
-          setVulnerabilities([]);
-          setReportSections([]);
+          setAuditExists(true);
+        } else {
+          setAuditExists(false);
         }
+      } catch (auditErr) {
+        console.error("Error fetching audit:", auditErr);
+        setAuditExists(false);
       }
-    } catch (error) {
-      console.error("runAudit API error:", error);
+      return true;
     }
-    setReportGenerating(false);
-  };
+  } catch (error) {
+    console.error("Stellar wallet connection error: ", error);
+  }
+  return false;
+};
 
-  // Prepare data for Pie chart
-  const severityCounts = vulnerabilities.reduce((acc, vuln) => {
-    acc[vuln.severity] = (acc[vuln.severity] || 0) + 1;
-    return acc;
-  }, {});
-  const pieData = [
-    { name: "High", value: severityCounts.High || 0 },
-    { name: "Medium", value: severityCounts.Medium || 0 },
-    { name: "Low", value: severityCounts.Low || 0 }
-  ];
+const handleFileUpload = (event) => {
+  if (event.target.files.length > 0) {
+    setUploadedFile(event.target.files[0]);
+    setFileName(event.target.files[0].name);
+    setProjectName(event.target.files[0].name);
+  }
+};
 
-  // Check if user can generate a report
-  const canGenerateReport = publicKey && projectName && uploadedFile;
+const handleGenerateReport = async () => {
+  // Ensure wallet is connected
+  if (!publicKey) {
+    const connected = await handleConnectStellar();
+    if (!connected) return;
+  }
 
-  return (
-    <Box sx={{ minHeight: "100vh", p: 3, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", }}>
-      {/* Render the alpha banner if an audit already exists */}
-      {auditExists && <AlphaBanner />}
-      <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
-        <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3 }}>
-          Run Audit
+  // Validate required fields
+  if (!projectName || !uploadedFile) {
+    alert("Please provide a project name and upload a file.");
+    return;
+  }
+
+  setReportGenerating(true);
+
+  const client = new Client();
+  try {
+    console.log({ publicKey, projectName, uploadedFile });
+    const result = await client.runAudit(publicKey, projectName, fileName, uploadedFile);
+    console.log(result);
+    if (result && result.report) {
+      const { report } = result.report;
+      // Decode the Base64 encoded report using window.atob
+      try {
+        let trimmedReport = report;
+        if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
+          trimmedReport = trimmedReport.slice(1, -1);
+        }
+        // Decode the Base64 string
+        const decodedString = base64Decode(trimmedReport);
+        // Parse JSON
+        const decodedReport = JSON.parse(decodedString);
+
+        setVulnerabilities(decodedReport.vulnerabilities || []);
+        setReportSections(decodedReport.reportSections || []);
+        setReportDate(formatDate(decodedReport.date) || "");
+      } catch (decodeErr) {
+        console.error("Failed to decode audit report:", decodeErr);
+        setVulnerabilities([]);
+        setReportSections([]);
+      }
+    }
+  } catch (error) {
+    console.error("runAudit API error:", error);
+  }
+  setReportGenerating(false);
+};
+
+// Prepare data for Pie chart
+const severityCounts = vulnerabilities.reduce((acc, vuln) => {
+  acc[vuln.severity] = (acc[vuln.severity] || 0) + 1;
+  return acc;
+}, {});
+const pieData = [
+  { name: "High", value: severityCounts.High || 0 },
+  { name: "Medium", value: severityCounts.Medium || 0 },
+  { name: "Low", value: severityCounts.Low || 0 }
+];
+
+// Check if user can generate a report
+const canGenerateReport = publicKey && projectName && uploadedFile;
+
+return (
+  <Box sx={{ minHeight: "100vh", p: 3, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", }}>
+    {/* Render the alpha banner if an audit already exists */}
+    {auditExists && <AlphaBanner />}
+    {!auditExists && <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
+      <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3 }}>
+        Run Audit
+      </Typography>
+
+      {/* STEP 1: Connect Freighter Wallet */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Connect Freighter Wallet
         </Typography>
-
-        {/* STEP 1: Connect Freighter Wallet */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Connect Freighter Wallet
+        {publicKey ? (
+          <Typography variant="body2" color="success.main">
+            Wallet connected: <strong>{publicKey}</strong>
           </Typography>
-          {publicKey ? (
-            <Typography variant="body2" color="success.main">
-              Wallet connected: <strong>{publicKey}</strong>
-            </Typography>
-          ) : (
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleConnectStellar}
-              sx={{ mt: 1 }}
-            >
-              Connect Freighter
-            </Button>
-          )}
-          {/* Render the banner if Freighter is not installed */}
-          {!isFreighterInstalled && <FreighterBanner />}
-        </Box>
+        ) : (
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleConnectStellar}
+            sx={{ mt: 1 }}
+          >
+            Connect Freighter
+          </Button>
+        )}
+        {/* Render the banner if Freighter is not installed */}
+        {!isFreighterInstalled && <FreighterBanner />}
+      </Box>
 
-        {/* STEP 2: Enter Project Name 
+      {/* STEP 2: Enter Project Name 
         <Box sx={{ mb: 4 }}>
           <Typography variant="h6" gutterBottom>
             Step 2: Provide a Project Name
@@ -249,176 +274,176 @@ export default function Dashboard({ publicKey, onLogin }) {
         </Box>
         */}
 
-        {/* STEP 3: Upload Contract File */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Upload Your Contract
+      {/* STEP 3: Upload Contract File */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Upload Your Contract
+        </Typography>
+        <Button disabled={auditExists} variant="contained" component="label" sx={{ mt: 1 }}>
+          {uploadedFile ? "Change File" : "Upload File"}
+          <input
+            type="file"
+            hidden
+            onChange={handleFileUpload}
+          />
+        </Button>
+        {uploadedFile && (
+          <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
+            Selected File: {fileName}
           </Typography>
-          <Button disabled={auditExists} variant="contained" component="label" sx={{ mt: 1 }}>
-            {uploadedFile ? "Change File" : "Upload File"}
-            <input
-              type="file"
-              hidden
-              onChange={handleFileUpload}
-            />
-          </Button>
-          {uploadedFile && (
-            <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
-              Selected File: {fileName}
-            </Typography>
-          )}
-        </Box>
+        )}
+      </Box>
 
-        {/* STEP 4: Generate Report */}
-        <Box sx={{ textAlign: "center" }}>
-          <Typography variant="h6" gutterBottom>
-            Generate Your Report
-          </Typography>
-          <LoadingButton
-            fullWidth
-            variant="contained"
-            color="primary"
-            loading={reportGenerating}
-            onClick={handleGenerateReport}
-            disabled={!canGenerateReport}
-            sx={{ py: 1.5, mt: 1 }}
+      {/* STEP 4: Generate Report */}
+      <Box sx={{ textAlign: "center" }}>
+        <Typography variant="h6" gutterBottom>
+          Generate Your Report
+        </Typography>
+        <LoadingButton
+          fullWidth
+          variant="contained"
+          color="primary"
+          loading={reportGenerating}
+          onClick={handleGenerateReport}
+          disabled={!canGenerateReport}
+          sx={{ py: 1.5, mt: 1 }}
+        >
+          Generate Report
+        </LoadingButton>
+        {reportGenerating && (
+          <Box sx={{ mt: 2 }}>
+            <CircularProgress />
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              Generating report...
+            </Typography>
+          </Box>
+        )}
+        {!canGenerateReport && !reportGenerating && (
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            sx={{ mt: 1, fontStyle: "italic" }}
           >
-            Generate Report
-          </LoadingButton>
-          {reportGenerating && (
-            <Box sx={{ mt: 2 }}>
-              <CircularProgress />
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                Generating report...
-              </Typography>
-            </Box>
-          )}
-          {!canGenerateReport && !reportGenerating && (
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              sx={{ mt: 1, fontStyle: "italic" }}
-            >
-              Please connect your wallet and upload a file first.
-            </Typography>
-          )}
-        </Box>
-      </Paper>
-
-      {/* REPORT SECTION */}
-      {vulnerabilities.length > 0 && (
-        <Paper sx={{ mt: 6, mx: "auto", maxWidth: 800, p: 4, boxShadow: 3 }}>
-          <Typography variant="h4" align="center">
-            Security Audit Report
+            Please connect your wallet and upload a file first.
           </Typography>
-          <Typography variant="h5" align="center" gutterBottom>
-            {fileName}
+        )}
+      </Box>
+    </Paper>}
+
+    {/* REPORT SECTION */}
+    {vulnerabilities.length > 0 && (
+      <Paper sx={{ mt: 6, mx: "auto", maxWidth: 800, p: 4, boxShadow: 3 }}>
+        <Typography variant="h4" align="center">
+          Security Audit Report
+        </Typography>
+        <Typography variant="h5" align="center" gutterBottom>
+          {fileName}
+        </Typography>
+
+        <Typography variant="subtitle1" align="center" gutterBottom>
+          {reportDate}
+        </Typography>
+
+        {/* Table of Contents */}
+        <Box sx={{ mt: 3, borderTop: "1px solid #ccc", pt: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Table of Contents
           </Typography>
-
-          <Typography variant="subtitle1" align="center" gutterBottom>
-            {reportDate}
-          </Typography>
-
-          {/* Table of Contents */}
-          <Box sx={{ mt: 3, borderTop: "1px solid #ccc", pt: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Table of Contents
-            </Typography>
-            <Typography variant="body1">1. Overview</Typography>
-            {reportSections.map((section, index) => (
-              <Typography key={index} variant="body1">
-                {index + 2}. {section.title}
-              </Typography>
-            ))}
-            <Typography variant="body1">
-              {reportSections.length + 2}. Findings
-            </Typography>
-          </Box>
-
-          <Divider sx={{ my: 2 }} />
-          <Box sx={{ mt: 4 }}>
-            <Typography variant="h5" gutterBottom>
-              1. Overview
-            </Typography>
-          </Box>
-
-          {/* Pie Chart */}
-          <PieChart width={350} height={350} style={{ margin: "auto" }}>
-            <Pie
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-            >
-              {pieData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-
-          {/* Report Sections */}
+          <Typography variant="body1">1. Overview</Typography>
           {reportSections.map((section, index) => (
-            <Box key={index} sx={{ mt: 4 }}>
-              <Typography variant="h5" gutterBottom>
-                {index + 2}. {section.title}
+            <Typography key={index} variant="body1">
+              {index + 2}. {section.title}
+            </Typography>
+          ))}
+          <Typography variant="body1">
+            {reportSections.length + 2}. Findings
+          </Typography>
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            1. Overview
+          </Typography>
+        </Box>
+
+        {/* Pie Chart */}
+        <PieChart width={350} height={350} style={{ margin: "auto" }}>
+          <Pie
+            data={pieData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+          >
+            {pieData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+
+        {/* Report Sections */}
+        {reportSections.map((section, index) => (
+          <Box key={index} sx={{ mt: 4 }}>
+            <Typography variant="h5" gutterBottom>
+              {index + 2}. {section.title}
+            </Typography>
+            <Typography variant="body1">{section.content}</Typography>
+          </Box>
+        ))}
+
+        {/* Findings Section */}
+        <Box sx={{ mt: 6 }}>
+          <Typography variant="h5" gutterBottom>
+            5. Findings
+          </Typography>
+          {vulnerabilities.map((vuln, index) => (
+            <Box
+              key={index}
+              sx={{ mt: 2, borderBottom: "1px solid #ddd", pb: 2 }}
+            >
+              <Typography variant="subtitle1">
+                5.{index + 1}{" "}
+                <span style={severityStyles[vuln.severity]}>
+                  {vuln.severity} Severity
+                </span>{" "}
+                {vuln.title}
               </Typography>
-              <Typography variant="body1">{section.content}</Typography>
+              <Typography variant="body2">
+                <strong>File:</strong> {fileName}
+              </Typography>
+              <Typography variant="body2">
+                <strong>Description:</strong> {vuln.description}
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                <strong>Code Snippet:</strong>
+              </Typography>
+              <Box
+                component="pre"
+                sx={{
+                  backgroundColor: "#f5f5f5",
+                  padding: 2,
+                  borderRadius: 1,
+                  overflowX: "auto",
+                  fontFamily: "monospace"
+                }}
+              >
+                {vuln.snippet}
+              </Box>
+              <Typography variant="body2">
+                <strong>Recommendation:</strong> {vuln.recommendation}
+              </Typography>
             </Box>
           ))}
-
-          {/* Findings Section */}
-          <Box sx={{ mt: 6 }}>
-            <Typography variant="h5" gutterBottom>
-              5. Findings
-            </Typography>
-            {vulnerabilities.map((vuln, index) => (
-              <Box
-                key={index}
-                sx={{ mt: 2, borderBottom: "1px solid #ddd", pb: 2 }}
-              >
-                <Typography variant="subtitle1">
-                  5.{index + 1}{" "}
-                  <span style={severityStyles[vuln.severity]}>
-                    {vuln.severity} Severity
-                  </span>{" "}
-                  {vuln.title}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>File:</strong> {fileName}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Description:</strong> {vuln.description}
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  <strong>Code Snippet:</strong>
-                </Typography>
-                <Box
-                  component="pre"
-                  sx={{
-                    backgroundColor: "#f5f5f5",
-                    padding: 2,
-                    borderRadius: 1,
-                    overflowX: "auto",
-                    fontFamily: "monospace"
-                  }}
-                >
-                  {vuln.snippet}
-                </Box>
-                <Typography variant="body2">
-                  <strong>Recommendation:</strong> {vuln.recommendation}
-                </Typography>
-              </Box>
-            ))}
-          </Box>
-        </Paper>
-      )}
-    </Box>
-  );
+        </Box>
+      </Paper>
+    )}
+  </Box>
+);
 }
