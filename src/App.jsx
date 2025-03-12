@@ -35,7 +35,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard publicKey={publicKey} onLogin={handleLogin} />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />PrivacyPolicy
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           {/*<Route path="*" element={<NotFound />} />*/}
         </Routes>
         <Footer/>
