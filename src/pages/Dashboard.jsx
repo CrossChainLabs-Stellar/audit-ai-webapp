@@ -201,7 +201,7 @@ export default function Dashboard({ onLogin }) {
   const canGenerateReport = publicKey && projectName && uploadedFile;
 
   return (
-    <Box sx={{ minHeight: "100vh", p: 3, bgcolor: "#f9fafb" }}>
+    <Box sx={{ minHeight: "100vh", p: 3, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", }}>
       {/* Render the alpha banner if an audit already exists */}
       {auditExists && <AlphaBanner />}
       <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
