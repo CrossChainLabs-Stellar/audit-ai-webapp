@@ -231,31 +231,30 @@ return (
   <Box sx={{ minHeight: "100vh", p: 3, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", }}>
     {/* Render the alpha banner if an audit already exists */}
     {auditExists && <AlphaBanner />}
-    {!auditExists && !loadingAudit && <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
-      <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3 }}>
+    {!auditExists && !loadingAudit && <Paper sx={{ maxWidth: 700, mx: "auto", mt: 4, p: 4, boxShadow: 3 }}>
+      <Typography variant="h4" gutterBottom align="center" sx={{ mt: 2, mb: 5 }}>
         Run Audit
       </Typography>
 
       {/* STEP 1: Connect Freighter Wallet */}
-      <Box sx={{ mb: 4 }}>
+      <Box sx={{ mb: 4, textAlign: "center" }}>
         <Typography variant="h6" gutterBottom>
-          Connect Freighter Wallet
+          STEP 1: Connect Freighter Wallet
         </Typography>
         {publicKey ? (
-          <Typography variant="body2" color="success.main">
-            Wallet connected: <strong>{publicKey}</strong>
+          <Typography variant="body2" color="secondary">
+            {publicKey}
           </Typography>
         ) : (
           <Button
-            variant="outlined"
+            variant="contained"
             color="primary"
             onClick={handleConnectStellar}
-            sx={{ mt: 1 }}
+            sx={{ display: "block", mx: "auto", mt: 1 }}
           >
             Connect Freighter
           </Button>
         )}
-        {/* Render the banner if Freighter is not installed */}
         {!isFreighterInstalled && <FreighterBanner />}
       </Box>
 
@@ -277,21 +276,22 @@ return (
         */}
 
       {/* STEP 3: Upload Contract File */}
-      <Box sx={{ mb: 4 }}>
+      <Box sx={{ mb: 4, textAlign: "center" }}>
         <Typography variant="h6" gutterBottom>
-          Upload Your Contract
+          STEP 2: Upload Your Smart Contract
         </Typography>
-        <Button disabled={auditExists} variant="contained" component="label" sx={{ mt: 1 }}>
+        <Button
+          disabled={auditExists}
+          variant="contained"
+          component="label"
+          sx={{ display: "inline-block", mt: 0.5 }}
+        >
           {uploadedFile ? "Change File" : "Upload File"}
-          <input
-            type="file"
-            hidden
-            onChange={handleFileUpload}
-          />
+          <input type="file" hidden onChange={handleFileUpload} />
         </Button>
         {uploadedFile && (
-          <Typography variant="body2" sx={{ mt: 1, fontStyle: "italic" }}>
-            Selected File: {fileName}
+          <Typography variant="body2" color="secondary" sx={{ mt: 1 }}>
+            {fileName}
           </Typography>
         )}
       </Box>
@@ -299,28 +299,27 @@ return (
       {/* STEP 4: Generate Report */}
       <Box sx={{ textAlign: "center" }}>
         <Typography variant="h6" gutterBottom>
-          Generate Your Report
+          STEP3: Generate Your Audit Report
         </Typography>
         <LoadingButton
-          fullWidth
           variant="contained"
           color="primary"
           loading={reportGenerating}
           onClick={handleGenerateReport}
           disabled={!canGenerateReport}
-          sx={{ py: 1.5, mt: 1 }}
+          sx={{ display: "inline-block", mt: 0.5, mb: 1 }}
         >
           Generate Report
         </LoadingButton>
         {reportGenerating && (
-          <Box sx={{ mt: 2 }}>
+          <Box sx={{ mt: 1 }}>
             <CircularProgress />
             <Typography variant="body2" sx={{ mt: 1 }}>
               Generating report...
             </Typography>
           </Box>
         )}
-        {!canGenerateReport && !reportGenerating && (
+       {/*} {!canGenerateReport && !reportGenerating && (
           <Typography
             variant="body2"
             color="textSecondary"
@@ -328,7 +327,7 @@ return (
           >
             Please connect your wallet and upload a file first.
           </Typography>
-        )}
+        )}*/}
       </Box>
     </Paper>}
 
