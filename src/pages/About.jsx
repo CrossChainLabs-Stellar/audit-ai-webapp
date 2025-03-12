@@ -1,5 +1,9 @@
 import React from "react";
-import { Box, Container, Typography, Grid, Card, CardContent } from "@mui/material";
+import { Box, Container, Typography, Grid, Card, CardContent, Avatar, Link } from "@mui/material";
+import { LinkedIn } from "@mui/icons-material";
+
+import AndreeaAvatar from "../assets/Andreea.jpeg";
+import GeorgeAvatar from "../assets/George.jpeg";
 
 export default function About() {
   return (
@@ -39,30 +43,66 @@ export default function About() {
             <Grid item xs={12} md={6}>
               <Card elevation={3}>
                 <CardContent>
-                  <Typography variant="h6">
-                    Andreea Stefan
-                  </Typography>
-                  <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 1 }}>
-                    Co-founder and CEO
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                    <Avatar
+                      src={AndreeaAvatar}
+                      alt="Andreea Stefan"
+                      sx={{ width: 56, height: 56, mr: 2 }}
+                    />
+                    <Box>
+                      <Typography variant="h6">
+                        Andreea Stefan
+                      </Typography>
+                      <Typography variant="subtitle1" color="text.secondary">
+                        Co-founder and CEO
+                      </Typography>
+                    </Box>
+                  </Box>
                   <Typography variant="body2">
                     Former Architect @ ConsenSys.
                   </Typography>
+                  <Box sx={{ mt: 2 }}>
+                    <Link
+                      href="https://www.linkedin.com/in/andreea-stefan-66740b20/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LinkedIn fontSize="large" />
+                    </Link>
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
             <Grid item xs={12} md={6}>
               <Card elevation={3}>
                 <CardContent>
-                  <Typography variant="h6">
-                    George Robert
-                  </Typography>
-                  <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 1 }}>
-                    Co-founder and CTO
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                    <Avatar
+                      src={GeorgeAvatar} 
+                      alt="George Robert"
+                      sx={{ width: 56, height: 56, mr: 2 }}
+                    />
+                    <Box>
+                      <Typography variant="h6">
+                        George Robert
+                      </Typography>
+                      <Typography variant="subtitle1" color="text.secondary">
+                        Co-founder and CTO
+                      </Typography>
+                    </Box>
+                  </Box>
                   <Typography variant="body2">
                     Former Senior Engineer @ ConsenSys.
                   </Typography>
+                  <Box sx={{ mt: 2 }}>
+                    <Link
+                      href="https://www.linkedin.com/in/george-robert-stefan-13385a9a/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LinkedIn fontSize="large" />
+                    </Link>
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
