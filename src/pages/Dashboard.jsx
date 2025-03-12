@@ -36,6 +36,7 @@ export default function Dashboard({ publicKey, onLogin }) {
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [reportSections, setReportSections] = useState([]);
   const [auditExists, setAuditExists] = useState(false);
+  const [loadingAudit, setLoadingAudit] = useState(publicKey ? true : false);
 
   const COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
 
@@ -107,6 +108,7 @@ export default function Dashboard({ publicKey, onLogin }) {
           } else {
             setAuditExists(false);
           }
+          setLoadingAudit(false);
         } catch (auditErr) {
           console.error("Error fetching audit:", auditErr);
           setAuditExists(false);
@@ -229,7 +231,7 @@ return (
   <Box sx={{ minHeight: "100vh", p: 3, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", }}>
     {/* Render the alpha banner if an audit already exists */}
     {auditExists && <AlphaBanner />}
-    {!auditExists && <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
+    {!auditExists && !loadingAudit && <Paper sx={{ maxWidth: 700, mx: "auto", p: 4, boxShadow: 3 }}>
       <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3 }}>
         Run Audit
       </Typography>
