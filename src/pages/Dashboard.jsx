@@ -24,9 +24,9 @@ function formatDate(isoDate) {
   return date.toLocaleDateString("en-US", options);
 }
 
-export default function Dashboard({ onLogin }) {
+export default function Dashboard({ publicKey, onLogin }) {
   const navigate = useNavigate();
-  const [publicKey, setPublicKey] = useState(null);
+  //const [publicKey, setPublicKey] = useState(publicKey);
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [fileName, setFileName] = useState("");
@@ -84,7 +84,7 @@ export default function Dashboard({ onLogin }) {
       }
       const pk = accessObj.address;
       if (pk) {
-        setPublicKey(pk);
+        //setPublicKey(pk);
         onLogin(pk);
 
         // After connecting, use client.getAudit to check if an audit already exists

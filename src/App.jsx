@@ -18,13 +18,17 @@ function App() {
     setPublicKey(pk);
   };
 
+  const handleLogout = () => {
+    setPublicKey(null);
+  };
+
   return (
     <ThemeProvider>
       <Router>
-        <AuditAINavbar publicKey={publicKey} onLogin={handleLogin}/>
+        <AuditAINavbar publicKey={publicKey} onLogin={handleLogin} onLogout={handleLogout}/>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard onLogin={handleLogin} />} />
+          <Route path="/dashboard" element={<Dashboard publicKey={publicKey} onLogin={handleLogin} />} />
           {/*<Route path="*" element={<NotFound />} />*/}
         </Routes>
       </Router>

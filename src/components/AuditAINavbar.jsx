@@ -1,12 +1,22 @@
 // AuditAINavbar.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { isConnected, requestAccess } from "@stellar/freighter-api"; // <-- for Freighter
 import logo from "../assets/AuditAILogo.svg";
 
-export default function AuditAINavbar({ publicKey, onLogin }) {
+export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     // Check if Freighter is installed
@@ -36,6 +46,20 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
     } catch (error) {
       console.error("Stellar wallet connection error: ", error);
     }
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDisconnect = () => {
+    // Implement disconnect logic here.
+    if (onLogout) onLogout();
+    handleMenuClose();
   };
 
   return (
@@ -87,20 +111,42 @@ export default function AuditAINavbar({ publicKey, onLogin }) {
           )*/}
         </Box>
 
-        {/* Right: Display publicKey or Login button */}
+        {/* Right: Display dropdown menu if publicKey exists */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {publicKey ? (
-            <Typography
-              variant="body1"
-              sx={{
-                marginLeft: 2,
-                color: "inherit",
-                fontWeight: "bold",
-                fontFamily: "monospace",
-              }}
-            >
-              {publicKey.slice(0, 6)}...{publicKey.slice(-6)}
-            </Typography>
+            <>
+              <Button
+                onClick={handleMenuOpen}
+                sx={{
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  color: "inherit",
+                }}
+              >
+                {publicKey.slice(0, 2)}...{publicKey.slice(-4)}
+                <ArrowDropDownIcon />
+              </Button>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+              >
+                <MenuItem component={Link} to="/dashboard" onClick={handleMenuClose}>
+                  My Reports
+                </MenuItem>
+                <MenuItem onClick={handleDisconnect}>
+                  Disconnect
+                </MenuItem>
+              </Menu>
+            </>
           ) : (
             <Button
               component={Link}
