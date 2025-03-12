@@ -19,7 +19,7 @@ export default function Footer() {
           @ 2025 Auditron
         </Typography>
         <Link href="/privacy" underline="hover" color="inherit">
-          Privacy Policies
+          Privacy Policy
         </Link>
         <Typography variant="body2" color="text.secondary">
           |
