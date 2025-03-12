@@ -7,7 +7,7 @@ import GeorgeAvatar from "../assets/George.jpeg";
 
 export default function About() {
   return (
-    <Box sx={{ py: 6, backgroundColor: "#fff" }}>
+    <Box sx={{ py: 6, backgroundColor: "#f4f4f4" }}>
       <Container maxWidth="lg">
         <Typography variant="h3" align="center" sx={{ mb: 4 }}>
           About Auditron

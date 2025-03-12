@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // Components
 import AuditAINavbar from "./components/AuditAINavbar";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard publicKey={publicKey} onLogin={handleLogin} />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />PrivacyPolicy
           {/*<Route path="*" element={<NotFound />} />*/}
         </Routes>
         <Footer/>
