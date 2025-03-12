@@ -238,23 +238,6 @@ export default function Home() {
             {statusMessage && <Typography variant="body2" color="text.secondary">{statusMessage}</Typography>}
           </Stack>
 
-          {/* Socials Section */}
-          <Stack
-            direction="row"
-            spacing={3}
-            justifyContent="center"
-            sx={{ mt: 4 }}
-          >
-            <Link to="https://x.com">
-              <X sx={{ fontSize: 32, color: '#000000' }} />
-            </Link>
-            <Link to="https://www.linkedin.com">
-              <LinkedIn sx={{ fontSize: 32, color: '#0A66C2' }} />
-            </Link>
-            <Link to="https://telegram.org">
-              <Telegram sx={{ fontSize: 32, color: '#000000' }} />
-            </Link>
-          </Stack>
         </Container>
       </Box>
     </Box>
