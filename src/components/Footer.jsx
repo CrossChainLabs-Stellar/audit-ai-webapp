@@ -7,10 +7,10 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        fontFamily: "Roboto, sans-serif", // Set your desired font here
         mt: 0,
         pt: 2,
-        backgroundColor: "#f4f4f4"
+        backgroundColor: "#f4f4f4",
+        minHeight: "3rem"
       }}
     >
       <Divider sx={{ mb: 1 }} />
