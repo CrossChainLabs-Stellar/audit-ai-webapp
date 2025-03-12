@@ -259,9 +259,15 @@ return (
       ) : (
         <Button
           variant="contained"
-          color="primary"
           onClick={handleConnectStellar}
-          sx={{ display: "inline-block", mt: 1 }}
+          sx={{
+            display: "inline-block",
+            mt: 1,
+            bgcolor: "#448696",
+            '&:hover': {
+              bgcolor: "#375e6f",
+            },
+          }}
         >
           Connect Freighter
         </Button>
@@ -279,6 +285,12 @@ return (
           disabled={auditExists}
           variant="contained"
           component="label"
+          sx={{
+            bgcolor: "#448696",
+            '&:hover': {
+              bgcolor: "#375e6f",
+            },
+          }}
         >
           {uploadedFile ? "Change File" : "Upload File"}
           <input type="file" hidden onChange={handleFileUpload} />
@@ -305,11 +317,15 @@ return (
       <LoadingButton
         fullWidth
         variant="contained"
-        color="primary"
         loading={reportGenerating}
         onClick={handleGenerateReport}
         disabled={!canGenerateReport}
-        sx={{ display: "block", mt: 1, mb: 1, py: 2 }}
+        sx={{ display: "block", mt: 1, mb: 1, py: 2,
+          bgcolor: "#448696",
+          '&:hover': {
+            bgcolor: "#375e6f",
+          },
+        }}
       >
         Generate Audit Report
       </LoadingButton>
