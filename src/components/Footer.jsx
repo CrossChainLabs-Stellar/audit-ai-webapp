@@ -4,7 +4,15 @@ import { X, LinkedIn } from "@mui/icons-material";
 
 export default function Footer() {
   return (
-    <Box component="footer" sx={{ mt: 0, pt: 2, backgroundColor: "#f4f4f4" }}>
+    <Box
+      component="footer"
+      sx={{
+        fontFamily: "Roboto, sans-serif", // Set your desired font here
+        mt: 0,
+        pt: 2,
+        backgroundColor: "#f4f4f4"
+      }}
+    >
       <Divider sx={{ mb: 1 }} />
       <Box
         sx={{
@@ -18,19 +26,22 @@ export default function Footer() {
         <Typography variant="body2" color="text.secondary">
           @ 2025 Auditron
         </Typography>
-        <Link href="/privacy" underline="hover" color="inherit">
+        <Typography variant="body2" color="text.secondary">
+          |
+        </Typography>
+        <Link href="/privacy" variant="body2" underline="hover" color="text.secondary">
           Privacy Policy
         </Link>
         <Typography variant="body2" color="text.secondary">
           |
         </Typography>
-        <Link href="/about" underline="hover" color="inherit">
+        <Link href="/about" variant="body2" underline="hover" color="text.secondary">
           About
         </Link>
         <Typography variant="body2" color="text.secondary">
           |
         </Typography>
-        <Link href="/contact" underline="hover" color="inherit">
+        <Link href="/contact" variant="body2" underline="hover" color="text.secondary">
           Contact
         </Link>
         <Typography variant="body2" color="text.secondary">
