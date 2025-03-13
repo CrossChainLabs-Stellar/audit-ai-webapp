@@ -13,6 +13,7 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { isConnected, requestAccess } from "@stellar/freighter-api"; // <-- for Freighter
 import logo from "../assets/AuditAILogo.svg";
+import logoFreighter from "../assets/Logo-freighter.svg";
 
 export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
@@ -77,10 +78,10 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
           <img
             src={logo}
             alt="Auditron Logo"
-            style={{ height: "40px", marginRight: "8px" }}
+            style={{ height: "40px", marginRight: "15px", marginLeft: "20px" }}
           />
           <Typography
-            variant="h5"
+            variant="h4"
             sx={{
               textDecoration: "none",
               color: "white",
@@ -119,7 +120,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                 onClick={handleMenuOpen}
                 sx={{
                   textTransform: "none",
-                  fontWeight: "bold",
+                  fontSize: "14px",
                   color: "inherit",
                 }}
               >
@@ -140,6 +141,9 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                 }}
               >
                 <MenuItem component={Link} to="/dashboard" onClick={handleMenuClose}>
+                  Run Audit
+                </MenuItem>
+                <MenuItem component={Link} to="/dashboard" onClick={handleMenuClose}>
                   My Reports
                 </MenuItem>
                 <MenuItem onClick={handleDisconnect}>
@@ -149,18 +153,26 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
             </>
           ) : (
             <Button
-              component={Link}
-              variant="outlined"
+              onClick={handleLogin}
               color="inherit"
               to="/dashboard"
               sx={{
                 textTransform: "none",
-                fontWeight: "bold",
-                borderColor: "rgba(255, 255, 255, 0.5)",
-                "&:hover": { borderColor: "white" },
+                fontSize: "14px",
+                //borderColor: "rgba(255, 255, 255, 0.5)",
+                display: "flex",
+                alignItems: "center",
+                //gap: 1, // Adds spacing between the logo and text
+                //"&:hover": { borderColor: "#533ABB" },
+                marginRight: "20px",
+                padding: "6px 12px",
               }}
             >
-              Get Started
+              <img 
+                src={logoFreighter}
+                alt="Freighter Logo" 
+                style={{ width: "100px"}} 
+              />
             </Button>
           )}
         </Box>
