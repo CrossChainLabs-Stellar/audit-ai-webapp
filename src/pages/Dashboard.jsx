@@ -293,7 +293,7 @@ return (
           }}
         >
           {uploadedFile ? "Change File" : "Upload File"}
-          <input type="file" hidden onChange={handleFileUpload} />
+          <input type="file" hidden onChange={handleFileUpload}  accept=".rs" />
         </Button>
         {uploadedFile && (
           <Typography variant="body2" color="secondary" sx={{ ml: 2 }}>
