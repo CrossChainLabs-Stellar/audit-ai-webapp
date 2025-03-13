@@ -253,7 +253,7 @@ return (
         STEP 1: Connect Freighter Wallet
       </Typography>
       {publicKey ? (
-        <Typography variant="body2" color="secondary" sx={{ ml: 2 }}>
+        <Typography variant="body2" color="#448696" sx={{ ml: 2 }}>
           {publicKey}
         </Typography>
       ) : (
@@ -298,7 +298,7 @@ return (
           <input type="file" hidden onChange={handleFileUpload}  accept=".rs" />
         </Button>
         {uploadedFile && (
-          <Typography variant="body2" color="secondary" sx={{ ml: 2 }}>
+          <Typography variant="body2" color="#448696" sx={{ ml: 2 }}>
             {fileName}
           </Typography>
         )}
