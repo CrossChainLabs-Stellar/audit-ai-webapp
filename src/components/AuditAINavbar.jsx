@@ -14,6 +14,9 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { isConnected, requestAccess } from "@stellar/freighter-api"; // <-- for Freighter
 import logo from "../assets/AuditAILogo.svg";
 import logoFreighter from "../assets/Logo-freighter.svg";
+import menuAudit from "../assets/menu-run-audit.svg";
+import menuReports from "../assets/menu-reports.svg";
+import menuDisconnect from "../assets/menu-disconnect.svg";
 
 export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
@@ -127,6 +130,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                 {publicKey.slice(0, 2)}...{publicKey.slice(-4)}
                 <ArrowDropDownIcon />
               </Button>
+
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
@@ -139,14 +143,98 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                   vertical: "top",
                   horizontal: "right",
                 }}
+                sx={{
+                  "& .MuiPaper-root": {
+                    backgroundColor: "#375e6f",
+                    borderRadius: "8px",
+                    width: "140px", // Set custom width
+                    border: "1px solid rgba(255, 255, 255, 0.1)", // Very subtle border
+                    boxShadow: "0px 0px 5px rgba(255, 255, 255, 0.1)", // Lighter, shallower glow
+                  },
+                  "& .MuiMenu-list": {
+                    padding: 0, // Remove extra padding inside the menu
+                  },
+                }}
               >
-                <MenuItem component={Link} to="/dashboard" onClick={handleMenuClose}>
+                <MenuItem
+                  component={Link}
+                  to="/dashboard"
+                  onClick={handleMenuClose}
+                  sx={{
+                    color: "white",
+                    padding: "8px 16px", // Ensures uniform padding
+                    fontWeight: "600",
+                    gap: 1,
+                    minHeight: "40px", // Increased height
+                    padding: "10px 16px", // Adjust padding while keeping text centered
+                    boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
+                    display: "flex",
+                    alignItems: "center",
+                    "&:hover": {
+                      backgroundColor: "#2c3e50",
+                    },
+                    "&.Mui-focusVisible": {
+                      backgroundColor: "#2c3e50", // Removes unwanted highlight on selection
+                    },
+                  }}
+                >
+                  <img
+                    src={menuAudit}
+                    alt="Disconnect"
+                    style={{ width: "20px", height: "20px" }}
+                  />
                   Run Audit
                 </MenuItem>
-                <MenuItem component={Link} to="/dashboard" onClick={handleMenuClose}>
+
+                <MenuItem
+                  component={Link}
+                  to="/dashboard"
+                  onClick={handleMenuClose}
+                  sx={{
+                    color: "white",
+                    padding: "8px 16px",
+                    fontWeight: "600",
+                    gap: 1,
+                    minHeight: "40px", // Increased height
+                    padding: "10px 16px", // Adjust padding while keeping text centered
+                    boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
+                    display: "flex",
+                    alignItems: "center",
+                    "&:hover": {
+                      backgroundColor: "#2c3e50",
+                    },
+                  }}
+                >
+                  <img
+                    src={menuReports}
+                    alt="Disconnect"
+                    style={{ width: "20px", height: "20px" }}
+                  />
                   My Reports
                 </MenuItem>
-                <MenuItem onClick={handleDisconnect}>
+
+                <MenuItem
+                  onClick={handleDisconnect}
+                  sx={{
+                    color: "white",
+                    padding: "8px 16px",
+                    fontWeight: "600",
+                    gap: 1,
+                    minHeight: "40px", // Increased height
+                    padding: "10px 16px", // Adjust padding while keeping text centered
+                    boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
+                    display: "flex",
+                    alignItems: "center",
+                    "&:hover": {
+                      backgroundColor: "#2c3e50",
+                    },
+                  }}
+                >
+                  <img
+                    src={menuDisconnect}
+                    alt="Disconnect"
+                    style={{ width: "20px", height: "18px" }}
+                  />
                   Disconnect
                 </MenuItem>
               </Menu>
@@ -159,10 +247,8 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
               sx={{
                 textTransform: "none",
                 fontSize: "14px",
-                //borderColor: "rgba(255, 255, 255, 0.5)",
                 display: "flex",
                 alignItems: "center",
-                //gap: 1, // Adds spacing between the logo and text
                 //"&:hover": { borderColor: "#533ABB" },
                 marginRight: "20px",
                 padding: "6px 12px",
