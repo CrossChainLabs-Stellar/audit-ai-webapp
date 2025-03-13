@@ -253,7 +253,7 @@ return (
         STEP 1: Connect Freighter Wallet
       </Typography>
       {publicKey ? (
-        <Typography variant="body2" color="secondary">
+        <Typography variant="body2" color="secondary" sx={{ ml: 2 }}>
           {publicKey}
         </Typography>
       ) : (
@@ -263,6 +263,7 @@ return (
           sx={{
             display: "inline-block",
             mt: 1,
+            ml: 2,
             bgcolor: "#448696",
             '&:hover': {
               bgcolor: "#375e6f",
@@ -286,6 +287,7 @@ return (
           variant="contained"
           component="label"
           sx={{
+            ml: 2,
             bgcolor: "#448696",
             '&:hover': {
               bgcolor: "#375e6f",
