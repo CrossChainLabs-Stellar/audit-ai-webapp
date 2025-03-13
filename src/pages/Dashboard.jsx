@@ -18,6 +18,8 @@ import { Client } from "../utils/client";
 import FreighterBanner from "../components/FreighterBanner";
 import AlphaBanner from "../components/AlphaBanner";
 
+import logoFreighter from "../assets/Simple-freighter.svg";
+
 function formatDate(isoDate) {
   const date = new Date(isoDate);
   const options = { year: "numeric", month: "long", day: "numeric" };
@@ -261,16 +263,24 @@ return (
           variant="contained"
           onClick={handleConnectStellar}
           sx={{
-            display: "inline-block",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             mt: 1,
             ml: 2,
+            gap: 1,
             bgcolor: "#448696",
             '&:hover': {
               bgcolor: "#375e6f",
             },
           }}
         >
-          Connect Freighter
+          Connect
+          <img 
+            src={logoFreighter}
+            alt="Freighter Logo" 
+            style={{ width: "25px"}} 
+          />
         </Button>
       )}
       {!isFreighterInstalled && <FreighterBanner />}
