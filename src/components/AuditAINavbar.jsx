@@ -125,6 +125,8 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                   textTransform: "none",
                   fontSize: "14px",
                   color: "inherit",
+                  marginRight: "20px", // Added marginRight
+                  padding: "6px 12px", // Added padding
                 }}
               >
                 {publicKey.slice(0, 2)}...{publicKey.slice(-4)}
@@ -147,9 +149,11 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                   "& .MuiPaper-root": {
                     backgroundColor: "#375e6f",
                     borderRadius: "8px",
-                    width: "140px", // Set custom width
+                    marginTop: "16px",
+                    width: "160px", // Set custom width
                     border: "1px solid rgba(255, 255, 255, 0.1)", // Very subtle border
                     boxShadow: "0px 0px 5px rgba(255, 255, 255, 0.1)", // Lighter, shallower glow
+                    marginLeft: "-6px", // Moves the menu exactly 6px left
                   },
                   "& .MuiMenu-list": {
                     padding: 0, // Remove extra padding inside the menu
@@ -162,12 +166,11 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                   onClick={handleMenuClose}
                   sx={{
                     color: "white",
-                    padding: "8px 16px", // Ensures uniform padding
                     fontWeight: "600",
                     gap: 1,
                     minHeight: "40px", // Increased height
-                    padding: "10px 16px", // Adjust padding while keeping text centered
-                    boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
+                    padding: "14px 16px", // Adjust padding while keeping text centered
+                    boxShadow: "0px 1px 1px rgba(255, 255, 255, 0.1)", // Glow between items
                     display: "flex",
                     alignItems: "center",
                     "&:hover": {
@@ -192,11 +195,10 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                   onClick={handleMenuClose}
                   sx={{
                     color: "white",
-                    padding: "8px 16px",
                     fontWeight: "600",
                     gap: 1,
                     minHeight: "40px", // Increased height
-                    padding: "10px 16px", // Adjust padding while keeping text centered
+                    padding: "14px 16px", // Adjust padding while keeping text centered
                     boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
                     display: "flex",
                     alignItems: "center",
@@ -217,11 +219,10 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                   onClick={handleDisconnect}
                   sx={{
                     color: "white",
-                    padding: "8px 16px",
                     fontWeight: "600",
-                    gap: 1,
+                    gap: 0.8,
                     minHeight: "40px", // Increased height
-                    padding: "10px 16px", // Adjust padding while keeping text centered
+                    padding: "14px 16px", // Adjust padding while keeping text centered
                     boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
                     display: "flex",
                     alignItems: "center",
@@ -233,7 +234,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                   <img
                     src={menuDisconnect}
                     alt="Disconnect"
-                    style={{ width: "20px", height: "18px" }}
+                    style={{ marginLeft: "2px", width: "20px", height: "20px" }}
                   />
                   Disconnect
                 </MenuItem>
