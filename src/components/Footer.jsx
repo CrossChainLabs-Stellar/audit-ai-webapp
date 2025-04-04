@@ -49,21 +49,21 @@ export default function Footer() {
           |
         </Typography>
         <Link
+          href="https://www.linkedin.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          color="inherit"
+        >
+          <LinkedIn  sx={{ fontSize: "23px", mt: "2px"}}/>
+        </Link>
+        <Link
           href="https://x.com"
           target="_blank"
           rel="noopener noreferrer"
           color="inherit"
         >
           <X fontSize="small" />
-        </Link>
-        <Link
-          href="https://www.linkedin.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          color="inherit"
-        >
-          <LinkedIn fontSize="small" />
-        </Link>
+        </Link>      
       </Box>
     </Box>
   );

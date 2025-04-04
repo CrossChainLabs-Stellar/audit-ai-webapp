@@ -84,7 +84,7 @@ export default function Home() {
               "&:hover": { boxShadow: 6 },
             }}
           >
-            Get Started
+            Audit Now
           </Button>
         </Container>
       </Box>
