@@ -65,10 +65,10 @@ export default function Home() {
       >
         <Container maxWidth="md">
           <Typography variant="h2" component="h1" sx={{ fontWeight: "bold", mb: 2 }}>
-            Welcome to Auditron
+            Auditron
           </Typography>
           <Typography variant="h5" sx={{ mb: 4 }}>
-            Your Automated Smart Contract Audit Platform
+            Fast, secure, and affordable smart contract audits.
           </Typography>
           <Button
             variant="contained"
@@ -97,13 +97,13 @@ export default function Home() {
             component="h2"
             sx={{ fontWeight: "bold", mb: 2 }}
           >
-            Proud Winner of the SCF Kickstart Award
+            Winner of the SCF Kickstart Award
           </Typography>
           <Typography variant="body1" sx={{ mb: 3 }}>
-            We’re honored to be recognized for our dedication to top-tier security and innovation in the Soroban ecosystem.
+            We’re proud to be recognized for our dedication to top-tier security and innovation in the Soroban ecosystem.
           </Typography>
 
-          <a href="https://communityfund.stellar.org/kickstart" target="_blank" rel="noopener noreferrer">
+          <a href="https://communityfund.stellar.org/project/auditai-lv1" target="_blank" rel="noopener noreferrer">
             <Box
               component="img"
               src={SCFLogoBlack}
@@ -165,7 +165,7 @@ export default function Home() {
                     Quick Audits
                   </Typography>
                   <Typography variant="body2">
-                    Upload your Soroban smart contract and get a detailed analysis in minutes—saving you time and headaches.
+                    Simply upload your Soroban smart contract and get audited instantly, saving you both time and money.
                   </Typography>
                 </CardContent>
               </Card>
@@ -177,7 +177,7 @@ export default function Home() {
                     Real-Time Progress
                   </Typography>
                   <Typography variant="body2">
-                    View audit progress as it happens. We’ll notify you when your contract analysis is complete.
+                    View audit progress as it happens. Detect vulnerabilities on the fly, ensuring your smart contracts deploy faster and safer.
                   </Typography>
                 </CardContent>
               </Card>
@@ -186,10 +186,10 @@ export default function Home() {
               <Card sx={cardStyles}>
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
-                    Detailed Findings
+                    Detailed Reports
                   </Typography>
                   <Typography variant="body2">
-                    Receive easy-to-understand reports outlining security issues, optimizations, and best-practice recommendations.
+                  Receive clear, actionable reports highlighting security issues, optimization tips, and best practice recommendations.
                   </Typography>
                 </CardContent>
               </Card>
@@ -207,10 +207,10 @@ export default function Home() {
             spacing={2}
           >
             <Typography variant="h5" sx={{ color: '#6ca4a4' }}>
-              Join the Waiting List
+              Join to Stay Informed
             </Typography>
             <Typography variant="body1" align="center" sx={{ maxWidth: '30rem', marginBottom: '1rem' }}>
-              Be the first to know when Auditron launches. Sign up below and we’ll keep you updated.
+              Be the first to know about Auditron's latest updates and releases. Sign up below and we’ll keep you informed.
             </Typography>
             <Stack direction='row' spacing={1} sx={{ alignItems: 'center' }}>
               <TextField
