@@ -9,8 +9,9 @@ export default function Footer() {
       sx={{
         mt: 0,
         pt: 2,
+        pb: 2,
         backgroundColor: "#f4f4f4",
-        minHeight: "3rem"
+        minHeight: "4rem"
       }}
     >
       <Divider sx={{ mb: 1 }} />
