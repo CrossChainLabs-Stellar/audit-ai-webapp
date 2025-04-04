@@ -120,6 +120,16 @@ export default function Dashboard({ publicKey, onLogin }) {
     checkAuditExists();
   }, []);
 
+  // New effect: reset file upload state when publicKey becomes null
+  useEffect(() => {
+    if (!publicKey) {
+      setUploadedFile(null);
+      setFileName("");
+      setProjectName("");
+      setAuditExists(false);
+    }
+  }, [publicKey]);
+
 const handleConnectStellar = async () => {
   try {
     if (!isFreighterInstalled) {
@@ -255,7 +265,7 @@ return (
         STEP 1: Connect Freighter Wallet
       </Typography>
       {publicKey ? (
-        <Typography variant="body2" color="#448696" sx={{ ml: 2 }}>
+        <Typography variant="body2" color="#448696" sx={{ ml: 0 }}>
           {publicKey}
         </Typography>
       ) : (
@@ -267,7 +277,6 @@ return (
             justifyContent: "center",
             alignItems: "center",
             mt: 1,
-            ml: 2,
             gap: 1,
             bgcolor: "#448696",
             '&:hover': {
@@ -297,7 +306,6 @@ return (
           variant="contained"
           component="label"
           sx={{
-            ml: 2,
             bgcolor: "#448696",
             '&:hover': {
               bgcolor: "#375e6f",

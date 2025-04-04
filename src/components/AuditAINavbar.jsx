@@ -1,17 +1,25 @@
 // AuditAINavbar.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 import {
   AppBar,
   Toolbar,
   Typography,
   Button,
   Box,
-  Menu,
-  MenuItem,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
 } from "@mui/material";
+
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { isConnected, requestAccess } from "@stellar/freighter-api"; // <-- for Freighter
+import CloseIcon from "@mui/icons-material/Close";
+import { isConnected, requestAccess } from "@stellar/freighter-api"; // Freighter
 import logo from "../assets/AuditAILogo.svg";
 import logoFreighter from "../assets/Logo-freighter.svg";
 import menuAudit from "../assets/menu-run-audit.svg";
@@ -20,10 +28,10 @@ import menuDisconnect from "../assets/menu-disconnect.svg";
 
 export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
-    // Check if Freighter is installed
+    // Check if Freighter is connected
     const checkFreighter = async () => {
       const connectionStatus = await isConnected();
       setIsFreighterInstalled(connectionStatus.isConnected);
@@ -33,6 +41,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
 
   const handleLogin = async () => {
     try {
+      // Check if Freighter is installed
       if (!isFreighterInstalled) {
         alert("Freighter wallet not found. Please install the Freighter extension.");
         return;
@@ -52,18 +61,13 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
     }
   };
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
   };
 
   const handleDisconnect = () => {
-    // Implement disconnect logic here.
     if (onLogout) onLogout();
-    handleMenuClose();
+    setDrawerOpen(false);
   };
 
   return (
@@ -76,190 +80,153 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
           sx={{
             display: "flex",
             alignItems: "center",
-            textDecoration: "none",   // disables underline
-          }}>
+            textDecoration: "none",
+          }}
+        >
           <img
             src={logo}
             alt="Auditron Logo"
             style={{ height: "40px", marginRight: "15px", marginLeft: "20px" }}
           />
-          <Typography
-            variant="h4"
-            sx={{
-              textDecoration: "none",
-              color: "white",
-            }}
-          >
+          <Typography variant="h4" sx={{ textDecoration: "none", color: "white" }}>
             Auditron
           </Typography>
         </Box>
 
-        {/* Center: Navigation Buttons (only if publicKey exists) */}
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
-          {/*publicKey && (
-            <Button
-              component={Link}
-              variant="outlined"
-              color="inherit"
-              to="/dashboard"
-              sx={{
-                marginLeft: 2,
-                textTransform: "none",
-                fontWeight: "bold",
-                borderColor: "rgba(255, 255, 255, 0.5)",
-                "&:hover": { borderColor: "white" },
-              }}
-            >
-              My reports
-            </Button>
-          )*/}
-        </Box>
+        {/* Center: Placeholder for navigation (if needed) */}
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}></Box>
 
-        {/* Right: Display dropdown menu if publicKey exists */}
+        {/* Right: User Info and Drawer Toggle */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {publicKey ? (
             <>
               <Button
-                onClick={handleMenuOpen}
+                onClick={handleDrawerToggle}
                 sx={{
                   textTransform: "none",
-                  fontSize: "14px",
+                  fontSize: "16px",
                   color: "inherit",
-                  marginRight: "20px", // Added marginRight
-                  padding: "6px 12px", // Added padding
+                  marginRight: "2px",
+                  padding: "6px 12px",
                 }}
               >
                 {publicKey.slice(0, 2)}...{publicKey.slice(-4)}
-                <ArrowDropDownIcon />
+                <ArrowDropDownIcon sx={{ marginLeft: "8px" }} />
               </Button>
 
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
+              {/* Drawer (Sidebar Menu) */}
+              <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={handleDrawerToggle}
                 sx={{
-                  "& .MuiPaper-root": {
+                  "& .MuiDrawer-paper": {
+                    width: "220px",
                     backgroundColor: "#375e6f",
-                    borderRadius: "8px",
-                    marginTop: "16px",
-                    width: "160px", // Set custom width
-                    border: "1px solid rgba(255, 255, 255, 0.1)", // Very subtle border
-                    boxShadow: "0px 0px 5px rgba(255, 255, 255, 0.1)", // Lighter, shallower glow
-                    marginLeft: "-6px", // Moves the menu exactly 6px left
-                  },
-                  "& .MuiMenu-list": {
-                    padding: 0, // Remove extra padding inside the menu
+                    color: "white",
+                    paddingTop: "20px",
                   },
                 }}
               >
-                <MenuItem
-                  component={Link}
-                  to="/dashboard"
-                  onClick={handleMenuClose}
+                <IconButton
+                  onClick={handleDrawerToggle}
                   sx={{
+                    alignSelf: "flex-end",
+                    marginRight: "10px",
                     color: "white",
-                    fontWeight: "600",
-                    gap: 1,
-                    minHeight: "40px", // Increased height
-                    padding: "14px 16px", // Adjust padding while keeping text centered
-                    boxShadow: "0px 1px 1px rgba(255, 255, 255, 0.1)", // Glow between items
-                    display: "flex",
-                    alignItems: "center",
-                    "&:hover": {
-                      backgroundColor: "#2c3e50",
-                    },
-                    "&.Mui-focusVisible": {
-                      backgroundColor: "#2c3e50", // Removes unwanted highlight on selection
-                    },
+                    padding: "4px", // Reduces button size
+                    fontSize: "14px", // Ensures a smaller button
+                    marginBottom: "20px",
                   }}
                 >
-                  <img
-                    src={menuAudit}
-                    alt="Disconnect"
-                    style={{ width: "20px", height: "20px" }}
-                  />
-                  Run Audit
-                </MenuItem>
+                  <CloseIcon sx={{ fontSize: "20px" }} /> {/* Reduces icon size */}
+                </IconButton>
 
-                <MenuItem
-                  component={Link}
-                  to="/dashboard"
-                  onClick={handleMenuClose}
-                  sx={{
-                    color: "white",
-                    fontWeight: "600",
-                    gap: 1,
-                    minHeight: "40px", // Increased height
-                    padding: "14px 16px", // Adjust padding while keeping text centered
-                    boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
-                    display: "flex",
-                    alignItems: "center",
-                    "&:hover": {
-                      backgroundColor: "#2c3e50",
-                    },
-                  }}
-                >
-                  <img
-                    src={menuReports}
-                    alt="Disconnect"
-                    style={{ width: "20px", height: "20px" }}
-                  />
-                  My Reports
-                </MenuItem>
+                <List>
+                  {/* Run Audit */}
+                  <ListItem disablePadding>
+                    <ListItemButton 
+                      component={Link} 
+                      to="/dashboard" 
+                      onClick={handleDrawerToggle} 
+                      sx={{
+                      "&:hover": {
+                        backgroundColor: "#2c3e50", // Updated hover color
+                      },
+                    }}>
+                      <ListItemIcon>
+                        <img src={menuAudit} alt="Run Audit" style={{ width: "26px", marginLeft: "3px" }} />
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary={
+                          <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "16px"}}>
+                            Run Audit
+                          </Typography>
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
 
-                <MenuItem
-                  onClick={handleDisconnect}
-                  sx={{
-                    color: "white",
-                    fontWeight: "600",
-                    gap: 0.8,
-                    minHeight: "40px", // Increased height
-                    padding: "14px 16px", // Adjust padding while keeping text centered
-                    boxShadow: "0px 1px 5px rgba(255, 255, 255, 0.1)", // Glow between items
-                    display: "flex",
-                    alignItems: "center",
-                    "&:hover": {
-                      backgroundColor: "#2c3e50",
-                    },
-                  }}
-                >
-                  <img
-                    src={menuDisconnect}
-                    alt="Disconnect"
-                    style={{ marginLeft: "2px", width: "20px", height: "20px" }}
-                  />
-                  Disconnect
-                </MenuItem>
-              </Menu>
+                  {/* My Reports */}
+                  <ListItem disablePadding>
+                  <ListItemButton 
+                      component={Link} 
+                      to="/dashboard" 
+                      onClick={handleDrawerToggle} 
+                      sx={{
+                      "&:hover": {
+                        backgroundColor: "#2c3e50", // Updated hover color
+                      },
+                    }}>
+                      <ListItemIcon>
+                        <img src={menuReports} alt="My Reports" style={{ width: "24px", marginLeft: "2px" }} />
+                      </ListItemIcon>
+                      <ListItemText primary={
+                          <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "16px"}}>
+                            My Reports
+                          </Typography>
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+
+                  {/* Disconnect */}
+                  <ListItem disablePadding>
+                    <ListItemButton 
+                      onClick={handleDisconnect}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#2c3e50", // Updated hover color
+                        },
+                      }}>
+                      <ListItemIcon>
+                        <img src={menuDisconnect} alt="Disconnect" style={{ width: "23px", marginLeft: "5px" }} />
+                      </ListItemIcon>
+                      <ListItemText primary={
+                          <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "16px"}}>
+                            Disconnect
+                          </Typography>
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </Drawer>
             </>
           ) : (
             <Button
               onClick={handleLogin}
               color="inherit"
-              to="/dashboard"
               sx={{
                 textTransform: "none",
                 fontSize: "14px",
                 display: "flex",
                 alignItems: "center",
-                //"&:hover": { borderColor: "#533ABB" },
                 marginRight: "20px",
                 padding: "6px 12px",
               }}
             >
-              <img 
-                src={logoFreighter}
-                alt="Freighter Logo" 
-                style={{ width: "100px"}} 
-              />
+              <img src={logoFreighter} alt="Freighter Logo" style={{ width: "100px" }} />
             </Button>
           )}
         </Box>
