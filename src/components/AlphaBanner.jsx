@@ -40,8 +40,8 @@ export default function AlphaBanner() {
         Alpha Release - Preview Version
       </Alert>
       <Typography variant="body2" sx={{ mb: 2 }}>
-        Welcome to Auditron's alpha release! This preview version allows you to generate one report.
-        Subscribe to our waiting list to stay informed about the latest updates and releases.
+        Thank you for testing Auditron! This alpha release allows you to generate one report only.
+        Subscribe to stay informed about the latest updates and releases.
       </Typography>
       <Stack direction="row" spacing={1} alignItems="center">
         <TextField

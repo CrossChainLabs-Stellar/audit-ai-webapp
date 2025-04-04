@@ -39,7 +39,7 @@ export default function Dashboard({ publicKey, onLogin }) {
   const [reportSections, setReportSections] = useState([]);
   const [auditExists, setAuditExists] = useState(false);
   const [loadingAudit, setLoadingAudit] = useState(publicKey ? true : false);
-
+  
   const COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
 
   // Custom severity label styles
@@ -277,19 +277,19 @@ return (
             justifyContent: "center",
             alignItems: "center",
             mt: 1,
-            gap: 1,
+            gap: 0.8,
             bgcolor: "#448696",
             '&:hover': {
               bgcolor: "#375e6f",
             },
           }}
         >
-          Connect
           <img 
             src={logoFreighter}
             alt="Freighter Logo" 
             style={{ width: "25px"}} 
           />
+          <span style={{ marginRight: "2px" }}>Connect</span>
         </Button>
       )}
       {!isFreighterInstalled && <FreighterBanner />}
@@ -362,7 +362,7 @@ return (
 )}
 
     {/* REPORT SECTION */}
-    {vulnerabilities.length > 0 && (
+    {publicKey && auditExists && vulnerabilities.length > 0 && (
       <Paper sx={{ mt: 6, mx: "auto", maxWidth: 800, p: 4, boxShadow: 3 }}>
         <Typography variant="h4" align="center">
           Security Audit Report

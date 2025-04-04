@@ -222,7 +222,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                 fontSize: "14px",
                 display: "flex",
                 alignItems: "center",
-                marginRight: "20px",
+                marginRight: "12px",
                 padding: "6px 12px",
               }}
             >
