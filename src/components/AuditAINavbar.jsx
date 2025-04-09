@@ -160,7 +160,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                       <ListItemText 
                         primary={
                           <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "16px"}}>
-                            Run Audit
+                            Audit Now
                           </Typography>
                         }
                       />
@@ -183,7 +183,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                       </ListItemIcon>
                       <ListItemText primary={
                           <Typography variant="body2" sx={{ fontWeight: 500, fontSize: "16px"}}>
-                            My Reports
+                            View Reports
                           </Typography>
                         }
                       />

@@ -24,9 +24,9 @@ export default function Footer() {
           flexWrap: "nowrap"
         }}
       >
-        <Typography variant="body2" color="text.secondary">
+        <Link href="/" variant="body2" underline="hover" color="text.secondary">
           @ 2025 Auditron
-        </Typography>
+        </Link>
         <Typography variant="body2" color="text.secondary">
           |
         </Typography>
@@ -54,7 +54,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           color="inherit"
         >
-          <LinkedIn  sx={{ fontSize: "23px", mt: "2px"}}/>
+          <LinkedIn  sx={{ fontSize: "25px", mt: "2px"}}/>
         </Link>
         <Link
           href="https://x.com"
