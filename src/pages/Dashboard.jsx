@@ -255,8 +255,8 @@ return (
       backgroundColor: "background.paper",
     }}
   >
-    <Typography variant="h4" gutterBottom align="center" sx={{ mt: 2, mb: 5 }}>
-      Run Audit
+    <Typography variant="h4" gutterBottom align="center" sx={{ mt: 2, mb: 7 }}>
+      Audit Now
     </Typography>
 
     {/* STEP 1: Connect Freighter Wallet */}
@@ -276,7 +276,9 @@ return (
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            mt: 1,
+            mt: 2,
+            minWidth: "150px",
+            height: "40px",
             gap: 0.8,
             bgcolor: "#448696",
             '&:hover': {
@@ -300,12 +302,14 @@ return (
       <Typography variant="subtitle1" gutterBottom>
         STEP 2: Upload Smart Contract
       </Typography>
-      <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+      <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
         <Button
           disabled={auditExists}
           variant="contained"
           component="label"
           sx={{
+            minWidth: "150px",
+            height: "40px",
             bgcolor: "#448696",
             '&:hover': {
               bgcolor: "#375e6f",

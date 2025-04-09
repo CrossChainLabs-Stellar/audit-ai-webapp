@@ -93,8 +93,30 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
           </Typography>
         </Box>
 
-        {/* Center: Placeholder for navigation (if needed) */}
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}></Box>
+        {/* Center: Navigation Links */}
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", gap: 3 }}>
+          <Button 
+            component={Link} 
+            to="/dashboard" 
+            sx={{ color: "#e0e0e0", fontWeight: 500, fontSize: "17px", textTransform: "none" }}
+          >
+            Audit Now
+          </Button>
+          <Button 
+            component={Link} 
+            to="/about" 
+            sx={{ color: "#e0e0e0", fontWeight: 500, fontSize: "17px", textTransform: "none" }}
+          >
+            About
+          </Button>
+          <Button 
+            component={Link} 
+            to="/contact" 
+            sx={{ color: "#e0e0e0", fontWeight: 500, fontSize: "17px", textTransform: "none" }}
+          >
+            Contact
+          </Button>
+        </Box>
 
         {/* Right: User Info and Drawer Toggle */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
