@@ -84,6 +84,9 @@ export default function Dashboard({ publicKey, onLogin }) {
         setVulnerabilities(decodedReport.vulnerabilities || []);
         setReportSections(decodedReport.reportSections || []);
         setReportDate(formatDate(decodedReport.date) || "");
+
+        // Make sure you do this so the final report section can show!
+        setAuditExists(true);
       } catch (decodeErr) {
         console.error("Failed to decode audit report:", decodeErr);
         setVulnerabilities([]);
@@ -121,14 +124,14 @@ export default function Dashboard({ publicKey, onLogin }) {
   }, []);
 
   // New effect: reset file upload state when publicKey becomes null
-  useEffect(() => {
+  /*useEffect(() => {
     if (!publicKey) {
       setUploadedFile(null);
       setFileName("");
       setProjectName("");
       setAuditExists(false);
     }
-  }, [publicKey]);
+  }, [publicKey]);*/
 
 const handleConnectStellar = async () => {
   try {
@@ -209,6 +212,8 @@ const handleGenerateReport = async () => {
         const decodedString = base64Decode(trimmedReport);
         // Parse JSON
         const decodedReport = JSON.parse(decodedString);
+
+        console.log(decodedReport);
 
         setVulnerabilities(decodedReport.vulnerabilities || []);
         setReportSections(decodedReport.reportSections || []);
