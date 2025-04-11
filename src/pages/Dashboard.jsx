@@ -122,14 +122,14 @@ export default function Dashboard({ publicKey, onLogin }) {
   }, []);
 
   // New effect: reset file upload state when publicKey becomes null
-  /*useEffect(() => {
+  useEffect(() => {
     if (!publicKey) {
       setUploadedFile(null);
       setFileName("");
       setProjectName("");
       setAuditExists(false);
     }
-  }, [publicKey]);*/
+  }, [publicKey]);
 
 const handleConnectStellar = async () => {
   try {
