@@ -189,7 +189,7 @@ export default function Home() {
                     Detailed Reports
                   </Typography>
                   <Typography variant="body2">
-                  Receive clear, actionable reports highlighting security issues, optimization tips, and best practice recommendations.
+                    Receive clear, AI-powered reports that highlight security issues, optimization tips, and best practice recommendations.
                   </Typography>
                 </CardContent>
               </Card>
