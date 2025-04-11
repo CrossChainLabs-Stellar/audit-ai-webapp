@@ -342,6 +342,7 @@ return (
         fullWidth
         variant="contained"
         loading={reportGenerating}
+        loadingIndicator={null}
         onClick={handleGenerateReport}
         disabled={!canGenerateReport}
         sx={{ display: "block", mt: 1, mb: 1, py: 2,
