@@ -85,8 +85,6 @@ export default function Dashboard({ publicKey, onLogin }) {
         setReportSections(decodedReport.reportSections || []);
         setReportDate(formatDate(decodedReport.date) || "");
 
-        // Make sure you do this so the final report section can show!
-        setAuditExists(true);
       } catch (decodeErr) {
         console.error("Failed to decode audit report:", decodeErr);
         setVulnerabilities([]);
@@ -218,6 +216,7 @@ const handleGenerateReport = async () => {
         setVulnerabilities(decodedReport.vulnerabilities || []);
         setReportSections(decodedReport.reportSections || []);
         setReportDate(formatDate(decodedReport.date) || "");
+        setAuditExists(true);
       } catch (decodeErr) {
         console.error("Failed to decode audit report:", decodeErr);
         setVulnerabilities([]);
