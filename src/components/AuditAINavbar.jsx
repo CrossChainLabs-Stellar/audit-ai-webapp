@@ -98,21 +98,21 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
           <Button 
             component={Link} 
             to="/dashboard" 
-            sx={{ color: "#e0e0e0", fontWeight: 500, fontSize: "17px", textTransform: "none" }}
+            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}
           >
             Audit Now
           </Button>
           <Button 
             component={Link} 
             to="/about" 
-            sx={{ color: "#e0e0e0", fontWeight: 500, fontSize: "17px", textTransform: "none" }}
+            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}
           >
             About
           </Button>
           <Button 
             component={Link} 
             to="/contact" 
-            sx={{ color: "#e0e0e0", fontWeight: 500, fontSize: "17px", textTransform: "none" }}
+            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}
           >
             Contact
           </Button>

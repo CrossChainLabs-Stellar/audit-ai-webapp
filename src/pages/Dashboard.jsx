@@ -277,7 +277,7 @@ return (
             justifyContent: "center",
             alignItems: "center",
             mt: 2,
-            minWidth: "150px",
+            minWidth: "140px",
             height: "40px",
             gap: 0.8,
             bgcolor: "#448696",
@@ -286,12 +286,12 @@ return (
             },
           }}
         >
+          <span style={{ marginRight: "2px" }}>Connect</span>
           <img 
             src={logoFreighter}
             alt="Freighter Logo" 
             style={{ width: "25px"}} 
           />
-          <span style={{ marginRight: "2px" }}>Connect</span>
         </Button>
       )}
       {!isFreighterInstalled && <FreighterBanner />}
@@ -308,7 +308,7 @@ return (
           variant="contained"
           component="label"
           sx={{
-            minWidth: "150px",
+            minWidth: "140px",
             height: "40px",
             bgcolor: "#448696",
             '&:hover': {
