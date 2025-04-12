@@ -83,40 +83,48 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
             textDecoration: "none",
           }}
         >
-          <img
+          <Box
+            component="img"
             src={logo}
             alt="Auditron Logo"
-            style={{ height: "40px", marginRight: "15px", marginLeft: "20px" }}
+            sx={{
+              height: { xs: 30, md: 40 },
+              mr: { xs: 1, md: 2 },
+              ml: { xs: 1, md: 2 },
+            }}
           />
-          <Typography variant="h4" sx={{ textDecoration: "none", color: "white" }}>
+          <Typography variant="h4" sx={{ textDecoration: "none", color: "white", fontSize: { xs: "1rem", md: "1.5rem" } }}>
             Auditron
           </Typography>
         </Box>
 
+
         {/* Center: Navigation Links */}
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", gap: 3 }}>
-          <Button 
-            component={Link} 
-            to="/dashboard" 
-            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", gap: { xs: 1.5, md: 3 } }}>
+          <Button
+            component={Link}
+            to="/dashboard"
+            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: { xs: "14px", md: "17px" }, textTransform: "none" }}
           >
             Audit Now
           </Button>
-          <Button 
-            component={Link} 
-            to="/about" 
-            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}
+          <Button
+            component={Link}
+            to="/about"
+            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: { xs: "14px", md: "17px" }, textTransform: "none" }}
           >
             About
           </Button>
-          <Button 
-            component={Link} 
-            to="/contact" 
-            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}
+          <Button
+            component={Link}
+            to="/contact"
+            sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: { xs: "14px", md: "17px" }, textTransform: "none" }}
           >
             Contact
           </Button>
         </Box>
+
+
 
         {/* Right: User Info and Drawer Toggle */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -143,7 +151,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
                 onClose={handleDrawerToggle}
                 sx={{
                   "& .MuiDrawer-paper": {
-                    width: "220px",
+                    width: { xs: "180px", md: "220px" },
                     backgroundColor: "#375e6f",
                     color: "white",
                     paddingTop: "20px",

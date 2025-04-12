@@ -21,31 +21,31 @@ export default function Footer() {
           alignItems: "center",
           justifyContent: "center",
           gap: 2,
-          flexWrap: "nowrap"
+          flexWrap: { xs: "wrap", md: "nowrap" }
         }}
       >
         <Link href="/" variant="body2" underline="hover" color="text.secondary">
           @ 2025 Auditron
         </Link>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ fontSize: { xs: "0.8rem", md: "inherit" } }} color="text.secondary">
           |
         </Typography>
         <Link href="/privacy" variant="body2" underline="hover" color="text.secondary">
           Privacy Policy
         </Link>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ fontSize: { xs: "0.8rem", md: "inherit" } }} color="text.secondary">
           |
         </Typography>
         <Link href="/about" variant="body2" underline="hover" color="text.secondary">
           About
         </Link>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ fontSize: { xs: "0.8rem", md: "inherit" } }} color="text.secondary">
           |
         </Typography>
         <Link href="/contact" variant="body2" underline="hover" color="text.secondary">
           Contact
         </Link>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ fontSize: { xs: "0.8rem", md: "inherit" } }} color="text.secondary">
           |
         </Typography>
         <Link

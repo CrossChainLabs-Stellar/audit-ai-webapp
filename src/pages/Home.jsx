@@ -53,7 +53,7 @@ export default function Home() {
       <Box
         sx={{
           width: "100vw",
-          height: "60vh",
+          height: { xs: "40vh", sm: "60vh" },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -217,7 +217,7 @@ export default function Home() {
                 size="small"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                sx={{ width: '20rem' }}
+                sx={{ width: { xs: '100%', sm: '20rem' } }}
               />
               <Button
                 variant="contained"

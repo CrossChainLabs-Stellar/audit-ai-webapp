@@ -81,7 +81,7 @@ export default function Contact() {
       <Card 
         sx={{
           display: 'flex',
-          flexDirection: matches ? 'row' : 'column',
+          flexDirection: { xs: 'column', md: 'row' },
           maxWidth: '1200px',
           margin: '0 auto',
         }}

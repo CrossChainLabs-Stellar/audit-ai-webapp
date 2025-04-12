@@ -244,21 +244,22 @@ const pieData = [
 const canGenerateReport = publicKey && projectName && uploadedFile;
 
 return (
-  <Box sx={{ minHeight: "100vh", p: 3, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)", }}>
+    <Box sx={{ minHeight: "100vh", p: { xs: 2, md: 3 }, background: "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)" }}>
+
     {/* Render the alpha banner if an audit already exists */}
     {auditExists && <AlphaBanner />}
     {!auditExists && !loadingAudit && (
-  <Paper
-    sx={{
-      maxWidth: 700,
-      mx: "auto",
-      mt: 4,
-      p: 4,
-      boxShadow: 3,
-      borderRadius: 2, // rounded corners for a modern look
-      backgroundColor: "background.paper",
-    }}
-  >
+      <Paper
+        sx={{
+          maxWidth: { xs: 360, sm: 700 },
+          mx: "auto",
+          mt: 4,
+          p: 4,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: "background.paper",
+        }}
+      >
     <Typography variant="h4" gutterBottom align="center" sx={{ mt: 2, mb: 7 }}>
       Audit Now
     </Typography>

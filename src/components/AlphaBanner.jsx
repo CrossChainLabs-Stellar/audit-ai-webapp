@@ -26,7 +26,7 @@ export default function AlphaBanner() {
       sx={{ 
         mb: 2,
         p: 3,
-        maxWidth: '800px',   // Limits the banner width
+        maxWidth: { xs: '95%', md: '800px' },
         margin: '0 auto',    // Centers the banner
         background: 'linear-gradient(135deg, #4ca1af, #c4e0e5)', 
         borderRadius: 1, 
@@ -59,7 +59,7 @@ export default function AlphaBanner() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           sx={{ 
-            width: '20rem',
+            width: { xs: '100%', sm: '20rem' },
             fontSize: '15px',
             backgroundColor: 'white',
             borderRadius: 1,
