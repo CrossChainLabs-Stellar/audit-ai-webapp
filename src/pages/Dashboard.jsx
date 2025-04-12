@@ -342,22 +342,26 @@ return (
           Please connect your wallet and upload a file first.
         </Typography>
       )}
-      <LoadingButton
+      
+      <Button
         fullWidth
         variant="contained"
-        loading={reportGenerating}
-        loadingIndicator={null}
         onClick={handleGenerateReport}
-        disabled={!canGenerateReport}
-        sx={{ display: "block", mt: 1, mb: 1, py: 2,
+        disabled={!canGenerateReport || reportGenerating}
+        sx={{
+          display: "block",
+          mt: 1,
+          mb: 1,
+          py: 2,
           bgcolor: "#448696",
           '&:hover': {
             bgcolor: "#375e6f",
           },
         }}
       >
-        Generate Audit Report
-      </LoadingButton>
+        {reportGenerating ? "Generating..." : "Generate Audit Report"}
+      </Button>
+
       {reportGenerating && (
         <Box sx={{ mt: 2 }}>
           <CircularProgress />

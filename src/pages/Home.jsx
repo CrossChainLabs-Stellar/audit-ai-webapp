@@ -129,9 +129,7 @@ export default function Home() {
             }}
           >
             <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/VIDEO_ID" 
+              src="https://www.youtube.com/embed/2URaB5ZThZI?rel=0"
               title="Audit AI Demo Video"
               frameBorder="0"
               style={{
