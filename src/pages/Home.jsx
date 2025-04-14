@@ -11,7 +11,6 @@ import {
   TextField
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { X, LinkedIn, Telegram, GitHub } from '@mui/icons-material';
 import SCFLogoBlack from '../assets/SCFLogoSVG-black.svg';
 import Client from '../utils/client.js';
 

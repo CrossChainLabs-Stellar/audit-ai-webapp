@@ -49,7 +49,7 @@ export default function Footer() {
           |
         </Typography>
         <Link
-          href="https://www.linkedin.com"
+          href="https://www.linkedin.com/company/auditronccl"
           target="_blank"
           rel="noopener noreferrer"
           color="inherit"
@@ -57,7 +57,7 @@ export default function Footer() {
           <LinkedIn  sx={{ fontSize: "25px", mt: "2px"}}/>
         </Link>
         <Link
-          href="https://x.com"
+          href="https://x.com/auditron_ccl"
           target="_blank"
           rel="noopener noreferrer"
           color="inherit"
