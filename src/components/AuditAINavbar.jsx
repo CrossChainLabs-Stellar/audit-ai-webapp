@@ -23,7 +23,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import MailIcon from "@mui/icons-material/Mail";
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 
-import logo from "../assets/AuditAILogo.svg";
+import logoAuditron from "../assets/AuditAILogo.svg";
 import logoFreighter from "../assets/Logo-freighter.svg";
 import menuAudit from "../assets/menu-run-audit.svg";
 import menuReports from "../assets/menu-reports.svg";
@@ -93,7 +93,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
         >
           <Box
             component="img"
-            src={logo}
+            src={logoAuditron}
             alt="Auditron Logo"
             sx={{
               height: { xs: 30, md: 40 },
