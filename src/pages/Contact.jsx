@@ -40,7 +40,7 @@ export default function Contact() {
       return;
     }
     try {
-      const response = await client.sendContactMessage({ name, email: contactEmail, subject, message });
+      const response = await client.message( name, contactEmail, subject, message );
       setContactStatus(response.message || "Message sent successfully!");
       // Clear the contact form
       setName('');

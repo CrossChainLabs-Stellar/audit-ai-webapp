@@ -2,8 +2,8 @@ import axios from 'axios';
 
 axios.defaults.timeout = 300000;
 
-const API = import.meta.env.REACT_APP_API || 'https://auditron.io/api';
-//const API = import.meta.env.REACT_APP_API || 'http://localhost:4000';
+//const API = import.meta.env.REACT_APP_API || 'https://auditron.io/api';
+const API = import.meta.env.REACT_APP_API || 'http://localhost:4000';
 
 export class Client {
   constructor() {
@@ -26,6 +26,7 @@ export class Client {
 
   // Generic POST method
   async post(endpoint, data, config = {}) {
+    console.log(data);
     try {
       const response = await axios.post(`${this.api}${endpoint}`, data, config);
       if (response.status !== 200) {
@@ -41,6 +42,11 @@ export class Client {
   // Waitlist endpoint: POST /waitlist
   async waitlist(email) {
     return this.post('/waitlist', { email });
+  }
+
+    // Message endpoint: POST /message
+  async message(name, email, subject, message) {
+    return this.post('/message', { name, email, subject, message });
   }
 
   // Audit endpoint: POST /audit
