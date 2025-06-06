@@ -48,7 +48,7 @@ export default function AlphaBanner() {
       </Alert>
 
       <Typography variant="body1" align="left" sx={{ marginBottom: '1rem', ml: '3px', fontSize: '15px'}}>
-        Thank you for testing Auditron!<br/>Sign up to stay informed about the latest updates and releases.
+        Thank you for testing Auditron!<br/>Join to stay informed about the latest updates and releases.
       </Typography>
 
       <Stack direction="row" spacing={1} alignItems="center" mb={2}>
@@ -87,7 +87,7 @@ export default function AlphaBanner() {
             },
           }}
         >
-          Sign Up
+          Join
         </Button>
       </Stack>
 

@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Join from "./pages/Join";
 
 // Components
 import AuditAINavbar from "./components/AuditAINavbar";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard publicKey={publicKey} onLogin={handleLogin} />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/join" element={<Join />} />
           <Route path="/about" element={<About />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           {/*<Route path="*" element={<NotFound />} />*/}

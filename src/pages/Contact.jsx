@@ -181,7 +181,7 @@ export default function Contact() {
           Join to Stay Informed
         </Typography>
         <Typography variant="body1" align="center" sx={{ maxWidth: '30rem', marginBottom: '1rem' }}>
-          Be the first to know about Auditron's latest updates and releases. Sign up below to stay informed.
+          Be the first to know about Auditron's latest updates and releases. Join below to stay informed.
         </Typography>
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
           <TextField
@@ -203,7 +203,7 @@ export default function Contact() {
               }
             }}
           >
-            Sign Up
+            Join
           </Button>
         </Stack>
         {subStatus && (
