@@ -14,6 +14,8 @@ import {
   ListItemText,
   IconButton,
   useMediaQuery,
+  Stack,
+  Link as MuiLink,
 } from "@mui/material";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -28,6 +30,7 @@ import logoFreighter from "../assets/Logo-freighter.svg";
 import menuAudit from "../assets/menu-run-audit.svg";
 import menuReports from "../assets/menu-reports.svg";
 import menuDisconnect from "../assets/menu-disconnect.svg";
+import ShieldIcon from '@mui/icons-material/GppGood';
 
 export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -35,6 +38,8 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
   const [userDrawerOpen, setUserDrawerOpen] = useState(false);
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
+
+  const gradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 
   useEffect(() => {
     const checkFreighter = async () => {
@@ -77,101 +82,63 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#2c3e50" }}>
+    <AppBar position="static" sx={{ backgroundColor: "grey.50", color: "black" }}>
       <Toolbar>
-
-        {/* Left: Logo and Title */}
-        <Box
-          component={Link}
-          to="/"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            textDecoration: "none",
-            mr: 2,
-          }}
-        >
-          <Box
-            component="img"
-            src={logoAuditron}
-            alt="Auditron Logo"
-            sx={{
-              height: { xs: 30, md: 40 },
-              mr: { xs: 1, md: 2 },
-              ml: { xs: 1, md: 2 },
-            }}
-          />
-          <Typography
-            variant="h4"
-            sx={{
-              textDecoration: "none",
-              color: "white",
-              fontSize: { xs: "1rem", md: "1.5rem" },
-            }}
-          >
-            Auditron
-          </Typography>
-        </Box>
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ flexGrow: 1 }}>
+          <Box component={Link} to="/" sx={{ width: 40, height: 40, borderRadius: 2, background: gradient, display: 'grid', placeItems: 'center' }}>
+            <ShieldIcon sx={{ color: '#fff' }} />
+          </Box>
+          <Typography variant="h6" fontWeight={800}>Auditron</Typography>
+        </Stack>
 
         {/* Center Links for Desktop Only */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: { xs: "none", md: "flex" },
-            justifyContent: "center",
-            gap: 3,
-          }}
-        >
-          <Button component={Link} to="/dashboard" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
-            Audit Now
-          </Button>
-          <Button component={Link} to="/about" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
-            About
-          </Button>
-          <Button component={Link} to="/contact" sx={{ color: "#e0e0e0", fontWeight: 600, fontSize: "17px", textTransform: "none" }}>
-            Contact
-          </Button>
-        </Box>
 
-        {/* Right: Login/User + Mobile Menu */}
+        <Stack direction="row" spacing={3} sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <MuiLink component={Link} to="/dashboard" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>Dashboard</MuiLink>
+          <MuiLink component={Link} to="/dashboard" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>Audit Now</MuiLink>
+          <MuiLink component={Link} to="/about" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>About</MuiLink>
+          <MuiLink component={Link} to="/contact" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>Contact</MuiLink>
+        </Stack>
+
+        {/* Right: Freighter / User + Mobile Menu */}
         <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
           {publicKey ? (
-            <>
-              <Button
-                onClick={handleUserDrawerToggle}
-                sx={{
-                  textTransform: "none",
-                  fontSize: "16px",
-                  color: "inherit",
-                  marginRight: "4px",
-                  padding: "6px 12px",
-                }}
-              >
-                {publicKey.slice(0, 2)}...{publicKey.slice(-4)}
-                <ArrowDropDownIcon sx={{ marginLeft: "8px" }} />
-              </Button>
-            </>
-          ) : (
             <Button
-              onClick={handleLogin}
-              color="inherit"
+              onClick={handleUserDrawerToggle}
               sx={{
                 textTransform: "none",
-                fontSize: "14px",
-                display: "flex",
-                alignItems: "center",
+                fontSize: "16px",
+                color: "inherit",
+                marginRight: "4px",
                 padding: "6px 12px",
               }}
             >
-              <img src={logoFreighter} alt="Freighter Logo" style={{ width: "100px" }} />
+              {publicKey.slice(0, 2)}...{publicKey.slice(-4)}
+              <ArrowDropDownIcon sx={{ marginLeft: "8px" }} />
             </Button>
+          ) : (
+            <Box sx={{ ml: 2, px: 1.5, py: 0.5, borderRadius: 999, display: 'inline-flex', alignItems: 'center', gap: 1, background: '#4e0597ff', color: '#fff', fontSize: 13, fontWeight: 700 }}>
+              <Button
+                onClick={handleLogin}
+                color="inherit"
+                sx={{
+                  textTransform: "none",
+                  fontSize: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "6px 12px",
+                }}
+              >
+                <img src={logoFreighter} alt="Freighter Logo" style={{ width: "100px" }} />
+              </Button>
+            </Box>
           )}
 
           {/* Hamburger Icon (far right) */}
           {isMobile && (
             <IconButton
               onClick={handleNavDrawerToggle}
-              sx={{ color: "white", ml: 1 }}
+              sx={{ color: "black", ml: 1 }}
             >
               <MenuIcon />
             </IconButton>
@@ -179,7 +146,7 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
         </Box>
       </Toolbar>
 
-      {/* Mobile Nav Drawer (right side) */}
+      {/* Mobile Nav Drawer */}
       <Drawer
         anchor="right"
         open={navDrawerOpen}
