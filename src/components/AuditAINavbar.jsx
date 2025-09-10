@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AppBar,
@@ -16,6 +16,7 @@ import {
   useMediaQuery,
   Stack,
   Link as MuiLink,
+  Divider,
 } from "@mui/material";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -23,30 +24,33 @@ import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import InfoIcon from "@mui/icons-material/Info";
 import MailIcon from "@mui/icons-material/Mail";
-import { isConnected, requestAccess } from "@stellar/freighter-api";
+import ShieldIcon from "@mui/icons-material/GppGood";
+import DescriptionIcon from "@mui/icons-material/Description";
 
-import logoAuditron from "../assets/AuditAILogo.svg";
+import { isConnected, requestAccess } from "@stellar/freighter-api";
 import logoFreighter from "../assets/Logo-freighter.svg";
 import menuAudit from "../assets/menu-run-audit.svg";
 import menuReports from "../assets/menu-reports.svg";
 import menuDisconnect from "../assets/menu-disconnect.svg";
-import ShieldIcon from '@mui/icons-material/GppGood';
+import { BRAND } from "../theme/AppTheme";
 
-export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
+export default function AuditAINavbar({
+  publicKey,
+  onLogin,
+  onLogout,
+  fixed = true,
+  showSpacer = true,
+}) {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
-
   const [isFreighterInstalled, setIsFreighterInstalled] = useState(false);
   const [userDrawerOpen, setUserDrawerOpen] = useState(false);
   const [navDrawerOpen, setNavDrawerOpen] = useState(false);
 
-  const gradient = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-
   useEffect(() => {
-    const checkFreighter = async () => {
+    (async () => {
       const connectionStatus = await isConnected();
-      setIsFreighterInstalled(connectionStatus.isConnected);
-    };
-    checkFreighter();
+      setIsFreighterInstalled(!!connectionStatus?.isConnected);
+    })();
   }, []);
 
   const handleLogin = async () => {
@@ -55,145 +59,167 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
         alert("Freighter wallet not found. Please install the Freighter extension.");
         return;
       }
-
       const accessObj = await requestAccess();
       if (accessObj.error) {
         alert(`Error: ${accessObj.error}`);
         return;
       }
-
-      onLogin(accessObj.address);
-    } catch (error) {
-      console.error("Stellar wallet connection error: ", error);
+      onLogin && onLogin(accessObj.address);
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const handleUserDrawerToggle = () => {
-    setUserDrawerOpen(!userDrawerOpen);
+  const gradientBtnSx = {
+    background: `linear-gradient(90deg, ${BRAND.secondary}, ${BRAND.primary})`,
+    color: "#fff",
+    fontWeight: 800,
+    px: 2.5,
+    py: 1,
+    borderRadius: 2,
+    textTransform: "none",
+    boxShadow: 6,
+    "&:hover": {
+      boxShadow: 10,
+      transform: "scale(1.03)",
+      background: `linear-gradient(90deg, ${BRAND.secondary}, ${BRAND.primary})`,
+    },
+    transition: "all .2s ease",
   };
 
-  const handleNavDrawerToggle = () => {
-    setNavDrawerOpen(!navDrawerOpen);
-  };
-
-  const handleDisconnect = () => {
-    if (onLogout) onLogout();
-    setUserDrawerOpen(false);
-  };
+  const linkSx = { color: BRAND.text, fontWeight: 600, "&:hover": { color: "#fff" } };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "grey.50", color: "black" }}>
-      <Toolbar>
-        <Stack direction="row" alignItems="center" spacing={1} sx={{ flexGrow: 1 }}>
-          <Box component={Link} to="/" sx={{ width: 40, height: 40, borderRadius: 2, background: gradient, display: 'grid', placeItems: 'center' }}>
-            <ShieldIcon sx={{ color: '#fff' }} />
-          </Box>
-          <Typography variant="h6" fontWeight={800}>Auditron</Typography>
-        </Stack>
-
-        {/* Center Links for Desktop Only */}
-
-        <Stack direction="row" spacing={3} sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <MuiLink component={Link} to="/dashboard" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>Dashboard</MuiLink>
-          <MuiLink component={Link} to="/dashboard" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>Audit Now</MuiLink>
-          <MuiLink component={Link} to="/about" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>About</MuiLink>
-          <MuiLink component={Link} to="/contact" underline="none" color="text.primary" sx={{ '&:hover': { color: '#667eea' }, fontWeight: 600 }}>Contact</MuiLink>
-        </Stack>
-
-        {/* Right: Freighter / User + Mobile Menu */}
-        <Box sx={{ display: "flex", alignItems: "center", ml: "auto" }}>
-          {publicKey ? (
-            <Button
-              onClick={handleUserDrawerToggle}
+    <>
+      <AppBar
+        position={fixed ? "fixed" : "static"}
+        elevation={0}
+        sx={{
+          bgcolor: "rgba(13,12,34,0.80)",
+          backdropFilter: "blur(6px)",
+          borderBottom: `1px solid ${BRAND.border}`,
+        }}
+      >
+        <Toolbar sx={{ minHeight: 64 }}>
+          {/* Left: logo */}
+          <Stack direction="row" alignItems="center" spacing={1.5} sx={{ flexGrow: 1 }}>
+            <Box
+              component={Link}
+              to="/"
               sx={{
-                textTransform: "none",
-                fontSize: "16px",
-                color: "inherit",
-                marginRight: "4px",
-                padding: "6px 12px",
+                width: 32,
+                height: 32,
+                color: BRAND.primary,
+                display: "grid",
+                placeItems: "center",
+                textDecoration: "none",
               }}
             >
-              {publicKey.slice(0, 2)}...{publicKey.slice(-4)}
-              <ArrowDropDownIcon sx={{ marginLeft: "8px" }} />
-            </Button>
-          ) : (
-            <Box sx={{ ml: 2, px: 1.5, py: 0.5, borderRadius: 999, display: 'inline-flex', alignItems: 'center', gap: 1, background: '#4e0597ff', color: '#fff', fontSize: 13, fontWeight: 700 }}>
-              <Button
-                onClick={handleLogin}
-                color="inherit"
-                sx={{
-                  textTransform: "none",
-                  fontSize: "14px",
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "6px 12px",
-                }}
-              >
-                <img src={logoFreighter} alt="Freighter Logo" style={{ width: "100px" }} />
-              </Button>
+              <ShieldIcon sx={{ color: BRAND.primary }} />
             </Box>
-          )}
+            <Typography variant="h6" fontWeight={800} sx={{ color: "#fff" }}>
+              Auditron
+            </Typography>
+          </Stack>
 
-          {/* Hamburger Icon (far right) */}
-          {isMobile && (
-            <IconButton
-              onClick={handleNavDrawerToggle}
-              sx={{ color: "black", ml: 1 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-        </Box>
-      </Toolbar>
+          {/* Center: nav (desktop) */}
+          <Stack direction="row" spacing={3} sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
+            <MuiLink component={Link} to="/audit" underline="none" sx={linkSx}>
+              Audit Now
+            </MuiLink>
+            <MuiLink component={Link} to="/dashboard" underline="none" sx={linkSx}>
+              Dashboard
+            </MuiLink>
+            <MuiLink component={Link} to="/about" underline="none" sx={linkSx}>
+              About
+            </MuiLink>
+            <MuiLink component={Link} to="/contact" underline="none" sx={linkSx}>
+              Contact
+            </MuiLink>
+          </Stack>
+
+          {/* Right: wallet / menu */}
+          <Stack direction="row" alignItems="center" spacing={1}>
+            {publicKey ? (
+              <Button
+                onClick={() => setUserDrawerOpen(true)}
+                endIcon={<ArrowDropDownIcon />}
+                sx={{ color: "#fff", fontWeight: 700 }}
+              >
+                {publicKey.slice(0, 4)}...{publicKey.slice(-4)}
+              </Button>
+            ) : (
+              <Button onClick={handleLogin} sx={gradientBtnSx}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box component="img" src={logoFreighter} alt="Freighter" sx={{ height: 18 }} />
+                  <span>Connect</span>
+                </Box>
+              </Button>
+            )}
+
+            {isMobile && (
+              <IconButton onClick={() => setNavDrawerOpen(true)} sx={{ color: "#fff", ml: 0.5 }}>
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Stack>
+        </Toolbar>
+      </AppBar>
+
+      {fixed && showSpacer && <Box sx={{ height: 64 }} />}
 
       {/* Mobile Nav Drawer */}
       <Drawer
         anchor="right"
         open={navDrawerOpen}
-        onClose={handleNavDrawerToggle}
+        onClose={() => setNavDrawerOpen(false)}
         sx={{
           "& .MuiDrawer-paper": {
-            width: "200px",
-            backgroundColor: "#2c3e50",
-            color: "white",
-            paddingTop: "20px",
+            width: 240,
+            bgcolor: BRAND.dark,
+            color: "#fff",
+            borderLeft: `1px solid ${BRAND.border}`,
           },
         }}
       >
-        <IconButton
-          onClick={handleNavDrawerToggle}
-          sx={{
-            alignSelf: "flex-end",
-            marginRight: "10px",
-            color: "white",
-            padding: "4px",
-            marginBottom: "20px",
-          }}
-        >
-          <CloseIcon sx={{ fontSize: "20px" }} />
-        </IconButton>
-
+        <Box sx={{ p: 1.5, display: "flex", justifyContent: "flex-end" }}>
+          <IconButton onClick={() => setNavDrawerOpen(false)} sx={{ color: "#fff" }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider sx={{ borderColor: BRAND.border }} />
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/dashboard" onClick={handleNavDrawerToggle}>
+            <ListItemButton component={Link} to="/audit" onClick={() => setNavDrawerOpen(false)}>
               <ListItemIcon>
-                <img src={menuAudit} alt="Audit Now" style={{ width: "26px", marginLeft: "2px" }} />
+                <img src={menuAudit} alt="Audit Now" style={{ width: 24 }} />
               </ListItemIcon>
               <ListItemText primary="Audit Now" />
             </ListItemButton>
           </ListItem>
+
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/about" onClick={handleNavDrawerToggle}>
+            <ListItemButton component={Link} to="/dashboard" onClick={() => setNavDrawerOpen(false)}>
               <ListItemIcon>
-                <InfoIcon sx={{ color: "white" }} />
+                <DescriptionIcon sx={{ color: "#fff" }} />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/about" onClick={() => setNavDrawerOpen(false)}>
+              <ListItemIcon>
+                <InfoIcon sx={{ color: "#fff" }} />
               </ListItemIcon>
               <ListItemText primary="About" />
             </ListItemButton>
           </ListItem>
+
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/contact" onClick={handleNavDrawerToggle}>
+            <ListItemButton component={Link} to="/contact" onClick={() => setNavDrawerOpen(false)}>
               <ListItemIcon>
-                <MailIcon sx={{ color: "white" }} />
+                <MailIcon sx={{ color: "#fff" }} />
               </ListItemIcon>
               <ListItemText primary="Contact" />
             </ListItemButton>
@@ -205,58 +231,56 @@ export default function AuditAINavbar({ publicKey, onLogin, onLogout }) {
       <Drawer
         anchor="right"
         open={userDrawerOpen}
-        onClose={handleUserDrawerToggle}
+        onClose={() => setUserDrawerOpen(false)}
         sx={{
           "& .MuiDrawer-paper": {
-            width: { xs: "180px", md: "220px" },
-            backgroundColor: "#375e6f",
-            color: "white",
-            paddingTop: "20px",
+            width: 260,
+            bgcolor: "#111827",
+            color: "#fff",
+            borderLeft: `1px solid ${BRAND.border}`,
           },
         }}
       >
-        <IconButton
-          onClick={handleUserDrawerToggle}
-          sx={{
-            alignSelf: "flex-end",
-            marginRight: "10px",
-            color: "white",
-            padding: "4px",
-            marginBottom: "20px",
-          }}
-        >
-          <CloseIcon sx={{ fontSize: "20px" }} />
-        </IconButton>
-
+        <Box sx={{ p: 1.5, display: "flex", justifyContent: "flex-end" }}>
+          <IconButton onClick={() => setUserDrawerOpen(false)} sx={{ color: "#fff" }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Divider sx={{ borderColor: BRAND.border }} />
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/dashboard" onClick={handleUserDrawerToggle}>
+            <ListItemButton component={Link} to="/dashboard" onClick={() => setUserDrawerOpen(false)}>
               <ListItemIcon>
-                <img src={menuAudit} alt="Audit Now" style={{ width: "26px", marginLeft: "3px" }} />
+                <img src={menuAudit} alt="Audit Now" style={{ width: 24 }} />
               </ListItemIcon>
               <ListItemText primary="Audit Now" />
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/dashboard" onClick={handleUserDrawerToggle}>
+            <ListItemButton component={Link} to="/dashboard" onClick={() => setUserDrawerOpen(false)}>
               <ListItemIcon>
-                <img src={menuReports} alt="My Reports" style={{ width: "24px", marginLeft: "2px" }} />
+                <img src={menuReports} alt="View Reports" style={{ width: 22 }} />
               </ListItemIcon>
               <ListItemText primary="View Reports" />
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton onClick={handleDisconnect}>
+            <ListItemButton
+              onClick={() => {
+                onLogout && onLogout();
+                setUserDrawerOpen(false);
+              }}
+            >
               <ListItemIcon>
-                <img src={menuDisconnect} alt="Disconnect" style={{ width: "23px", marginLeft: "5px" }} />
+                <img src={menuDisconnect} alt="Disconnect" style={{ width: 20 }} />
               </ListItemIcon>
               <ListItemText primary="Disconnect" />
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
-    </AppBar>
+    </>
   );
 }

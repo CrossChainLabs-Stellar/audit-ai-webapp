@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, Container, Typography, Divider, Link } from "@mui/material";
+import { BRAND } from "../theme/AppTheme";
 
 export default function PrivacyPolicy() {
     return (
-        <Box sx={{ minHeight: "100vh", backgroundColor: "#f4f4f4", py: 4 }}>
+        <Box sx={{ minHeight: "100vh", backgroundColor: BRAND.dark, py: 4 }}>
             <Container maxWidth="md" sx={{ py: { xs: 4, md: 6 } }}>
                 {/* Title & Last Updated */}
                 <Typography variant="h3" align="center" sx={{ mb: 1 }}>

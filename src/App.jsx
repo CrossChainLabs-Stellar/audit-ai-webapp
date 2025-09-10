@@ -2,9 +2,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { ThemeProvider } from "./theme/theme-provider";
-
 // Pages
+import NewAudit from "./pages/NewAudit";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
@@ -28,11 +27,12 @@ function App() {
   };
 
   return (
-    <ThemeProvider>
+//
       <Router>
         <AuditAINavbar publicKey={publicKey} onLogin={handleLogin} onLogout={handleLogout}/>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/audit" element={<NewAudit publicKey={publicKey} onLogin={handleLogin} />} />
           <Route path="/dashboard" element={<Dashboard publicKey={publicKey} onLogin={handleLogin} />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join" element={<Join />} />
@@ -42,7 +42,7 @@ function App() {
         </Routes>
         <Footer/>
       </Router>
-    </ThemeProvider>
+
   );
 }
 

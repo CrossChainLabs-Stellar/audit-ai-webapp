@@ -1,18 +1,19 @@
 import React from "react";
 import { Box, Container, Typography, Grid, Card, CardContent, Avatar, Link } from "@mui/material";
 import { LinkedIn } from "@mui/icons-material";
+import { BRAND } from "../theme/AppTheme";
 
 import AndreeaAvatar from "../assets/Andreea.jpeg";
 import GeorgeAvatar from "../assets/George.jpeg";
 
 export default function About() {
   return (
-    <Box sx={{ py: 6, backgroundColor: "#f4f4f4" }}>
-     <Container maxWidth="lg" sx={{ p: { xs: 2, md: 3 } }}>
+    <Box sx={{ py: 6, backgroundColor: BRAND.dark, }}>
+      <Container maxWidth="lg" sx={{ p: { xs: 2, md: 3 } }}>
         <Typography variant="h3" align="center" sx={{ mb: 4 }}>
           About Auditron
         </Typography>
-        
+
         {/* About the Product Section */}
         <Box sx={{ mb: 6 }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
@@ -33,7 +34,7 @@ export default function About() {
             <strong>Solution:</strong> Auditron offers a fast, secure, and cost-effective way for developers and audit organizations to perform smart contract audits. Features include instant AI-driven audits, comprehensive PDF reports, GitHub integration, multi-chain support starting with Soroban, and continuous learning to improve audit capabilities.
           </Typography>
         </Box>
-        
+
         {/* About the Team Section */}
         <Box sx={{ mb: 6 }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
@@ -78,7 +79,7 @@ export default function About() {
                 <CardContent>
                   <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                     <Avatar
-                      src={GeorgeAvatar} 
+                      src={GeorgeAvatar}
                       alt="George Robert"
                       sx={{ width: 56, height: 56, mr: 2 }}
                     />
