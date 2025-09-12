@@ -1,101 +1,125 @@
-import React, { useState } from 'react';
-import { Box, Typography, Button, Alert, TextField, Stack } from '@mui/material';
-import { Client } from '../utils/client';
+// src/components/AlphaBanner.jsx
+import React, { useState } from "react";
+import { Box, Container, Typography, TextField, Button, Chip, Stack } from "@mui/material";
+import BoltIcon from "@mui/icons-material/Bolt";
+import { Client } from "../utils/client";
+import { BRAND } from "../theme/AppTheme";
 
 export default function AlphaBanner() {
-  const [email, setEmail] = useState('');
-  const [statusMessage, setStatusMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
   const client = new Client();
 
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e?.preventDefault?.();
     if (!email) {
-      setStatusMessage('Please enter an email.');
+      setStatusMessage("Please enter an email.");
       return;
     }
     try {
       const response = await client.waitlist(email);
-      setStatusMessage(response.message || 'Successfully signed up!');
+      setStatusMessage(response.message || "Successfully signed up!");
+      setEmail("");
     } catch (error) {
-      console.error('Waitlist signup error:', error);
-      setStatusMessage('Signup failed. Please try again later.');
+      console.error("Waitlist signup error:", error);
+      setStatusMessage("Signup failed. Please try again later.");
     }
   };
 
   return (
-    <Box 
-      sx={{ 
-        mb: 2,
-        p: 3,
-        maxWidth: { xs: '95%', md: '800px' },
-        margin: '0 auto',    // Centers the banner
-        background: 'linear-gradient(135deg, #4ca1af, #c4e0e5)', 
-        borderRadius: 1, 
-        boxShadow: 3,
-        position: 'relative' 
-      }}
-    >
-      <Alert 
-        severity="info" 
-        sx={{ 
-          mt: 2, 
-          mb: 2, 
-          backgroundColor: 'rgba(255,255,255,0.7)', 
-          color: 'black',
-          border: '1px solid rgba(0,0,0,0.3)'
+    <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 6 } }}>
+      <Box
+        sx={{
+          maxWidth: 960,
+          mx: "auto",
+          textAlign: "center",
+          borderRadius: 4,
+          p: { xs: 3, sm: 4 },
+          background: `linear-gradient(135deg, ${BRAND.secondary}, #6D28D9)`,
+          boxShadow: "0 30px 80px rgba(0,0,0,.45)",
         }}
       >
-        This alpha release allows you to generate one report only!
-      </Alert>
+        {/* Alpha notice */}
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+          <Chip
+            icon={<BoltIcon sx={{ color: BRAND.secondary }} />}
+            label="Alpha Release"
+            sx={{
+              bgcolor: "#fff",
+              color: BRAND.secondary,
+              fontWeight: 800,
+              "& .MuiChip-icon": { color: BRAND.secondary },
+            }}
+          />
+        </Stack>
+        <Typography sx={{ color: "#E9D5FF", mb: 0.5 }}>
+          This alpha release allows you to generate <b>one report</b> only.
+        </Typography>
 
-      <Typography variant="body1" align="left" sx={{ marginBottom: '1rem', ml: '3px', fontSize: '15px'}}>
-        Thank you for testing Auditron!<br/>Join to stay informed about the latest updates and releases.
-      </Typography>
+        <Typography variant="h6" sx={{ color: "#fff", fontWeight: 800, mt: 1 }}>
+          Thank you for testing Auditron!
+        </Typography>
+        <Typography sx={{ color: "#E9D5FF", mb: 3 }}>
+          Join to stay informed about the latest updates and releases.
+        </Typography>
 
-      <Stack direction="row" spacing={1} alignItems="center" mb={2}>
-        <TextField
-          label="Email Address"
-          variant="outlined"
-          size="small"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          sx={{ 
-            width: { xs: '100%', sm: '20rem' },
-            fontSize: '15px',
-            backgroundColor: 'white',
-            borderRadius: 1,
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: 'transparent' },
-              '&:hover fieldset': { borderColor: '#c4e0e5' },
-              '&.Mui-focused fieldset': { borderColor: '#c4e0e5' },
-            },
-            '& .MuiInputLabel-root': {
-              color: 'grey',
-            },
-            '& .MuiInputLabel-root.Mui-focused': {
-              color: 'grey',
-            }
-          }}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSignup}
+        {/* Email form */}
+        <Box
+          component="form"
+          onSubmit={handleSignup}
           sx={{
-            bgcolor: "#448696",
-            '&:hover': {
-              bgcolor: "#375e6f",
-            },
+            maxWidth: 640,
+            mx: "auto",
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2,
+            alignItems: "center",
+            bgcolor: "rgba(0,0,0,0.2)",
+            p: 1,
+            borderRadius: 999,
           }}
         >
-          Join
-        </Button>
-      </Stack>
+          <TextField
+            type="email"
+            placeholder="Enter your email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            size="medium"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                bgcolor: "transparent",
+                color: "#fff",
+                borderRadius: 999,
+                px: 2,
+                "& fieldset": { borderColor: "transparent" },
+                "&:hover fieldset": { borderColor: "transparent" },
+              },
+              "& input::placeholder": { color: "#E9D5FF", opacity: 1 },
+            }}
+          />
+          <Button
+            type="submit"
+            sx={{
+              bgcolor: "#fff",
+              color: BRAND.secondary,
+              fontWeight: 800,
+              px: 4,
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: "none",
+              "&:hover": { bgcolor: "#E5E7EB", transform: "scale(1.03)" },
+              transition: "all .2s ease",
+            }}
+          >
+            Join
+          </Button>
+        </Box>
 
-      {statusMessage && (
-        <Typography variant="body2" sx={{ mt: 2, color: 'black' }}>
-          {statusMessage}
-        </Typography>
-      )}
-    </Box>
+        {statusMessage && (
+          <Typography sx={{ mt: 1.5, color: "#fff" }}>{statusMessage}</Typography>
+        )}
+      </Box>
+    </Container>
   );
 }
