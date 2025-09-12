@@ -170,7 +170,7 @@ export default function NewAudit({ publicKey, onLogin }) {
     checkFreighter();
     console.log('checkFreighter');
     const checkAuditExists = async () => {
-      console.log(publicKey);
+      console.log('checkAuditExists', publicKey);
       if (publicKey) {
         const client = new Client();
         try {
@@ -744,8 +744,8 @@ export default function NewAudit({ publicKey, onLogin }) {
             <Box sx={{ pt: 3 }}>
               <Button
                 fullWidth
-                disabled={!canGenerate}
-                onClick={onGenerate}
+                onClick={handleGenerateReport}
+                disabled={!canGenerateReport || reportGenerating}
                 startIcon={<BoltIcon />}
                 sx={{
                   bgcolor: canGenerate ? COLORS.accent : "#4b5563",
@@ -763,7 +763,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                   opacity: canGenerate ? 1 : 0.6,
                 }}
               >
-                Generate Audit Report
+                {reportGenerating ? "Generating..." : "Generate Audit Report"}
               </Button>
 
               <Typography
