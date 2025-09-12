@@ -795,7 +795,7 @@ export default function NewAudit({ publicKey, onLogin }) {
               {pieData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
+                  fill={SEVERITY_COLORS[index % SEVERITY_COLORS.length]}
                 />
               ))}
             </Pie>
@@ -842,7 +842,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                 <Box
                   component="pre"
                   sx={{
-                    backgroundColor: "#f5f5f5",
+                    backgroundColor: "#055aa8ff",
                     padding: 2,
                     borderRadius: 1,
                     overflowX: "auto",
