@@ -77,6 +77,43 @@ const severityStyles = {
   }
 };
 
+const GH = {
+  bg: "#0D1117",
+  gray800: "#161B22",
+  gray700: "#21262D",
+  gray600: "#30363D",
+  gray500: "#8B949E",
+  gray400: "#C9D1D9",
+  blue500: "#58A6FF",
+  sevHigh: "#F85149",
+  sevMedium: "#F78166",
+  sevLow: "#30363D",
+};
+
+const severityBg = (s) =>
+  s === "High" ? GH.sevHigh : s === "Medium" ? GH.sevMedium : GH.sevLow;
+
+function SeverityPill({ severity }) {
+  return (
+    <Box
+      sx={{
+        color: "#fff",
+        bgcolor: severityBg(severity),
+        px: 1.25,
+        py: 0.5,
+        borderRadius: 999,
+        fontSize: 11,
+        fontWeight: 800,
+        textTransform: "uppercase",
+        letterSpacing: ".04em",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {severity} Severity
+    </Box>
+  );
+}
+
 export default function NewAudit({ publicKey, onLogin }) {
   // STATE
   const [walletConnected, setWalletConnected] = useState(false);
@@ -815,47 +852,119 @@ export default function NewAudit({ publicKey, onLogin }) {
 
           {/* Findings Section */}
           <Box sx={{ mt: 6 }}>
-            <Typography variant="h5" gutterBottom>
-              5. Findings
-            </Typography>
-            {vulnerabilities.map((vuln, index) => (
-              <Box
-                key={index}
-                sx={{ mt: 2, borderBottom: "1px solid #ddd", pb: 2 }}
+            {/* Findings Section */}
+            <Box sx={{ mt: 8 }}>
+              <Typography
+                sx={{
+                  fontSize: 24,
+                  fontWeight: 800,
+                  color: "#fff",
+                  borderBottom: `1px solid ${GH.gray600}`,
+                  pb: 1.5,
+                  mb: 3,
+                }}
               >
-                <Typography variant="subtitle1">
-                  5.{index + 1}{" "}
-                  <span style={severityStyles[vuln.severity]}>
-                    {vuln.severity} Severity
-                  </span>{" "}
-                  {vuln.title}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>File:</strong> {fileName}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Description:</strong> {vuln.description}
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  <strong>Code Snippet:</strong>
-                </Typography>
-                <Box
-                  component="pre"
-                  sx={{
-                    backgroundColor: "#055aa8ff",
-                    padding: 2,
-                    borderRadius: 1,
-                    overflowX: "auto",
-                    fontFamily: "monospace"
-                  }}
-                >
-                  {vuln.snippet}
-                </Box>
-                <Typography variant="body2">
-                  <strong>Recommendation:</strong> {vuln.recommendation}
-                </Typography>
-              </Box>
-            ))}
+                5. Findings
+              </Typography>
+
+              <Stack spacing={3}>
+                {vulnerabilities.map((vuln, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      border: `1px solid ${GH.gray700}`,
+                      borderRadius: 2,
+                      overflow: "hidden",
+                      bgcolor: "rgba(33,38,45,0.5)", // brand-gray-700/50
+                    }}
+                  >
+                    {/* Header */}
+                    <Box
+                      sx={{
+                        p: 2.5,
+                        bgcolor: "rgba(33,38,45,0.5)",
+                        borderBottom: `1px solid ${GH.gray700}`,
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="flex-start"
+                        gap={2}
+                      >
+                        <Typography sx={{ color: "#fff", fontSize: 18, fontWeight: 700 }}>
+                          5.{index + 1} {vuln.title}
+                        </Typography>
+                        <SeverityPill severity={vuln.severity || "Low"} />
+                      </Stack>
+
+                      <Typography
+                        sx={{
+                          mt: 0.75,
+                          color: GH.gray500,
+                          fontFamily:
+                            'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                          fontSize: 12.5,
+                        }}
+                      >
+                        File: <Box component="span" sx={{ color: GH.gray400 }}>{fileName}</Box>
+                      </Typography>
+                    </Box>
+
+                    {/* Body */}
+                    <Box sx={{ p: 2.5, color: GH.gray400 }}>
+                      {/* Description */}
+                      <Box sx={{ mb: 1.25 }}>
+                        <Typography component="span" sx={{ color: GH.gray400, fontWeight: 700 }}>
+                          Description:
+                        </Typography>{" "}
+                        <Typography component="span" sx={{ color: GH.gray400 }}>
+                          {vuln.description}
+                        </Typography>
+                      </Box>
+
+                      {/* Recommendation */}
+                      <Box sx={{ mb: 1.25 }}>
+                        <Typography component="span" sx={{ color: GH.gray400, fontWeight: 700 }}>
+                          Recommendation:
+                        </Typography>{" "}
+                        <Typography component="span" sx={{ color: GH.gray400 }}>
+                          {vuln.recommendation}
+                        </Typography>
+                      </Box>
+
+                      {/* Code Snippet */}
+                      {vuln.snippet && (
+                        <Box sx={{ mt: 2 }}>
+                          <Typography sx={{ fontWeight: 700, color: GH.gray400, mb: 1 }}>
+                            Code Snippet:
+                          </Typography>
+                          <Box
+                            component="pre"
+                            sx={{
+                              m: 0,
+                              p: 2,
+                              borderRadius: 1.5,
+                              fontSize: 13,
+                              lineHeight: 1.5,
+                              overflowX: "auto",
+                              fontFamily:
+                                'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                              bgcolor: "rgba(88,166,255,0.10)", // brand-blue-500/10
+                              color: GH.blue500,
+                              border: `1px solid ${GH.gray600}`,
+                            }}
+                          >
+                            <code>{vuln.snippet}</code>
+                          </Box>
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
+
           </Box>
         </Paper>
       )}
