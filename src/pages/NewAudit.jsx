@@ -243,15 +243,6 @@ export default function NewAudit({ publicKey, onLogin }) {
     return false;
   };
 
-  const handleFileUpload = (event) => {
-    if (event.target.files.length > 0) {
-      setUploadedFile(event.target.files[0]);
-      setFileName(event.target.files[0].name);
-      setProjectName(event.target.files[0].name);
-    }
-  };
-
-
   const handleGenerateReport = async () => {
     // Ensure wallet is connected
     if (!publicKey) {
@@ -351,6 +342,10 @@ export default function NewAudit({ publicKey, onLogin }) {
 
   const handleInputChange = (e) => {
     if (!e.target.files) return;
+    setUploadedFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
+    setProjectName(e.target.files[0].name);
+
     addFiles(e.target.files);
     e.target.value = ""; // reset input
   };
@@ -399,14 +394,6 @@ export default function NewAudit({ publicKey, onLogin }) {
     [files]
   );
 
-  const onGenerate = () => {
-    if (!walletConnected) return setValidation("Please connect your wallet first.");
-    if (!contractReady) return setValidation("Please provide a smart contract to audit.");
-    setValidation("");
-    // TODO: wire to your actual generation flow (upload files / fetch repo, call backend, route to progress page)
-    // For now, a simple console log:
-    console.log("Generate audit:", { files, githubUrl });
-  };
 
   return (
     <Box
