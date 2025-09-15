@@ -168,9 +168,7 @@ export default function NewAudit({ publicKey, onLogin }) {
       setIsFreighterInstalled(connectionStatus.isConnected);
     };
     checkFreighter();
-    console.log('checkFreighter');
     const checkAuditExists = async () => {
-      console.log('checkAuditExists', publicKey);
       if (publicKey) {
         const client = new Client();
         try {
@@ -314,15 +312,6 @@ export default function NewAudit({ publicKey, onLogin }) {
   const contractReady = isFilesReady || isGithubReady;
   const canGenerate = walletConnected && contractReady;
 
-  // HANDLERS
-  const toggleWallet = () => {
-    const next = !walletConnected;
-    setWalletConnected(next);
-    if (!next) setValidation("Please connect your wallet first.");
-    else if (!contractReady) setValidation("Please provide a smart contract to audit.");
-    else setValidation("");
-  };
-
   const onTabFiles = () => {
     setActiveTab("files");
     // validation update
@@ -460,7 +449,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                 </Typography>
               </Stack>
 
-              {walletConnected ? (
+              {publicKey ? (
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ ml: 5 }}>
                   <Chip
                     icon={<CheckIcon sx={{ color: "#fff !important" }} />}
@@ -472,9 +461,9 @@ export default function NewAudit({ publicKey, onLogin }) {
                       "& .MuiChip-icon": { color: "#fff" },
                     }}
                   />
-                  <Button
+                  {/*<Button
                     variant="outlined"
-                    onClick={toggleWallet}
+                    onClick={handleDisconnectStellar}
                     sx={{
                       ml: 1,
                       borderColor: "#10b981",
@@ -484,12 +473,12 @@ export default function NewAudit({ publicKey, onLogin }) {
                     startIcon={<ShieldIcon />}
                   >
                     Disconnect
-                  </Button>
+                  </Button>*/}
                 </Stack>
               ) : (
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ ml: 5 }}>
                   <Button
-                    onClick={toggleWallet}
+                    onClick={handleConnectStellar}
                     startIcon={<WalletIcon />}
                     sx={{
                       bgcolor: COLORS.accent,
