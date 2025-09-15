@@ -116,7 +116,6 @@ function SeverityPill({ severity }) {
 
 export default function NewAudit({ publicKey, onLogin }) {
   // STATE
-  const [walletConnected, setWalletConnected] = useState(false);
   const [activeTab, setActiveTab] = useState("files"); // 'files' | 'github'
   const [files, setFiles] = useState([]);
   const [githubUrl, setGithubUrl] = useState("");
@@ -126,7 +125,6 @@ export default function NewAudit({ publicKey, onLogin }) {
   const [projectName, setProjectName] = useState("");
   const [fileName, setFileName] = useState("");
   const [reportDate, setReportDate] = useState("");
-  const [uploadedFile, setUploadedFile] = useState(null);
   const [reportGenerating, setReportGenerating] = useState(false);
   const [vulnerabilities, setVulnerabilities] = useState([]);
   const [reportSections, setReportSections] = useState([]);
@@ -173,7 +171,6 @@ export default function NewAudit({ publicKey, onLogin }) {
         const client = new Client();
         try {
           const result = await client.getAudit(publicKey);
-          console.log(result);
           if (result?.success && result.report) {
             const { report } = result.report;
             await viewReport(report);
@@ -189,13 +186,12 @@ export default function NewAudit({ publicKey, onLogin }) {
       }
     };
     checkAuditExists();
-    console.log('checkAuditExists');
   }, []);
 
   // New effect: reset file upload state when publicKey becomes null
   useEffect(() => {
     if (!publicKey) {
-      setUploadedFile(null);
+      setFiles([]);
       setFileName("");
       setProjectName("");
       setAuditExists(false);
@@ -249,7 +245,7 @@ export default function NewAudit({ publicKey, onLogin }) {
     }
 
     // Validate required fields
-    if (!projectName || !uploadedFile) {
+    if (!projectName || !files) {
       alert("Please provide a project name and upload a file.");
       return;
     }
@@ -258,24 +254,20 @@ export default function NewAudit({ publicKey, onLogin }) {
 
     const client = new Client();
     try {
-      console.log({ publicKey, projectName, uploadedFile });
-      const result = await client.runAudit(publicKey, projectName, fileName, uploadedFile);
-      console.log(result);
+      const result = await client.runAudit(publicKey, projectName, fileName, files);
       if (result && result.report) {
-        const { report } = result.report;
-        // Decode the Base64 encoded report using window.atob
+        let { report } = result.report;
         try {
-          let trimmedReport = report;
-          if (trimmedReport.startsWith('"') && trimmedReport.endsWith('"')) {
-            trimmedReport = trimmedReport.slice(1, -1);
-          }
-          // Decode the Base64 string
-          const decodedString = base64Decode(trimmedReport);
-          // Parse JSON
+          if (report.startsWith('"') && report.endsWith('"')) report = report.slice(1, -1);
+          const decodedString = base64Decode(report);
           const decodedReport = JSON.parse(decodedString);
 
-          console.log(decodedReport);
-
+          setProjectName(decodedReport.name || projectName);
+          setFileName(
+            Array.isArray(decodedReport.fileNames) && decodedReport.fileNames.length
+              ? decodedReport.fileNames.join(", ")
+              : (decodedReport.fileName || "")
+          );
           setVulnerabilities(decodedReport.vulnerabilities || []);
           setReportSections(decodedReport.reportSections || []);
           setReportDate(formatDate(decodedReport.date) || "");
@@ -304,25 +296,24 @@ export default function NewAudit({ publicKey, onLogin }) {
   ];
 
   // Check if user can generate a report
-  const canGenerateReport = publicKey && projectName && uploadedFile;
+  const canGenerateReport = publicKey && projectName && files;
 
   // VALIDATION
   const isFilesReady = activeTab === "files" && files.length > 0;
   const isGithubReady = activeTab === "github" && githubUrl.trim() !== "";
   const contractReady = isFilesReady || isGithubReady;
-  const canGenerate = walletConnected && contractReady;
 
   const onTabFiles = () => {
     setActiveTab("files");
     // validation update
-    if (!walletConnected) setValidation("Please connect your wallet first.");
+    if (!publicKey) setValidation("Please connect your wallet first.");
     else if (files.length === 0) setValidation("Please provide a smart contract to audit.");
     else setValidation("");
   };
   const onTabGithub = () => {
     setActiveTab("github");
     // validation update
-    if (!walletConnected) setValidation("Please connect your wallet first.");
+    if (!publicKey) setValidation("Please connect your wallet first.");
     else if (!githubUrl.trim()) setValidation("Please provide a smart contract to audit.");
     else setValidation("");
   };
@@ -331,7 +322,6 @@ export default function NewAudit({ publicKey, onLogin }) {
 
   const handleInputChange = (e) => {
     if (!e.target.files) return;
-    setUploadedFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
     setProjectName(e.target.files[0].name);
 
@@ -349,8 +339,8 @@ export default function NewAudit({ publicKey, onLogin }) {
     }
     setFiles(next);
     // update validation
-    if (walletConnected && next.length > 0) setValidation("");
-  }, [files, walletConnected]);
+    if (publicKey && next.length > 0) setValidation("");
+  }, [files, publicKey]);
 
   const onDrop = (e) => {
     e.preventDefault();
@@ -724,7 +714,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                 disabled={!canGenerateReport || reportGenerating}
                 startIcon={<BoltIcon />}
                 sx={{
-                  bgcolor: canGenerate ? COLORS.accent : "#4b5563",
+                  bgcolor: canGenerateReport ? COLORS.accent : "#4b5563",
                   color: "#fff",
                   fontWeight: 800,
                   py: 1.5,
@@ -732,11 +722,11 @@ export default function NewAudit({ publicKey, onLogin }) {
                   fontSize: 18,
                   transition: "all .2s ease",
                   "&:hover": {
-                    bgcolor: canGenerate ? COLORS.accentHover : "#4b5563",
-                    transform: canGenerate ? "scale(1.02)" : "none",
+                    bgcolor: canGenerateReport ? COLORS.accentHover : "#4b5563",
+                    transform: canGenerateReport ? "scale(1.02)" : "none",
                   },
-                  cursor: canGenerate ? "pointer" : "not-allowed",
-                  opacity: canGenerate ? 1 : 0.6,
+                  cursor: canGenerateReport ? "pointer" : "not-allowed",
+                  opacity: canGenerateReport ? 1 : 0.6,
                 }}
               >
                 {reportGenerating ? "Generating..." : "Generate Audit Report"}
@@ -745,7 +735,7 @@ export default function NewAudit({ publicKey, onLogin }) {
               <Typography
                 sx={{
                   textAlign: "center",
-                  color: canGenerate ? COLORS.textMuted : "#fca5a5",
+                  color: canGenerateReport ? COLORS.textMuted : "#fca5a5",
                   mt: 1.25,
                   minHeight: 20,
                   fontSize: 13,
@@ -883,7 +873,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                           fontSize: 12.5,
                         }}
                       >
-                        File: <Box component="span" sx={{ color: GH.gray400 }}>{fileName}</Box>
+                        File: <Box component="span" sx={{ color: GH.gray400 }}>{vuln.file}</Box>
                       </Typography>
                     </Box>
 

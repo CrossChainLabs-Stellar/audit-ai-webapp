@@ -2,8 +2,8 @@ import axios from 'axios';
 
 axios.defaults.timeout = 300000;
 
-const API = import.meta.env.REACT_APP_API || 'https://auditron.io/api';
-//const API = import.meta.env.REACT_APP_API || 'http://localhost:4000';
+//const API = import.meta.env.REACT_APP_API || 'https://auditron.io/api';
+const API = import.meta.env.REACT_APP_API || 'http://localhost:4001';
 
 export class Client {
   constructor() {
@@ -44,23 +44,28 @@ export class Client {
     return this.post('/waitlist', { email });
   }
 
-    // Message endpoint: POST /message
+  // Message endpoint: POST /message
   async message(name, email, subject, message) {
     return this.post('/message', { name, email, subject, message });
   }
 
   // Audit endpoint: POST /audit
-  // Expects: accountWallet (string), projectName (string), fileName (string), codeFile (File)
-  async runAudit(accountWallet, projectName, fileName, codeFile) {
+  // Expects: accountWallet (string), projectName (string), fileName (string), codeFiles (Files)
+  async runAudit(accountWallet, projectName, fileName, codeFiles) {
     try {
-      const formData = new FormData();
-      formData.append('accountWallet', accountWallet);
-      formData.append('projectName', projectName);
-      formData.append('fileName', fileName);
-      formData.append('codeFile', codeFile);
+      const form = new FormData();
+      form.append('accountWallet', accountWallet);
+      form.append('projectName', projectName);
+      form.append('fileName', fileName);
+
+      for (const f of codeFiles) {
+        form.append("codeFiles", f); // field name is plural
+      }
+
 
       // axios will set the multipart boundary automatically
-      const response = await axios.post(`${this.api}/audit`, formData, {
+      // axios will set the multipart boundary automatically
+      const response = await axios.post(`${this.api}/audit`, form, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (response.status !== 200) {
