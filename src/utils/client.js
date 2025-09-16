@@ -65,7 +65,7 @@ export class Client {
 
       // axios will set the multipart boundary automatically
       // axios will set the multipart boundary automatically
-      const response = await axios.post(`${this.api}/audit`, form, {
+      const response = await this.post(`${this.api}/audit`, form, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (response.status !== 200) {
@@ -81,6 +81,12 @@ export class Client {
   // GET audit: GET /audit/:accountWallet
   async getAudit(accountWallet) {
     return this.get(`/audit/${accountWallet}`);
+  }
+
+  async runAuditRepo(accountWallet, projectName, repoUrl) {
+    return this.post('/auditrepo', { accountWallet, projectName, repoUrl }, {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
 

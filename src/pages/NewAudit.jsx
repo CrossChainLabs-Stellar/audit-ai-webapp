@@ -114,6 +114,21 @@ function SeverityPill({ severity }) {
   );
 }
 
+function extractRepoName(input) {
+  try {
+    const url = new URL(input);
+    if (!/github\.com$/i.test(url.hostname)) return null;
+    const segments = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
+    // segments: [owner, repo, ...]
+    const repo = segments[1];
+    return repo ? repo.replace(/\.git$/i, "") : null;
+  } catch {
+    // Fallback for SSH-like strings: git@github.com:owner/repo.git
+    const m = String(input).match(/github\.com[:/][^/]+\/([^/\s]+)(?:\/|$)/i);
+    return m ? m[1].replace(/\.git$/i, "") : null;
+  }
+}
+
 export default function NewAudit({ publicKey, onLogin }) {
   // STATE
   const [activeTab, setActiveTab] = useState("files"); // 'files' | 'github'
@@ -173,6 +188,7 @@ export default function NewAudit({ publicKey, onLogin }) {
           const result = await client.getAudit(publicKey);
           if (result?.success && result.report) {
             const { report } = result.report;
+            console.log(report);
             await viewReport(report);
             setAuditExists(true);
           } else {
@@ -244,45 +260,59 @@ export default function NewAudit({ publicKey, onLogin }) {
       if (!connected) return;
     }
 
-    // Validate required fields
-    if (!projectName || !files) {
-      alert("Please provide a project name and upload a file.");
+    const isFilesFlow = activeTab === "files";
+    const isGithubFlow = activeTab === "github";
+
+    if (!projectName) {
+      alert("Please provide a project name.");
+      return;
+    }
+    if (isFilesFlow && files.length === 0) {
+      alert("Please upload at least one .rs file.");
+      return;
+    }
+    if (isGithubFlow && !githubUrl.trim()) {
+      alert("Please enter a GitHub repository URL.");
       return;
     }
 
     setReportGenerating(true);
-
     const client = new Client();
+
     try {
-      const result = await client.runAudit(publicKey, projectName, fileName, files);
+      const result = isGithubFlow
+        ? await client.runAuditRepo(publicKey, projectName, githubUrl.trim())
+        : await client.runAudit(publicKey, projectName, fileName || (files[0]?.name ?? ""), files);
+
       if (result && result.report) {
         let { report } = result.report;
-        try {
-          if (report.startsWith('"') && report.endsWith('"')) report = report.slice(1, -1);
-          const decodedString = base64Decode(report);
-          const decodedReport = JSON.parse(decodedString);
-
-          setProjectName(decodedReport.name || projectName);
-          setFileName(
-            Array.isArray(decodedReport.fileNames) && decodedReport.fileNames.length
-              ? decodedReport.fileNames.join(", ")
-              : (decodedReport.fileName || "")
-          );
-          setVulnerabilities(decodedReport.vulnerabilities || []);
-          setReportSections(decodedReport.reportSections || []);
-          setReportDate(formatDate(decodedReport.date) || "");
-          setAuditExists(true);
-        } catch (decodeErr) {
-          console.error("Failed to decode audit report:", decodeErr);
-          setVulnerabilities([]);
-          setReportSections([]);
+        if (typeof report === "string" && report.startsWith('"') && report.endsWith('"')) {
+          report = report.slice(1, -1);
         }
+        const decodedString = base64Decode(report);
+        const decodedReport = JSON.parse(decodedString);
+
+        setProjectName(decodedReport.name || projectName);
+        setFileName(
+          Array.isArray(decodedReport.fileNames) && decodedReport.fileNames.length
+            ? decodedReport.fileNames.join(", ")
+            : (decodedReport.fileName || "")
+        );
+        setVulnerabilities(decodedReport.vulnerabilities || []);
+        setReportSections(decodedReport.reportSections || []);
+        setReportDate(formatDate(decodedReport.date) || "");
+        setAuditExists(true);
+      } else if (result && result.preview_suspended) {
+        alert(result.message || "Audits are currently suspended.");
+      } else {
+        alert("Audit failed. Please try again.");
       }
     } catch (error) {
-      console.error("runAudit API error:", error);
+      console.error("generate API error:", error);
     }
     setReportGenerating(false);
   };
+
 
   // Prepare data for Pie chart
   const severityCounts = vulnerabilities.reduce((acc, vuln) => {
@@ -296,7 +326,15 @@ export default function NewAudit({ publicKey, onLogin }) {
   ];
 
   // Check if user can generate a report
-  const canGenerateReport = publicKey && projectName && files;
+  //const canGenerateReport = publicKey && projectName && files;
+  const canGenerateReport = Boolean(
+    publicKey &&
+    projectName &&
+    ((activeTab === "files" && files.length > 0) ||
+      (activeTab === "github" && githubUrl.trim()))
+  );
+
+  console.log('canGenerateReport', canGenerateReport, publicKey, projectName, activeTab);
 
   // VALIDATION
   const isFilesReady = activeTab === "files" && files.length > 0;
@@ -364,7 +402,7 @@ export default function NewAudit({ publicKey, onLogin }) {
     next.splice(idx, 1);
     setFiles(next);
     if (activeTab === "files" && next.length === 0) {
-      setValidation(walletConnected ? "Please provide a smart contract to audit." : "Please connect your wallet first.");
+      setValidation(publicKey ? "Please provide a smart contract to audit." : "Please connect your wallet first.");
     }
   };
 
@@ -686,7 +724,8 @@ export default function NewAudit({ publicKey, onLogin }) {
                       value={githubUrl}
                       onChange={(e) => {
                         setGithubUrl(e.target.value);
-                        if (walletConnected && e.target.value.trim()) setValidation("");
+                        setProjectName(extractRepoName(e.target.value));
+                        if (publicKey && e.target.value.trim()) setValidation("");
                       }}
                       sx={{
                         "& .MuiOutlinedInput-root": {
