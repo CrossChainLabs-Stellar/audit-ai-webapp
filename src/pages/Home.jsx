@@ -12,7 +12,7 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import SCFLogoBlack from "../assets/SCFLogoSVG-black.svg";
+import SCFLogoBlack from "../assets/SCFLogoSVG-white.svg";
 import Client from "../utils/client.js";
 import BoltIcon from "@mui/icons-material/Bolt";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
