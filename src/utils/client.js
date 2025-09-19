@@ -62,10 +62,7 @@ export class Client {
         form.append("codeFiles", f); // field name is plural
       }
 
-
-      // axios will set the multipart boundary automatically
-      // axios will set the multipart boundary automatically
-      const response = await this.post(`${this.api}/audit`, form, {
+      const response = await axios.post(`${this.api}/audit`, form, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       if (response.status !== 200) {
