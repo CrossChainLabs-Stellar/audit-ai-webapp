@@ -2,8 +2,8 @@ import axios from 'axios';
 
 axios.defaults.timeout = 300000;
 
-//const API = import.meta.env.REACT_APP_API || 'https://auditron.io/api';
-const API = import.meta.env.REACT_APP_API || 'http://localhost:4001';
+const API = import.meta.env.REACT_APP_API || 'https://auditron.io/api';
+//const API = import.meta.env.REACT_APP_API || 'http://localhost:4001';
 
 export class Client {
   constructor() {
