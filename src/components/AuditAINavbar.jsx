@@ -123,7 +123,16 @@ export default function AuditAINavbar({
           </Stack>
 
           {/* Center: nav (desktop) */}
-          <Stack direction="row" spacing={3} sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
+          <Stack
+            direction="row"
+            spacing={3}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
             <MuiLink component={Link} to="/audit" underline="none" sx={linkSx}>
               Audit Now
             </MuiLink>
@@ -137,8 +146,7 @@ export default function AuditAINavbar({
               Contact
             </MuiLink>
           </Stack>
-
-          {/* Right: wallet / menu */}
+          { }
           <Stack direction="row" alignItems="center" spacing={1}>
             {publicKey ? (
               <Button
