@@ -33,7 +33,7 @@ export default function JoinToStayInformed() {
           <Box
             sx={{
               background: `linear-gradient(90deg, ${BRAND.secondary}, ${BRAND.primary})`,
-              borderRadius: 4,
+              borderRadius: 1,
               p: { xs: 4, md: 6 },
               textAlign: "center",
               boxShadow: "0 30px 80px rgba(0,0,0,.45)",

@@ -44,18 +44,24 @@ export default function Contact() {
 
   // input style to mirror gray inputs + purple focus ring
   const inputSx = {
-    "& .MuiOutlinedInput-root": {
-      bgcolor: "#F3F4F6", // gray-100
-      color: "#111827", // gray-900
-      borderRadius: 1, // ~ rounded-lg
-      "& fieldset": { borderColor: "#E5E7EB" }, // gray-200
-      "&:hover fieldset": { borderColor: "#E5E7EB" },
-      "&.Mui-focused fieldset": { borderColor: "#8A2BE2" }, // brand-primary
+      "& .MuiOutlinedInput-root": {
+      bgcolor: "rgba(17,24,39,0.50)",           // gray-900/50
+      color: "#FFFFFF",                          // white text
+      borderRadius: 1,                           // ~ rounded-lg
+      "& fieldset": { borderColor: "#374151" },  // gray-700
+      "&:hover fieldset": { borderColor: "#4B5563" }, // gray-600
+      "&.Mui-focused fieldset": { borderColor: "#7B2BF9" }, // brand purple
       "&.Mui-focused": {
-        boxShadow: "0 0 0 2px rgba(138,43,226,0.30)", // focus:ring-brand-primary/50
+        boxShadow: "0 0 0 2px rgba(123,43,249,0.35)",       // focus:ring-brand-purple
       },
     },
-    "& .MuiInputBase-input::placeholder": { color: "#6B7280", opacity: 1 }, // gray-500
+    "& .MuiInputBase-input::placeholder": {
+      color: "#9CA3AF", // gray-400
+      opacity: 1,
+    },
+    "& .MuiInputAdornment-root": {
+      color: "#9CA3AF", // icon color
+    },
   };
 
   return (
@@ -94,27 +100,24 @@ export default function Contact() {
         <Container maxWidth="lg">
           <Box
             sx={{
-              maxWidth: 1100, // ~ max-w-5xl
+              maxWidth: 1200,            // ~ max-w-6xl
               mx: "auto",
-              bgcolor: "#FFFFFF",
-              color: "#111827",
-              borderRadius: 1, // rounded-2xl
-              boxShadow:
-                "0 40px 80px rgba(124,58,237,0.10), 0 20px 30px rgba(0,0,0,0.08)",
+              bgcolor: "rgba(255,255,255,0.08)", // bg-white/10
+              backdropFilter: "blur(16px)",      // backdrop-blur-lg
+              border: "1px solid rgba(255,255,255,0.1)", // border-white/10
+              borderRadius: 1,           
+              boxShadow: "0 20px 40px rgba(0,0,0,0.5)", // shadow-2xl
               overflow: "hidden",
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, // md:grid-cols-2
+              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
             }}
           >
-            {/* Left: form */}
-            <Box sx={{ p: { xs: 3, sm: 6 } }}>
-              <Typography
-                variant="h5"
-                sx={{ fontWeight: 800, color: "#1F2937", mb: 0.5 }}
-              >
+            {/* Left: form (Send us a message) */}
+            <Box sx={{ p: { xs: 3, md: 6 }, color: "#fff" }}>
+              <Typography variant="h4" fontWeight={800} gutterBottom>
                 Send us a Message
               </Typography>
-              <Typography sx={{ color: "#6B7280", mb: 3 }}>
+              <Typography sx={{ color: "grey.300", mb: 4 }}>
                 We&apos;d love to hear from you! Please fill out the form below.
               </Typography>
 
@@ -165,7 +168,7 @@ export default function Contact() {
                       color: "#FFFFFF",
                       fontWeight: 800,
                       py: 1.25,
-                      borderRadius: 1, // rounded-xl
+                      borderRadius: 2, // rounded-xl
                       textTransform: "none",
                       border: "1px solid transparent",
                       transition: "transform .2s ease, box-shadow .2s ease",
