@@ -116,13 +116,15 @@ export default function AuditAINavbar({
           >
             <Box
               sx={{
-                width: 32,
-                height: 32,
+                width: 42,
+                height: 42,
                 display: "grid",
                 placeItems: "center",
+                borderRadius: 2,
+                background: "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)",
               }}
             >
-              <ShieldIcon sx={{ color: BRAND.primary }} />
+              <ShieldIcon sx={{ color: "#fff" }} />
             </Box>
             <Typography variant="h6" fontWeight={800} sx={{ color: "#fff" }}>
               Auditron
