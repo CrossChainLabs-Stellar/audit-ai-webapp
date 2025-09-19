@@ -102,17 +102,24 @@ export default function AuditAINavbar({
       >
         <Toolbar sx={{ minHeight: 64 }}>
           {/* Left: logo */}
-          <Stack direction="row" alignItems="center" spacing={1.5} sx={{ flexGrow: 1 }}>
+          <Box
+            component={Link}
+            to="/"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+              color: "inherit",
+              flexGrow: 1,
+              gap: 1.5,
+            }}
+          >
             <Box
-              component={Link}
-              to="/"
               sx={{
                 width: 32,
                 height: 32,
-                color: BRAND.primary,
                 display: "grid",
                 placeItems: "center",
-                textDecoration: "none",
               }}
             >
               <ShieldIcon sx={{ color: BRAND.primary }} />
@@ -120,9 +127,8 @@ export default function AuditAINavbar({
             <Typography variant="h6" fontWeight={800} sx={{ color: "#fff" }}>
               Auditron
             </Typography>
-          </Stack>
-
-          {/* Center: nav (desktop) */}
+          </Box>
+          { }
           <Stack
             direction="row"
             spacing={3}
