@@ -160,8 +160,10 @@ export default function NewAudit({ publicKey, onLogin }) {
         const decodedString = base64Decode(trimmedReport);
         // Parse JSON
         const decodedReport = JSON.parse(decodedString);
+        console.log('decodedReport');
+        console.log(decodedReport);
 
-        setProjectName(decodedReport.fileName);
+        setProjectName(decodedReport.name || decodedReport.projectName);
         setFileName(decodedReport.fileName);
         setVulnerabilities(decodedReport.vulnerabilities || []);
         setReportSections(decodedReport.reportSections || []);
@@ -212,7 +214,7 @@ export default function NewAudit({ publicKey, onLogin }) {
       setProjectName("");
       setAuditExists(false);
     }
-  }, [publicKey]);
+  }, [publicKey, projectName]);
 
   const handleConnectStellar = async () => {
     try {
@@ -291,6 +293,8 @@ export default function NewAudit({ publicKey, onLogin }) {
         }
         const decodedString = base64Decode(report);
         const decodedReport = JSON.parse(decodedString);
+
+        console.log(decodedReport);
 
         setProjectName(decodedReport.name || projectName);
         setFileName(
@@ -794,7 +798,7 @@ export default function NewAudit({ publicKey, onLogin }) {
             Security Audit Report
           </Typography>
           <Typography variant="h5" align="center" gutterBottom>
-            {fileName}
+            {projectName}
           </Typography>
 
           <Typography variant="subtitle1" align="center" gutterBottom>
