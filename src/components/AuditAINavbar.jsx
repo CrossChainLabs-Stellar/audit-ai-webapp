@@ -22,16 +22,16 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
-import InfoIcon from "@mui/icons-material/Info";
-import MailIcon from "@mui/icons-material/Mail";
-import ShieldIcon from "@mui/icons-material/GppGood";
+import BoltIcon from "@mui/icons-material/Bolt";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
 import DescriptionIcon from "@mui/icons-material/Description";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import ShieldIcon from "@mui/icons-material/GppGood";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 import { isConnected, requestAccess } from "@stellar/freighter-api";
 import logoFreighter from "../assets/Logo-freighter.svg";
-import menuAudit from "../assets/menu-run-audit.svg";
-import menuReports from "../assets/menu-reports.svg";
-import menuDisconnect from "../assets/menu-disconnect.svg";
 import { BRAND } from "../theme/AppTheme";
 
 export default function AuditAINavbar({
@@ -87,7 +87,17 @@ export default function AuditAINavbar({
     transition: "all .2s ease",
   };
 
-  const linkSx = { color: BRAND.text, fontWeight: 600, "&:hover": { color: "#fff" } };
+  const linkSx = {
+    color: BRAND.text,
+    fontWeight: 600,
+    "&:hover": { color: "#fff" },
+  };
+
+  const gradientBg =
+    "linear-gradient(135deg, #0D0C22 0%, #1a1a3d 50%, #0D0C22 100%)";
+
+  const radialGlow =
+    "radial-gradient(circle at top left, rgba(74,0,224,.15) 0%, transparent 30%), radial-gradient(circle at bottom right, rgba(138,43,226,.15) 0%, transparent 30%)";
 
   return (
     <>
@@ -95,8 +105,8 @@ export default function AuditAINavbar({
         position={fixed ? "fixed" : "static"}
         elevation={0}
         sx={{
-          bgcolor: "rgba(13,12,34,0.80)",
-          backdropFilter: "blur(6px)",
+          background: `${gradientBg}, ${radialGlow}`,
+          backdropFilter: "blur(8px)",
           borderBottom: `1px solid ${BRAND.border}`,
         }}
       >
@@ -121,7 +131,8 @@ export default function AuditAINavbar({
                 display: "grid",
                 placeItems: "center",
                 borderRadius: 2,
-                background: "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)",
+                background: `linear-gradient(135deg, ${BRAND.secondary}, ${BRAND.primary})`,
+                boxShadow: 4,
               }}
             >
               <ShieldIcon sx={{ color: "#fff" }} />
@@ -130,7 +141,8 @@ export default function AuditAINavbar({
               Auditron
             </Typography>
           </Box>
-          { }
+
+          {/* Center nav (desktop) */}
           <Stack
             direction="row"
             spacing={3}
@@ -154,7 +166,8 @@ export default function AuditAINavbar({
               Contact
             </MuiLink>
           </Stack>
-          { }
+
+          {/* Right: user / connect + burger */}
           <Stack direction="row" alignItems="center" spacing={1}>
             {publicKey ? (
               <Button
@@ -191,10 +204,11 @@ export default function AuditAINavbar({
         onClose={() => setNavDrawerOpen(false)}
         sx={{
           "& .MuiDrawer-paper": {
-            width: 240,
-            bgcolor: BRAND.dark,
+            width: 260,
+            background: `${gradientBg}, ${radialGlow}`,
             color: "#fff",
             borderLeft: `1px solid ${BRAND.border}`,
+            backdropFilter: "blur(10px)",
           },
         }}
       >
@@ -207,8 +221,8 @@ export default function AuditAINavbar({
         <List>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/audit" onClick={() => setNavDrawerOpen(false)}>
-              <ListItemIcon>
-                <img src={menuAudit} alt="Audit Now" style={{ width: 24 }} />
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <BoltIcon />
               </ListItemIcon>
               <ListItemText primary="Audit Now" />
             </ListItemButton>
@@ -216,8 +230,8 @@ export default function AuditAINavbar({
 
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/dashboard" onClick={() => setNavDrawerOpen(false)}>
-              <ListItemIcon>
-                <DescriptionIcon sx={{ color: "#fff" }} />
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <ShowChartIcon />
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItemButton>
@@ -225,8 +239,8 @@ export default function AuditAINavbar({
 
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/about" onClick={() => setNavDrawerOpen(false)}>
-              <ListItemIcon>
-                <InfoIcon sx={{ color: "#fff" }} />
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <InfoOutlinedIcon />
               </ListItemIcon>
               <ListItemText primary="About" />
             </ListItemButton>
@@ -234,8 +248,8 @@ export default function AuditAINavbar({
 
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/contact" onClick={() => setNavDrawerOpen(false)}>
-              <ListItemIcon>
-                <MailIcon sx={{ color: "#fff" }} />
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <MailOutlineIcon />
               </ListItemIcon>
               <ListItemText primary="Contact" />
             </ListItemButton>
@@ -251,7 +265,7 @@ export default function AuditAINavbar({
         sx={{
           "& .MuiDrawer-paper": {
             width: 260,
-            bgcolor: "#111827",
+            background: `${gradientBg}, ${radialGlow}`,
             color: "#fff",
             borderLeft: `1px solid ${BRAND.border}`,
           },
@@ -266,8 +280,8 @@ export default function AuditAINavbar({
         <List>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/dashboard" onClick={() => setUserDrawerOpen(false)}>
-              <ListItemIcon>
-                <img src={menuAudit} alt="Audit Now" style={{ width: 24 }} />
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <BoltIcon />
               </ListItemIcon>
               <ListItemText primary="Audit Now" />
             </ListItemButton>
@@ -275,8 +289,8 @@ export default function AuditAINavbar({
 
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/dashboard" onClick={() => setUserDrawerOpen(false)}>
-              <ListItemIcon>
-                <img src={menuReports} alt="View Reports" style={{ width: 22 }} />
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <DescriptionIcon />
               </ListItemIcon>
               <ListItemText primary="View Reports" />
             </ListItemButton>
@@ -289,8 +303,8 @@ export default function AuditAINavbar({
                 setUserDrawerOpen(false);
               }}
             >
-              <ListItemIcon>
-                <img src={menuDisconnect} alt="Disconnect" style={{ width: 20 }} />
+              <ListItemIcon sx={{ color: "#fff" }}>
+                <LogoutIcon />
               </ListItemIcon>
               <ListItemText primary="Disconnect" />
             </ListItemButton>
