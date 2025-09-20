@@ -469,7 +469,8 @@ export default function NewAudit({ publicKey, onLogin }) {
                     borderRadius: "50%",
                     display: "grid",
                     placeItems: "center",
-                    bgcolor: COLORS.accent,
+                    bgcolor: "transparent",
+                    border: "1px solid #fff",
                     color: "#fff",
                     fontWeight: 800,
                   }}
@@ -484,13 +485,14 @@ export default function NewAudit({ publicKey, onLogin }) {
               {publicKey ? (
                 <Stack direction="row" alignItems="center" spacing={1} sx={{ ml: 5 }}>
                   <Chip
-                    icon={<CheckIcon sx={{ color: "#fff !important" }} />}
+                    icon={<CheckIcon sx={{ color: "#C7D2FE !important" }} />}
                     label="Wallet connected"
                     sx={{
-                      bgcolor: COLORS.teal,
-                      color: "#fff",
+                      bgcolor: "rgba(99,102,241,0.15)",        // faint indigo
+                      color: "#E5E7EB",
                       fontWeight: 700,
-                      "& .MuiChip-icon": { color: "#fff" },
+                      border: `1px solid rgba(99,102,241,0.35)`,
+                      "& .MuiChip-icon": { color: "#C7D2FE" }, // light indigo icon
                     }}
                   />
                   {/*<Button
@@ -513,14 +515,24 @@ export default function NewAudit({ publicKey, onLogin }) {
                     onClick={handleConnectStellar}
                     startIcon={<WalletIcon />}
                     sx={{
-                      bgcolor: COLORS.accent,
-                      color: "#fff",
+                      // bg-gradient-to-r from-brand-secondary to-brand-primary
+                      background:
+                        "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)",
+                      color: "#FFFFFF",
                       fontWeight: 700,
                       px: 2.5,
                       py: 1,
-                      borderRadius: 2,
-                      "&:hover": { bgcolor: COLORS.accentHover, transform: "scale(1.02)" },
-                      transition: "all .2s ease",
+                      borderRadius: 2, // rounded-xl
+                      textTransform: "none",
+                      border: "1px solid transparent",
+                      transition: "transform .2s ease, box-shadow .2s ease",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                        boxShadow: "0 20px 45px rgba(138,43,226,0.25)",
+                        borderColor: "rgba(255,255,255,0.12)",
+                        background:
+                          "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)",
+                      },
                     }}
                   >
                     Connect Wallet
@@ -545,7 +557,8 @@ export default function NewAudit({ publicKey, onLogin }) {
                     borderRadius: "50%",
                     display: "grid",
                     placeItems: "center",
-                    bgcolor: COLORS.accent,
+                    bgcolor: "transparent",
+                    border: "1px solid #fff",
                     color: "#fff",
                     fontWeight: 800,
                   }}
@@ -557,13 +570,12 @@ export default function NewAudit({ publicKey, onLogin }) {
                 </Typography>
               </Stack>
 
-              {/* Tabs (buttons) */}
+              {/* Tabs (gradient buttons) */}
               <Box sx={{ ml: 5 }}>
                 <Stack
                   direction="row"
-                  spacing={0.75}
+                  spacing={1}
                   sx={{
-                    border: `1px solid ${COLORS.border}`,
                     borderRadius: 2,
                     p: 0.5,
                     width: "fit-content",
@@ -574,16 +586,29 @@ export default function NewAudit({ publicKey, onLogin }) {
                     onClick={onTabFiles}
                     startIcon={<CloudUploadIcon />}
                     sx={{
-                      px: 2,
+                      px: 2.5,
                       py: 1,
                       fontWeight: 700,
-                      borderRadius: 1.5,
+                      borderRadius: 2,
+                      textTransform: "none",
+                      background:
+                        activeTab === "files"
+                          ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
+                          : "transparent",
                       color: activeTab === "files" ? "#fff" : COLORS.textMuted,
-                      bgcolor: activeTab === "files" ? COLORS.accent : "transparent",
+                      border: "1px solid transparent",
+                      transition: "transform .2s ease, box-shadow .2s ease, background .2s ease",
                       "&:hover": {
-                        bgcolor: activeTab === "files" ? COLORS.accent : "rgba(55,65,81,0.5)",
+                        transform: "scale(1.05)",
+                        boxShadow:
+                          activeTab === "files"
+                            ? "0 20px 45px rgba(138,43,226,0.25)"
+                            : "0 0 0 rgba(0,0,0,0)",
+                        background:
+                          activeTab === "files"
+                            ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
+                            : "rgba(55,65,81,0.5)",
                       },
-                      transition: "all .2s ease",
                     }}
                   >
                     Upload Files
@@ -592,16 +617,29 @@ export default function NewAudit({ publicKey, onLogin }) {
                     onClick={onTabGithub}
                     startIcon={<GitHubIcon />}
                     sx={{
-                      px: 2,
+                      px: 2.5,
                       py: 1,
                       fontWeight: 700,
-                      borderRadius: 1.5,
+                      borderRadius: 2,
+                      textTransform: "none",
+                      background:
+                        activeTab === "github"
+                          ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
+                          : "transparent",
                       color: activeTab === "github" ? "#fff" : COLORS.textMuted,
-                      bgcolor: activeTab === "github" ? COLORS.accent : "transparent",
+                      border: "1px solid transparent",
+                      transition: "transform .2s ease, box-shadow .2s ease, background .2s ease",
                       "&:hover": {
-                        bgcolor: activeTab === "github" ? COLORS.accent : "rgba(55,65,81,0.5)",
+                        transform: "scale(1.05)",
+                        boxShadow:
+                          activeTab === "github"
+                            ? "0 20px 45px rgba(138,43,226,0.25)"
+                            : "0 0 0 rgba(0,0,0,0)",
+                        background:
+                          activeTab === "github"
+                            ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
+                            : "rgba(55,65,81,0.5)",
                       },
-                      transition: "all .2s ease",
                     }}
                   >
                     GitHub Repo
