@@ -202,7 +202,7 @@ export default function NewAudit({ publicKey, onLogin }) {
       }
     };
     checkAuditExists();
-  }, []);
+  }, [publicKey]);
 
   // New effect: reset file upload state when publicKey becomes null
   useEffect(() => {
