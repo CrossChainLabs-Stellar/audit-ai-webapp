@@ -15,28 +15,39 @@ export default function About() {
         </Typography>
 
         {/* About the Product Section */}
-        <Box sx={{ mb: 6 }}>
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            About the Product
+        <Box sx={{ mb: 10 }}>
+          <Box sx={{ height: 80 }} />
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            Auditron is an AI-powered security benchmarking platform for the Stellar ecosystem.
           </Typography>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Accelerate smart contract security through fast and cost-effective audits
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            It continuously scan, audit, and benchmark Soroban projects, assigning each a transparent security score.
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            Auditron is an AI-powered application designed to help dApp developers quickly and securely audit smart contracts at a fraction of the cost of traditional audits.
-            By leveraging advanced AI models and machine learning techniques, Auditron provides developers with rapid, reliable security audits, enhancing the development lifecycle while minimizing the risk of security vulnerabilities.
-            Additionally, Auditron empowers security audit organizations to scale their operations by automating the audit process, enabling them to handle more contracts with the same resources.
+
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <Typography component="li">
+              <strong>For developers</strong> → actionable feedback and affordable audits.
+            </Typography>
+            <Typography component="li">
+              <strong>For investors &amp; users</strong> → trusted visibility into project security.
+            </Typography>
+            <Typography component="li">
+              <strong>For the community</strong> → a transparent standard that raises security across Stellar DeFi.
+            </Typography>
+          </Box>
+
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            Projects that meet the security standards are awarded the <strong>Auditron Certification Seal</strong>, 
+            a mark of trust and reliability.
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            <strong>Problem:</strong> With the increase in blockchain adoption, security risks in smart contracts are becoming a critical concern. Traditional audits are time-consuming, expensive, and may not be accessible to smaller teams or projects. Audit firms themselves often struggle with scalability due to limited resources.
-          </Typography>
-          <Typography variant="body1">
-            <strong>Solution:</strong> Auditron offers a fast, secure, and cost-effective way for developers and audit organizations to perform smart contract audits. Features include instant AI-driven audits, comprehensive PDF reports, GitHub integration, multi-chain support starting with Soroban, and continuous learning to improve audit capabilities.
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            Auditron transforms auditing from a closed process into an <strong>open, ongoing measure of trust</strong>, 
+            setting the <strong>security standard for the Stellar ecosystem</strong>.
           </Typography>
         </Box>
 
         {/* About the Team Section */}
-        <Box sx={{ mb: 6 }}>
+        <Box sx={{ mb: 12 }}>
           <Typography variant="h4" sx={{ mb: 2 }}>
             About the Team
           </Typography>
@@ -60,7 +71,10 @@ export default function About() {
                     </Box>
                   </Box>
                   <Typography variant="body2">
-                    Former Architect @ ConsenSys.
+                    Former Architect @ ConsenSys.<br />Co-founder of{" "}
+                    <Link href="https://sorobanpulse.com" target="_blank" rel="noopener noreferrer">
+                      SorobanPulse
+                    </Link>.
                   </Typography>
                   <Box sx={{ mt: 2 }}>
                     <Link
@@ -92,9 +106,12 @@ export default function About() {
                       </Typography>
                     </Box>
                   </Box>
-                  <Typography variant="body2">
-                    Former Senior Engineer @ ConsenSys.
-                  </Typography>
+                    <Typography variant="body2">
+                      Former Senior Engineer @ ConsenSys.<br />Co-founder of{" "}
+                      <Link href="https://sorobanpulse.com" target="_blank" rel="noopener noreferrer">
+                        SorobanPulse
+                      </Link>.
+                    </Typography>
                   <Box sx={{ mt: 2 }}>
                     <Link
                       href="https://www.linkedin.com/in/george-robert-stefan-13385a9a/"
