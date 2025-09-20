@@ -50,26 +50,26 @@ const COLORS = {
   textLight: "#D1D5DB",
 };
 
-const SEVERITY_COLORS = ["#FF6666", "#FFA500", "#4CAF50"];
+const SEVERITY_COLORS = ["#EF4444", "#F59E0B", "#10B981"];
 
 // Custom severity label styles
 const severityStyles = {
   High: {
-    backgroundColor: "#FF6666",
+    backgroundColor: "#EF4444",
     color: "white",
     padding: "2px 4px",
     borderRadius: "4px",
     fontWeight: "bold"
   },
   Medium: {
-    backgroundColor: "#FFA500",
+    backgroundColor: "#F59E0B",
     color: "white",
     padding: "2px 4px",
     borderRadius: "4px",
     fontWeight: "bold"
   },
   Low: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#10B981",
     color: "white",
     padding: "2px 4px",
     borderRadius: "4px",
@@ -85,9 +85,9 @@ const GH = {
   gray500: "#8B949E",
   gray400: "#C9D1D9",
   blue500: "#58A6FF",
-  sevHigh: "#F85149",
-  sevMedium: "#F78166",
-  sevLow: "#30363D",
+  sevHigh: "#EF4444",
+  sevMedium: "#F59E0B",
+  sevLow: "#10B981",
 };
 
 const severityBg = (s) =>
@@ -954,8 +954,41 @@ export default function NewAudit({ publicKey, onLogin }) {
                 />
               ))}
             </Pie>
-            <Tooltip />
-            <Legend />
+            <Tooltip
+              content={({ active, payload }) => {
+                if (active && payload && payload.length) {
+                  return (
+                    <Box
+                      sx={{
+                        backgroundColor: GH.gray800,
+                        border: `1px solid ${GH.gray600}`,
+                        borderRadius: 1,
+                        p: 1.2,
+                      }}
+                    >
+                      {payload.map((entry, index) => (
+                        <Typography
+                          key={index}
+                          sx={{
+                            color: "#fff",
+                            fontSize: 12, // smaller font for all tooltip items
+                          }}
+                        >
+                          {entry.name}: {entry.value}
+                        </Typography>
+                      ))}
+                    </Box>
+                  );
+                }
+                return null;
+              }}
+            />
+            <Legend
+              wrapperStyle={{ paddingTop: 16 }}
+              formatter={(value) => (
+                <span style={{ color: GH.gray400, fontSize: 14 }}>{value}</span>
+              )}
+            />
           </PieChart>
 
           {/* Report Sections */}
