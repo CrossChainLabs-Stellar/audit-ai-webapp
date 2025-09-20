@@ -180,7 +180,7 @@ export default function AuditAINavbar({
             ) : (
               <Button onClick={handleLogin} sx={gradientBtnSx}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Box component="img" src={logoFreighter} alt="Freighter" sx={{ height: 18 }} />
+                  <Box component="img" src={logoFreighter} alt="Freighter" sx={{ height: 20 }} />
                   <span>Connect</span>
                 </Box>
               </Button>
@@ -279,7 +279,7 @@ export default function AuditAINavbar({
         <Divider sx={{ borderColor: BRAND.border }} />
         <List>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/dashboard" onClick={() => setUserDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/audit" onClick={() => setUserDrawerOpen(false)}>
               <ListItemIcon sx={{ color: "#fff" }}>
                 <BoltIcon />
               </ListItemIcon>

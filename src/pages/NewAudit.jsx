@@ -30,7 +30,7 @@ import { Client } from "../utils/client";
 import FreighterBanner from "../components/FreighterBanner";
 import AlphaBanner from "../components/AlphaBanner";
 
-import logoFreighter from "../assets/Simple-freighter.svg";
+import logoFreighter from "../assets/Logo-freighter.svg";
 
 function formatDate(isoDate) {
   const date = new Date(isoDate);
@@ -330,7 +330,6 @@ export default function NewAudit({ publicKey, onLogin }) {
   ];
 
   // Check if user can generate a report
-  //const canGenerateReport = publicKey && projectName && files;
   const canGenerateReport = Boolean(
     publicKey &&
     projectName &&
@@ -347,14 +346,12 @@ export default function NewAudit({ publicKey, onLogin }) {
 
   const onTabFiles = () => {
     setActiveTab("files");
-    // validation update
     if (!publicKey) setValidation("Please connect your wallet first.");
     else if (files.length === 0) setValidation("Please provide a smart contract to audit.");
     else setValidation("");
   };
   const onTabGithub = () => {
     setActiveTab("github");
-    // validation update
     if (!publicKey) setValidation("Please connect your wallet first.");
     else if (!githubUrl.trim()) setValidation("Please provide a smart contract to audit.");
     else setValidation("");
@@ -374,13 +371,11 @@ export default function NewAudit({ publicKey, onLogin }) {
   const addFiles = useCallback((fileList) => {
     const next = [...files];
     for (const f of fileList) {
-      // dedupe by name+size
       if (!next.some((x) => x.name === f.name && x.size === f.size)) {
         next.push(f);
       }
     }
     setFiles(next);
-    // update validation
     if (publicKey && next.length > 0) setValidation("");
   }, [files, publicKey]);
 
@@ -421,10 +416,22 @@ export default function NewAudit({ publicKey, onLogin }) {
       sx={{
         minHeight: "100vh",
         color: "#e5e7eb",
-        // gradient backdrop like the HTML
         background: `linear-gradient(135deg, ${COLORS.darkA}, ${COLORS.darkB})`,
+        position: "relative",
       }}
     >
+      {/* --- SVG gradient defs for icons (add once) --- */}
+      <Box sx={{ position: "absolute", width: 0, height: 0, pointerEvents: "none" }}>
+        <svg width="0" height="0" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="auditronGradIcon" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#4A00E0" />
+              <stop offset="100%" stopColor="#8A2BE2" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </Box>
+
       {/* Spacer for translucent header if your appbar is fixed; remove if not needed */}
       <Box sx={{ height: 64 }} />
 
@@ -439,12 +446,11 @@ export default function NewAudit({ publicKey, onLogin }) {
           <Box
             sx={{
               width: "100%",
-              bgcolor: `${COLORS.card}CC`, // /80
+              bgcolor: `${COLORS.card}CC`,
               backdropFilter: "blur(10px)",
               border: `1px solid ${COLORS.border}`,
               borderRadius: 4,
-              boxShadow:
-                "0 0 25px rgba(99,102,241,0.20), 0 0 10px rgba(99,102,241,0.10)", // glow
+              boxShadow: "0 0 25px rgba(99,102,241,0.20), 0 0 10px rgba(99,102,241,0.10)",
               p: { xs: 3, md: 4 },
             }}
           >
@@ -488,11 +494,11 @@ export default function NewAudit({ publicKey, onLogin }) {
                     icon={<CheckIcon sx={{ color: "#C7D2FE !important" }} />}
                     label="Wallet connected"
                     sx={{
-                      bgcolor: "rgba(99,102,241,0.15)",        // faint indigo
+                      bgcolor: "rgba(99,102,241,0.15)",
                       color: "#E5E7EB",
                       fontWeight: 700,
                       border: `1px solid rgba(99,102,241,0.35)`,
-                      "& .MuiChip-icon": { color: "#C7D2FE" }, // light indigo icon
+                      "& .MuiChip-icon": { color: "#C7D2FE" },
                     }}
                   />
                   {/*<Button
@@ -510,19 +516,17 @@ export default function NewAudit({ publicKey, onLogin }) {
                   </Button>*/}
                 </Stack>
               ) : (
-                <Stack direction="row" alignItems="center" spacing={1} sx={{ ml: 5 }}>
+                <Stack direction="column" alignItems="flex-start" spacing={1} sx={{ ml: 5 }}>
                   <Button
                     onClick={handleConnectStellar}
-                    startIcon={<WalletIcon />}
                     sx={{
-                      // bg-gradient-to-r from-brand-secondary to-brand-primary
                       background:
                         "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)",
                       color: "#FFFFFF",
                       fontWeight: 700,
                       px: 2.5,
                       py: 1,
-                      borderRadius: 2, // rounded-xl
+                      borderRadius: 2,
                       textTransform: "none",
                       border: "1px solid transparent",
                       transition: "transform .2s ease, box-shadow .2s ease",
@@ -535,11 +539,11 @@ export default function NewAudit({ publicKey, onLogin }) {
                       },
                     }}
                   >
-                    Connect Wallet
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box component="img" src={logoFreighter} alt="Freighter" sx={{ height: 20 }} />
+                      <span>Connect</span>
+                    </Box>
                   </Button>
-                  <Typography variant="body2" sx={{ color: COLORS.textMuted }}>
-                    Freighter supported
-                  </Typography>
                 </Stack>
               )}
             </Stack>
@@ -570,7 +574,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                 </Typography>
               </Stack>
 
-              {/* Tabs (gradient buttons) */}
+              {/* Tabs */}
               <Box sx={{ ml: 5 }}>
                 <Stack
                   direction="row"
@@ -582,63 +586,94 @@ export default function NewAudit({ publicKey, onLogin }) {
                     bgcolor: "rgba(17,24,39,0.5)", // brand-dark/50
                   }}
                 >
+                  {/* Upload Files Tab */}
                   <Button
                     onClick={onTabFiles}
-                    startIcon={<CloudUploadIcon />}
+                    disabled={activeTab === "files"}
+                    startIcon={<CloudUploadIcon sx={{ fontSize: 18 }} />}
                     sx={{
-                      px: 2.5,
-                      py: 1,
+                      px: 2,                // tighter to hit 32px total height
+                      py: 0,                // rely on minHeight
+                      minHeight: 32,        // match Chip height
+                      lineHeight: 1,        // compact text line
+                      fontSize: 14,         // similar Chip text size
                       fontWeight: 700,
                       borderRadius: 2,
                       textTransform: "none",
                       background:
+                        activeTab === "files" ? "rgba(99,102,241,0.15)" : "transparent",
+                      border:
                         activeTab === "files"
-                          ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
-                          : "transparent",
-                      color: activeTab === "files" ? "#fff" : COLORS.textMuted,
-                      border: "1px solid transparent",
-                      transition: "transform .2s ease, box-shadow .2s ease, background .2s ease",
+                          ? "1px solid rgba(99,102,241,0.35)"
+                          : "1px solid transparent",
+                      color: activeTab === "files" ? "#E5E7EB" : COLORS.textMuted,
+                      transition:
+                        "transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease",
+                      "& .MuiButton-startIcon": {
+                        ml: 0, mr: 0.75,     // tighter spacing like Chip icon
+                      },
+                      "& .MuiButton-startIcon > *": {
+                        color: activeTab === "files" ? "#C7D2FE" : COLORS.textMuted,
+                        fontSize: 18,
+                      },
                       "&:hover": {
-                        transform: "scale(1.05)",
-                        boxShadow:
-                          activeTab === "files"
-                            ? "0 20px 45px rgba(138,43,226,0.25)"
-                            : "0 0 0 rgba(0,0,0,0)",
-                        background:
-                          activeTab === "files"
-                            ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
-                            : "rgba(55,65,81,0.5)",
+                        ...(activeTab !== "files" && {
+                          transform: "scale(1.05)",
+                          boxShadow: "0 20px 45px rgba(138,43,226,0.25)",
+                          background: "rgba(55,65,81,0.5)",
+                        }),
+                      },
+                      "&.Mui-disabled": {
+                        opacity: 1,
+                        color: "#E5E7EB",
+                        cursor: "default",
                       },
                     }}
                   >
                     Upload Files
                   </Button>
+
+                  {/* GitHub Repo Tab */}
                   <Button
                     onClick={onTabGithub}
-                    startIcon={<GitHubIcon />}
+                    disabled={activeTab === "github"}
+                    startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
                     sx={{
-                      px: 2.5,
-                      py: 1,
+                      px: 2,
+                      py: 0,
+                      minHeight: 32,
+                      lineHeight: 1,
+                      fontSize: 14,
                       fontWeight: 700,
                       borderRadius: 2,
                       textTransform: "none",
                       background:
+                        activeTab === "github" ? "rgba(99,102,241,0.15)" : "transparent",
+                      border:
                         activeTab === "github"
-                          ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
-                          : "transparent",
-                      color: activeTab === "github" ? "#fff" : COLORS.textMuted,
-                      border: "1px solid transparent",
-                      transition: "transform .2s ease, box-shadow .2s ease, background .2s ease",
+                          ? "1px solid rgba(99,102,241,0.35)"
+                          : "1px solid transparent",
+                      color: activeTab === "github" ? "#E5E7EB" : COLORS.textMuted,
+                      transition:
+                        "transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease",
+                      "& .MuiButton-startIcon": {
+                        ml: 0, mr: 0.75,
+                      },
+                      "& .MuiButton-startIcon > *": {
+                        color: activeTab === "github" ? "#C7D2FE" : COLORS.textMuted,
+                        fontSize: 18,
+                      },
                       "&:hover": {
-                        transform: "scale(1.05)",
-                        boxShadow:
-                          activeTab === "github"
-                            ? "0 20px 45px rgba(138,43,226,0.25)"
-                            : "0 0 0 rgba(0,0,0,0)",
-                        background:
-                          activeTab === "github"
-                            ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
-                            : "rgba(55,65,81,0.5)",
+                        ...(activeTab !== "github" && {
+                          transform: "scale(1.05)",
+                          boxShadow: "0 20px 45px rgba(138,43,226,0.25)",
+                          background: "rgba(55,65,81,0.5)",
+                        }),
+                      },
+                      "&.Mui-disabled": {
+                        opacity: 1,
+                        color: "#E5E7EB",
+                        cursor: "default",
                       },
                     }}
                   >
@@ -684,14 +719,33 @@ export default function NewAudit({ publicKey, onLogin }) {
                       accept=".rs"
                     />
                     <Stack spacing={1} alignItems="center" sx={{ color: COLORS.textMuted }}>
-                      <CloudUploadIcon sx={{ fontSize: 36, color: COLORS.accent }} />
+                      <CloudUploadIcon
+                        sx={{
+                          fontSize: 48,
+                          // Force the SVG path to use the gradient defined at the top of the page
+                          "& path": {
+                            fill: "url(#auditronGradIcon) !important",
+                          },
+                        }}
+                      />
                       <Typography sx={{ color: "#fff", fontWeight: 700 }}>
                         Drag & drop files here
                       </Typography>
                       <Typography>
-                        or <Box component="span" sx={{ color: COLORS.accent, fontWeight: 600 }}>click to browse</Box>
+                        or{" "}
+                        <Box
+                          component="span"
+                          sx={{
+                            fontWeight: 700,
+                            background: "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                          }}
+                        >
+                          click to browse
+                        </Box>
                       </Typography>
-                      <Typography variant="caption">Supports  .rs</Typography>
+                      <Typography variant="caption">Supports .rs</Typography>
                     </Stack>
                   </Box>
 
@@ -711,7 +765,15 @@ export default function NewAudit({ publicKey, onLogin }) {
                         }}
                       >
                         <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
-                          <InsertDriveFileIcon sx={{ color: COLORS.teal }} />
+                          {/* Gradient file icon */}
+                          <InsertDriveFileIcon
+                            sx={{
+                              fontSize: 24,
+                              "& path": {
+                                fill: "url(#auditronGradIcon) !important",
+                              },
+                            }}
+                          />
                           <Typography
                             sx={{ color: "#e5e7eb", fontSize: 14, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 260 }}
                             title={f.name}
@@ -795,16 +857,25 @@ export default function NewAudit({ publicKey, onLogin }) {
                 disabled={!canGenerateReport || reportGenerating}
                 startIcon={<BoltIcon />}
                 sx={{
-                  bgcolor: canGenerateReport ? COLORS.accent : "#4b5563",
+                  background: canGenerateReport
+                    ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
+                    : "#4b5563",
                   color: "#fff",
                   fontWeight: 800,
                   py: 1.5,
                   borderRadius: 3,
                   fontSize: 18,
-                  transition: "all .2s ease",
+                  textTransform: "none",
+                  border: "1px solid transparent",
+                  transition: "transform .2s ease, box-shadow .2s ease",
                   "&:hover": {
-                    bgcolor: canGenerateReport ? COLORS.accentHover : "#4b5563",
-                    transform: canGenerateReport ? "scale(1.02)" : "none",
+                    background: canGenerateReport
+                      ? "linear-gradient(90deg, #4A00E0 0%, #8A2BE2 100%)"
+                      : "#4b5563",
+                    transform: canGenerateReport ? "scale(1.05)" : "none",
+                    boxShadow: canGenerateReport
+                      ? "0 20px 45px rgba(138,43,226,0.25)"
+                      : "none",
                   },
                   cursor: canGenerateReport ? "pointer" : "not-allowed",
                   opacity: canGenerateReport ? 1 : 0.6,
@@ -899,7 +970,6 @@ export default function NewAudit({ publicKey, onLogin }) {
 
           {/* Findings Section */}
           <Box sx={{ mt: 6 }}>
-            {/* Findings Section */}
             <Box sx={{ mt: 8 }}>
               <Typography
                 sx={{
@@ -922,7 +992,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                       border: `1px solid ${GH.gray700}`,
                       borderRadius: 2,
                       overflow: "hidden",
-                      bgcolor: "rgba(33,38,45,0.5)", // brand-gray-700/50
+                      bgcolor: "rgba(33,38,45,0.5)",
                     }}
                   >
                     {/* Header */}
@@ -997,7 +1067,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                               overflowX: "auto",
                               fontFamily:
                                 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                              bgcolor: "rgba(88,166,255,0.10)", // brand-blue-500/10
+                              bgcolor: "rgba(88,166,255,0.10)",
                               color: GH.blue500,
                               border: `1px solid ${GH.gray600}`,
                             }}

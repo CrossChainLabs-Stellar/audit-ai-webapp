@@ -40,7 +40,7 @@ export default function AlphaBanner() {
         }}
       >
         {/* Alpha notice */}
-        <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={1} sx={{ mb: 3 }}>
           <Chip
             icon={<BoltIcon sx={{ color: BRAND.secondary }} />}
             label="Alpha Release"
@@ -57,11 +57,8 @@ export default function AlphaBanner() {
         <Typography variant="h6" sx={{ color: "#fff", fontWeight: 800, mt: 1 }}>
           Thank you for testing Auditron! 
         </Typography>
-        <Typography sx={{ color: "#E9D5FF", mb: 0.5 }}>
-          This alpha release allows you to generate <b>one report</b> only.
-        </Typography>
         <Typography sx={{ color: "#E9D5FF", mb: 3 }}>
-          Join to stay informed about our latest updates and releases.
+          This alpha release allows you to generate <b>one report</b>. Join us to stay updated on new releases.
         </Typography>
 
         {/* Email form */}
