@@ -72,7 +72,7 @@ export default function About() {
                   </Box>
                   <Typography variant="body2">
                     Former Architect @ ConsenSys.<br />Co-founder of{" "}
-                    <Link href="https://sorobanpulse.com" target="_blank" rel="noopener noreferrer">
+                    <Link href="https://sorobanpulse.app" target="_blank" rel="noopener noreferrer">
                       SorobanPulse
                     </Link>.
                   </Typography>
@@ -108,7 +108,7 @@ export default function About() {
                   </Box>
                     <Typography variant="body2">
                       Former Senior Engineer @ ConsenSys.<br />Co-founder of{" "}
-                      <Link href="https://sorobanpulse.com" target="_blank" rel="noopener noreferrer">
+                      <Link href="https://sorobanpulse.app" target="_blank" rel="noopener noreferrer">
                         SorobanPulse
                       </Link>.
                     </Typography>
