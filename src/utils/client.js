@@ -26,7 +26,6 @@ export class Client {
 
   // Generic POST method
   async post(endpoint, data, config = {}) {
-    console.log(data);
     try {
       const response = await axios.post(`${this.api}${endpoint}`, data, config);
       if (response.status !== 200) {

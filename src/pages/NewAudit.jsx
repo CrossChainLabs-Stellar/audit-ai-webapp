@@ -188,7 +188,6 @@ export default function NewAudit({ publicKey, onLogin }) {
           const result = await client.getAudit(publicKey);
           if (result?.success && result.report) {
             const { report } = result.report;
-            console.log(report);
             await viewReport(report);
             setAuditExists(true);
           } else {
@@ -291,8 +290,6 @@ export default function NewAudit({ publicKey, onLogin }) {
         }
         const decodedString = base64Decode(report);
         const decodedReport = JSON.parse(decodedString);
-
-        console.log(decodedReport);
 
         setProjectName(decodedReport.name || projectName);
         setFileName(
