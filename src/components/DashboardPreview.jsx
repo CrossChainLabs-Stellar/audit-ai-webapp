@@ -12,9 +12,9 @@ import { BRAND } from "../theme/AppTheme";
 
 export default function DashboardPreview() {
     return (
-        <Box sx={{ bgcolor: BRAND.dark, color: "#fff", minHeight: "100vh" }}>
+        <Box sx={{ bgcolor: BRAND.dark, color: "#fff", minHeight: 0 }}>
             {/* Dashboard Preview (MacBook mock) -v2*/}
-            <Box sx={{ py: { xs: 10, md: 14 }, bgcolor: BRAND.dark }}>
+            <Box sx={{ pt: { xs: 10, md: 14 }, pb: { xs: 6, md: 8 }, bgcolor: BRAND.dark }}>
                 <Container maxWidth="lg">
                     {/* Title + Subtitle */}
                     <Box sx={{ textAlign: "center", maxWidth: 768, mx: "auto", mb: { xs: 6, md: 8 } }}>

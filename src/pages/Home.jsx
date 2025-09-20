@@ -149,92 +149,68 @@ export default function Home() {
         </Container>
       </Box>
 
-
       <DashboardPreview></DashboardPreview>
+
       {/* Features */}
-      <Box sx={{ py: 10, bgcolor: "rgba(13,12,34,0.95)" }}>
+      <Box sx={{ pt: 10, pb: 15, bgcolor: "rgba(13,12,34,0.95)" }}>
         <Container maxWidth="lg">
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <Card sx={softCard}>
-                <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                  <Box
-                    sx={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: "50%",
-                      background: `linear-gradient(135deg, ${BRAND.secondary}, ${BRAND.primary})`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: 6,
-                    }}
-                  >
-                    <BoltIcon />
+            {[
+              {
+                icon: <ShieldIcon />,
+                title: "Continuous Audits",
+                desc: "Auditron continuously scans and benchmarks Soroban projects-making security an ongoing standard, not a one-off event.",
+              },
+              {
+                icon: <ShowChartIcon />,
+                title: "Transparent Benchmarking",
+                desc: "Every project receives a public security score helping developers, investors, and the community compare security across the ecosystem.",
+              },
+              {
+                icon: <DescriptionIcon />,
+                title: "Actionable Insights",
+                desc: "Get AI-powered feedback and detailed reports with clear recommendations for strengthening your project’s security posture.",
+              },
+              {
+                icon: <StarIcon />,
+                title: "Certification Seal",
+                desc: "Projects that meet minimum standards earn the Auditron Certification Seal, a visible mark of trust for the Stellar community.",
+              },
+            ].map((card, i) => (
+              <Grid item xs={12} md={3} key={i}>
+                <Card
+                  sx={{
+                    ...softCard,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+                    <Box
+                      sx={{
+                        width: 64,
+                        height: 64,
+                        borderRadius: "50%",
+                        background: `linear-gradient(135deg, ${BRAND.secondary}, ${BRAND.primary})`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: 6,
+                      }}
+                    >
+                      {card.icon}
+                    </Box>
                   </Box>
-                </Box>
-                <Typography variant="h6" fontWeight={800} gutterBottom>
-                  Quick Audits
-                </Typography>
-                <Typography color="text.secondary">
-                  Simply upload your Soroban smart contract and get audited instantly, saving you both time and money with our automated analysis.
-                </Typography>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Card sx={softCard}>
-                <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                  <Box
-                    sx={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: "50%",
-                      background: `linear-gradient(135deg, ${BRAND.secondary}, ${BRAND.primary})`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: 6,
-                    }}
-                  >
-                    <ShowChartIcon />
-                  </Box>
-                </Box>
-                <Typography variant="h6" fontWeight={800} gutterBottom>
-                  Real-Time Progress
-                </Typography>
-                <Typography color="text.secondary">
-                  View audit progress as it happens and detect vulnerabilities on the fly, ensuring your smart contracts deploy faster and safer.
-                </Typography>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Card sx={softCard}>
-                <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-                  <Box
-                    sx={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: "50%",
-                      background: `linear-gradient(135deg, ${BRAND.secondary}, ${BRAND.primary})`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxShadow: 6,
-                    }}
-                  >
-                    <DescriptionIcon />
-                  </Box>
-                </Box>
-                <Typography variant="h6" fontWeight={800} gutterBottom>
-                  Detailed Reports
-                </Typography>
-                <Typography color="text.secondary">
-                  Receive clear, AI-powered reports that highlight security issues, optimization tips, and best practice recommendations.
-                </Typography>
-              </Card>
-            </Grid>
+                  <Typography variant="h6" fontWeight={800} gutterBottom>
+                    {card.title}
+                  </Typography>
+                  <Typography color="text.secondary" sx={{ flexGrow: 1 }}>
+                    {card.desc}
+                  </Typography>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
         </Container>
       </Box>
