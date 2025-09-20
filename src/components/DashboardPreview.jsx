@@ -22,7 +22,7 @@ export default function DashboardPreview() {
                             Your Security Command Center
                         </Typography>
                         <Typography sx={{ mt: 2, fontSize: 18, color: "#cbd5e1" }}>
-                            Get a sneak peek at our upcoming Security Dashboard — your unified, intuitive hub for monitoring DeFi projects across the Stellar ecosystem.
+                            Get a sneak peek at our upcoming Security Dashboard - your unified, intuitive hub for monitoring Soroban projects across the Stellar ecosystem.
                         </Typography>
                     </Box>
 

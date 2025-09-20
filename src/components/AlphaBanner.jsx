@@ -30,10 +30,10 @@ export default function AlphaBanner() {
     <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 6 } }}>
       <Box
         sx={{
-          maxWidth: 960,
+          maxWidth: 800,
           mx: "auto",
           textAlign: "center",
-          borderRadius: 4,
+          borderRadius: 1,
           p: { xs: 3, sm: 4 },
           background: `linear-gradient(135deg, ${BRAND.secondary}, #6D28D9)`,
           boxShadow: "0 30px 80px rgba(0,0,0,.45)",
@@ -52,15 +52,16 @@ export default function AlphaBanner() {
             }}
           />
         </Stack>
+        
+
+        <Typography variant="h6" sx={{ color: "#fff", fontWeight: 800, mt: 1 }}>
+          Thank you for testing Auditron! 
+        </Typography>
         <Typography sx={{ color: "#E9D5FF", mb: 0.5 }}>
           This alpha release allows you to generate <b>one report</b> only.
         </Typography>
-
-        <Typography variant="h6" sx={{ color: "#fff", fontWeight: 800, mt: 1 }}>
-          Thank you for testing Auditron!
-        </Typography>
         <Typography sx={{ color: "#E9D5FF", mb: 3 }}>
-          Join to stay informed about the latest updates and releases.
+          Join to stay informed about our latest updates and releases.
         </Typography>
 
         {/* Email form */}

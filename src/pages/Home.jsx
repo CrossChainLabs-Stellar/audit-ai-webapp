@@ -121,7 +121,7 @@ export default function Home() {
             AI-Powered Smart Contract Auditing
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
-            Secure your blockchain projects with lightning-fast, comprehensive, and affordable smart contract audits.
+            Secure your Soroban project with lightning-fast, comprehensive, and affordable smart contract audits.
           </Typography>
           <Stack direction="row" spacing={2} justifyContent="center">
             <Button component={Link} to="/audit" sx={gradientBtn}>
