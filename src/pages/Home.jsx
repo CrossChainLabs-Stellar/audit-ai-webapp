@@ -174,7 +174,7 @@ export default function Home() {
               {
                 icon: <StarIcon />,
                 title: "Certification Seal",
-                desc: "Projects that meet minimum standards earn the Auditron Certification Seal, a visible mark of trust for the Stellar community.",
+                desc: "Projects that meet the standards earn the Auditron Certification Seal, a visible mark of trust for the Stellar community.",
               },
             ].map((card, i) => (
               <Grid item xs={12} md={3} key={i}>
