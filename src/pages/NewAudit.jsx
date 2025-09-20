@@ -160,8 +160,6 @@ export default function NewAudit({ publicKey, onLogin }) {
         const decodedString = base64Decode(trimmedReport);
         // Parse JSON
         const decodedReport = JSON.parse(decodedString);
-        console.log('decodedReport');
-        console.log(decodedReport);
 
         setProjectName(decodedReport.name || decodedReport.projectName);
         setFileName(decodedReport.fileName);
@@ -336,8 +334,6 @@ export default function NewAudit({ publicKey, onLogin }) {
     ((activeTab === "files" && files.length > 0) ||
       (activeTab === "github" && githubUrl.trim()))
   );
-
-  console.log('canGenerateReport', canGenerateReport, publicKey, projectName, activeTab);
 
   // VALIDATION
   const isFilesReady = activeTab === "files" && files.length > 0;
