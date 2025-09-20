@@ -745,7 +745,7 @@ export default function NewAudit({ publicKey, onLogin }) {
                           click to browse
                         </Box>
                       </Typography>
-                      <Typography variant="caption">Supports .rs</Typography>
+                      <Typography variant="caption">Supports .rs files</Typography>
                     </Stack>
                   </Box>
 
