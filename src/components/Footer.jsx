@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Container, Typography, Stack, IconButton, Link as MuiLink } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter"; // displays the X/Twitter glyph
 import { Link as RouterLink } from "react-router-dom";
 import { BRAND } from "../theme/AppTheme";
 
@@ -67,7 +66,15 @@ export default function Footer() {
               aria-label="X (Twitter)"
               sx={{ color: BRAND.text, "&:hover": { color: "#fff" } }}
             >
-              <TwitterIcon fontSize="medium" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+              >
+                <path d="M18.244 2.25h3.384l-7.39 8.455L22 21.75h-6.562l-5.144-6.778-5.906 6.778H1.004l7.834-9.01L2 2.25h6.75l4.658 6.162L18.244 2.25z" />
+              </svg>
             </IconButton>
           </Stack>
         </Stack>
